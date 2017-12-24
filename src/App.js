@@ -3,7 +3,8 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 
 import CSSTransitionGroup from 'react-addons-css-transition-group'
 
-import MainPage from './views/MainPage';
+import PunchClock from './views/PunchClock';
+import UserCenter from './views/UserCenter';
 
 class App extends Component {
   render() {
@@ -26,7 +27,8 @@ class App extends Component {
                 transitionLeaveTimeout={leaveTime}
               >
                 <div key={props.location.pathname}>
-                  <Route location={props.location} exact path="/home" component={MainPage} />
+                  <Route location={props.location} exact path="/punchClock" component={PunchClock} />
+                  <Route location={props.location} exact path="/userCenter" component={UserCenter}/>
                 </div>
               </CSSTransitionGroup>
             )

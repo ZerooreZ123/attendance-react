@@ -1,0 +1,100 @@
+.container{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    background: #ededed;
+}
+.header{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#33b5fc;
+    font-size:26px;
+    color:#fff;
+}
+.header>span{
+    display:inline-block;
+    width:33.3%;
+    height:80px;
+    text-align: center;
+    line-height: 80px;
+}
+.header>span:nth-child(2){
+    font-size:38px;
+}
+.information{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px;
+    height:216px;
+    width:100%;
+    background: #33b5fc;
+}
+.informationPhoto{
+    width:140px;
+    height: 140px;
+    border-radius:50%;
+}
+.personalInformation{
+    margin-left:20px;
+    color:#fff;
+    font-size:24px;
+    line-height: 48px;
+}
+.name{
+    font-size:32px;
+}
+.content{
+    padding:0 48px;
+    background:#fff;
+}
+.content>.item:last-child{
+    border:0;
+}
+.item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:106px;
+    border-bottom: 2px solid #ddd;
+}
+.itemImg{
+    display:inline-block;
+    width:38px;
+    height:44px;
+    margin-right: 32px;
+}
+.itemName{
+    flex:1;
+}
+.itemGo{
+    width:26px;
+    height:40px;
+}
+.jurisdictionModule_1{
+    padding:0 48px 160px;
+    margin-top:22px;
+    background:#fff;
+
+}
+.tabBox{
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:102px;
+    padding:12px 0 18px;
+    border-top:1px solid #ededed;
+}
+.tab{
+    display:inline-block;
+    text-align: center;
+    width:50%;
+}
+.tabImg{
+    width:50px;
+    height:55px;
+}
