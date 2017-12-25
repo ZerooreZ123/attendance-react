@@ -1,0 +1,75 @@
+.container{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
+    background: #fff;
+}
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:76px;
+    color:#000;
+}
+.back{
+    position: absolute;
+    top:0px;
+    left:22px;
+    width:150px;
+    height:76px;
+    line-height: 76px;
+    font-size:28px;
+}
+.backImg{
+    display:inline-block;
+    vertical-align: middle;
+    width:28px;
+    height: 42px;
+}
+.title{
+    width:50%;
+    text-align: center;
+    line-height:76px;
+    margin: 0 auto;
+    font-size:38px;
+}
+.content{
+    margin-top:76px;
+    padding:0 22px;
+}
+.item{
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:146px;
+    border-bottom:2px solid #ddd;
+}
+.timeSlot{
+    position: absolute;
+    top:146px;
+    left:0;  
+}
+.timeSlot>div{
+    width:706px;
+    height:104px;
+    line-height: 104px;
+    text-align: center;
+    font-size:28px;
+    border-bottom:2px solid #ddd;
+}
+.current{
+    color:#2295e8
+}
+.work{
+    font-size:30px;
+    color:#000;
+}
+.workRemind{
+    margin-top:24px;
+    font-size:24px;
+    color:#a8a8a8;
+}

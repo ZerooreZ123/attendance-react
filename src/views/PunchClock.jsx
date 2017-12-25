@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 import styles from '../styles/PunchClock.css';
 
-import delete_1 from '../asset/icon/delete_1.png';
-import person from '../asset/icon/person.png';
-import clock from '../asset/icon/punchClock.png';
-import notice from '../asset/icon/notice.png';
-import warn from '../asset/icon/warn.png'
+import delete_1 from '../asset/ico/close.png';
+import person from '../asset/punchClock/person-2.png';
+import clock from '../asset/punchClock/loction-2.png';
+import notice from '../asset/punchClock/notice.png';
+import warn from '../asset/punchClock/abnormal.png'
 
 
 class PunchClock extends Component {

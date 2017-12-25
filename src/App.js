@@ -5,6 +5,9 @@ import CSSTransitionGroup from 'react-addons-css-transition-group'
 
 import PunchClock from './views/PunchClock';
 import UserCenter from './views/UserCenter';
+import RevisionDepartment from './views/RevisionDepartment';
+import CardReminding from './views/CardReminding';
+import AttendanceRecord from './views/AttendanceRecord';
 
 class App extends Component {
   render() {
@@ -29,6 +32,9 @@ class App extends Component {
                 <div key={props.location.pathname}>
                   <Route location={props.location} exact path="/punchClock" component={PunchClock} />
                   <Route location={props.location} exact path="/userCenter" component={UserCenter}/>
+                  <Route location={props.location} exact path="/revisionDepartment" component={RevisionDepartment}/>
+                  <Route location={props.location} exact path="/cardReminding" component={CardReminding}/>
+                  <Route location={props.location} exact path="/attendanceRecord" component={AttendanceRecord}/>
                 </div>
               </CSSTransitionGroup>
             )

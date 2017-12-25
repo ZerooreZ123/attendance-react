@@ -37,6 +37,7 @@
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.2.0",
     "react-fastclick": "^3.0.2",
+    "react-ios-switch": "^0.1.19",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^1.2.1",
@@ -90,10 +91,16 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "jsx-control-statements"
     ]
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "./"
+  "homepage": "./",
+  "devDependencies": {
+    "babel-plugin-jsx-control-statements": "^3.2.8"
+  }
 }
