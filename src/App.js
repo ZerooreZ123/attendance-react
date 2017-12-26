@@ -8,6 +8,12 @@ import UserCenter from './views/UserCenter';
 import RevisionDepartment from './views/RevisionDepartment';
 import CardReminding from './views/CardReminding';
 import AttendanceRecord from './views/AttendanceRecord';
+import ExportData from './views/ExportData';
+import HistoryAnnouncement from './views/HistoryAnnouncement';
+import AnnouncementDetails from './views/AnnouncementDetails';
+import ReleaseAnnouncement from './views/ReleaseAnnouncement';
+import AddAttendanceMachine from './views/AddAttendanceMachine';
+import Search from './views/Search';
 
 class App extends Component {
   render() {
@@ -35,6 +41,12 @@ class App extends Component {
                   <Route location={props.location} exact path="/revisionDepartment" component={RevisionDepartment}/>
                   <Route location={props.location} exact path="/cardReminding" component={CardReminding}/>
                   <Route location={props.location} exact path="/attendanceRecord" component={AttendanceRecord}/>
+                  <Route location={props.location} exact path="/exportData" component={ExportData}/>
+                  <Route location={props.location} exact path="/historyAnnouncement" component={HistoryAnnouncement}/>
+                  <Route location={props.location} exact path="/announcementDetails" component={AnnouncementDetails}/>
+                  <Route location={props.location} exact path="/releaseAnnouncement" component={ReleaseAnnouncement}/>
+                  <Route location={props.location} exact path="/addAttendanceMachine" component={AddAttendanceMachine}/>
+                  <Route location={props.location} exact path="/search" component={Search}/>
                 </div>
               </CSSTransitionGroup>
             )

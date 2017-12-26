@@ -3,7 +3,6 @@
     top:0;
     left:0;
     width:100%;
-    height:100%;
     background: #fff;
 }
 .header{
@@ -38,39 +37,26 @@
     font-size:38px;
 }
 .content{
-    margin-top:76px;
-    padding:0 22px;
+    padding:76px 24px 0;
+    background: #fff;
+
 }
-.item{
-    position:relative;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    height:146px;
-    border-bottom:2px solid #ddd;
-}
-.timeSlot{
-    position: absolute;
-    top:146px;
-    left:0;  
-}
-.timeSlot>div{
-    width:706px;
-    height:104px;
-    line-height: 104px;
-    text-align: center;
-    font-size:28px;
-    border-bottom:2px solid #ddd;
-}
-.current{
-    color:#2295e8
-}
-.work{
-    font-size:30px;
+.caption{
+    margin:40px 0 64px;
+    font-size:32px;
     color:#000;
 }
-.workRemind{
-    margin-top:24px;
-    font-size:24px;
-    color:#a8a8a8;
+.text{
+    font-size:26px;
+    line-height:42px;
+}
+.photoBox{
+    width:700px;
+    margin:28px 0;
+}
+.photoBox>img{
+    display:inline-block;
+    width:700px;
+    height:478px;
+    margin-bottom:36px;
 }

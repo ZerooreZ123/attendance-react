@@ -9,6 +9,7 @@
     top:0;
     left:0;
     width:100%;
+    background: #fff;
 }
 .title{
     width:50%;
@@ -120,6 +121,7 @@
     height:102px;
     padding:12px 0 18px;
     border-top:1px solid #ededed;
+    background: #fff;
 }
 .tab{
     display:inline-block;

@@ -38,39 +38,28 @@
     font-size:38px;
 }
 .content{
-    margin-top:76px;
-    padding:0 22px;
+    padding-top:76px;
+    margin-bottom:80px;
+    background:#fff;
 }
-.item{
-    position:relative;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    height:146px;
+.describe,.mailbox{
+    padding:45px 0 25px;
+    margin:0 46px;
     border-bottom:2px solid #ddd;
 }
-.timeSlot{
-    position: absolute;
-    top:146px;
-    left:0;  
+.inputBox{
+    border:0;
 }
-.timeSlot>div{
-    width:706px;
-    height:104px;
-    line-height: 104px;
+.button{
+    width:658px;
+    height:94px;
+    margin: 0 auto;
+    border-radius:3px;
     text-align: center;
-    font-size:28px;
-    border-bottom:2px solid #ddd;
-}
-.current{
-    color:#2295e8
-}
-.work{
-    font-size:30px;
-    color:#000;
-}
-.workRemind{
-    margin-top:24px;
-    font-size:24px;
-    color:#a8a8a8;
+    line-height: 94px;
+    color:#fff;
+    font-size:34px;
+    background:#2295e8;
+
+  
 }

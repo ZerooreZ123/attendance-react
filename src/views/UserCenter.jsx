@@ -13,7 +13,7 @@ import release from '../asset/manager/release.png';
 import setUp from '../asset/manager/setUp.png';
 
 import person from '../asset/manager/person-1.png';
-import clock from '../asset/manager/location-1.png';
+import clock from '../asset/manager/location-2.png';
 import go from '../asset/manager/go.png';
 
 class UserCenter extends Component{

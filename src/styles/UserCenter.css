@@ -88,6 +88,7 @@
     height:102px;
     padding:12px 0 18px;
     border-top:1px solid #ededed;
+    background: #fff;
 }
 .tab{
     display:inline-block;
