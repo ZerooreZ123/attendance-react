@@ -10,10 +10,22 @@ import CardReminding from './views/CardReminding';
 import AttendanceRecord from './views/AttendanceRecord';
 import ExportData from './views/ExportData';
 import HistoryAnnouncement from './views/HistoryAnnouncement';
+import InviteCode from './views/InviteCode';
+import InviteCodeDetail from './views/InviteCodeDetail';
+import ShareInviteCode from './views/ShareInviteCode';
 import AnnouncementDetails from './views/AnnouncementDetails';
 import ReleaseAnnouncement from './views/ReleaseAnnouncement';
 import AddAttendanceMachine from './views/AddAttendanceMachine';
 import Search from './views/Search';
+import AttendanceData from './views/AttendanceData';
+import Department from './views/Department';
+import EnterpriseManager from './views/EnterpriseManager';
+import EditProfile from './views/EditProfile';
+import PersonalInformation from './views/PersonalInformation';
+import EmployeeInformation from './views/EmployeeInformation';
+import AttendanceManagement from './views/AttendanceManagement';
+
+
 
 class App extends Component {
   render() {
@@ -43,10 +55,20 @@ class App extends Component {
                   <Route location={props.location} exact path="/attendanceRecord" component={AttendanceRecord}/>
                   <Route location={props.location} exact path="/exportData" component={ExportData}/>
                   <Route location={props.location} exact path="/historyAnnouncement" component={HistoryAnnouncement}/>
+                  <Route location={props.location} exact path="/inviteCode" component={InviteCode}/>
+                  <Route location={props.location} exact path="/InviteCodeDetail" component={InviteCodeDetail}/>
                   <Route location={props.location} exact path="/announcementDetails" component={AnnouncementDetails}/>
+                  <Route location={props.location} exact path="/ShareInviteCode" component={ShareInviteCode}/>
                   <Route location={props.location} exact path="/releaseAnnouncement" component={ReleaseAnnouncement}/>
                   <Route location={props.location} exact path="/addAttendanceMachine" component={AddAttendanceMachine}/>
                   <Route location={props.location} exact path="/search" component={Search}/>
+                  <Route location={props.location} exact path="/attendanceData" component={AttendanceData}/>
+                  <Route location={props.location} exact path="/department" component={Department}/>
+                  <Route location={props.location} exact path="/enterpriseManager" component={EnterpriseManager}/>
+                  <Route location={props.location} exact path="/editProfile" component={EditProfile}/>
+                  <Route location={props.location} exact path="/personalInformation" component={PersonalInformation}/>
+                  <Route location={props.location} exact path="/employeeInformation" component={EmployeeInformation}/>
+                  <Route location={props.location} exact path="/attendanceManagement" component={AttendanceManagement}/>
                 </div>
               </CSSTransitionGroup>
             )

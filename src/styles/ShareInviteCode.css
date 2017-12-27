@@ -1,0 +1,69 @@
+.container{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #FFF;
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height:84px;
+  color:gray;
+}
+.back{
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 15px;
+  height:64px;
+  font-size:28px;
+}
+.backImg{
+  display:inline-block;
+  vertical-align: middle;
+  width:28px;
+  height: 42px;
+  margin-right: 5px;
+  
+}
+.codeWrap{
+  margin-top:20%;
+  /* background: lightblue; */
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.codeContent{
+  position:relative;
+  width:170;
+  height:170;
+  
+}
+.code{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 340px;
+  text-align: center;
+  color:#3db8fa;
+  font-size: 36px;
+  /* background: yellowgreen */
+}
+.shareBtn{
+  padding: 20px;
+}
+.shareBtn >div{
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  color: #FFF;
+  background: #3db8fa;
+  border-radius: 8px;
+}

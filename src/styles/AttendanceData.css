@@ -1,0 +1,131 @@
+.container{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: #fff;
+}
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:50px;
+    margin:10px 0;
+    color:#000;
+    background: #fff;
+}
+.back{
+    position: absolute;
+    top:0px;
+    left:22px;
+    width:150px;
+    height:50px;
+    line-height:50px;
+    font-size:28px;
+}
+.backImg{
+    display:inline-block;
+    vertical-align: middle;
+    width:28px;
+    height: 42px;
+}
+.title{
+    width:340px;
+    height: 55px;
+    margin: 0 auto;
+    border:2px solid #2295e8;
+    border-radius:6px;
+    text-align: center;
+    line-height:55px;
+    font-size:28px;
+}
+.title>div{
+    display:inline-block;
+    width:50%;
+}
+.tab{
+    color:#2295e8;
+   
+}
+.currentTab{
+    color:#fff;
+    background:#2295e8;
+}
+.timetable{
+    display:flex;
+    justify-content: space-around;
+    align-items:center;
+    width:100%;
+    height:102px;
+    padding-top:75px;
+    font-size:30px;
+    color:#707070;
+    border-bottom: 2px solid #ddd;
+}
+.currentTimetable{
+    color:#2295e8;
+}
+.item{
+    border-bottom:1px solid #ddd;
+    padding:20px 0 22px;
+}
+.name{
+    padding-left:22px;
+    font-size:22px;
+    color:#999;
+}
+.work{
+    width:100%;
+}
+.work>div{
+    box-sizing:border-box;
+    display:inline-block;
+    margin-top:26px;
+    width:50%;
+}
+.gotoWork,.gooffWork{
+    padding-left:48px;
+    color:#000;
+}
+.punchTime{
+    color:#999;
+}
+.abnormal{
+    color:rgb(236, 73, 73);
+}
+.footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:100%;
+    height:102px;
+    border-top:3px solid #ddd;
+    color:#2295e8;
+    font-size:30px;
+}
+.brief{
+    width:560px;
+    height:102px;
+    line-height: 102px;
+    text-align: center;
+}
+.top{
+    width:20px;
+    height:10px;
+    margin-left:25px;
+    vertical-align: middle;
+}
+.exportData{
+    height:102px;
+    width:186px;
+    line-height: 102px;
+    text-align: center;
+    color:#fff;
+    background: #2295e8;
+
+}
