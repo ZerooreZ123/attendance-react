@@ -8,20 +8,40 @@ class PersonalInformation extends Component {
     constructor() {
         super();
         this.state={
+            record:[
+                {
+                    date:'2018.8.27',
+                    week:'周一',
+                    goWorkState:'正常',
+                    goWorkTime:'08:05',
+                    offWorkState:'正常',
+                    offWorkTime:'18:05'
+                },{
+                    date:'2018.8.28',
+                    week:'周二',
+                    goWorkState:'迟到',
+                    goWorkTime:'08:50',
+                    offWorkState:'未打卡',
+                    offWorkTime:'18:05'
+                }
 
+            ]
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人考勤记录';
     }
-
+    editData() {
+        this.props.history.push('/editProfile');
+    }
     render() {
+        const { record } = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>叶湘伦</div>
-                    <div className={styles.editProfile}>修改资料</div>     
+                    <div onClick={ev =>this.editData(ev)} className={styles.editProfile}>修改资料</div>     
                 </div>
                 <div className={styles.content}>
                     <div className={styles.information}>
@@ -39,50 +59,21 @@ class PersonalInformation extends Component {
                     <div>9月</div>
                     </div>
                     <div className={styles.detailsList}>
-                        <div className={styles.item}>
-                            <div className={styles.displayDate}><span>2018.8.28</span><span>周一</span></div>
-                            <div className={styles.work}>
-                                <div className={styles.gotoWork}>上班: <span>正常</span></div>
-                                <div className={styles.punchTime}>08:25</div>
-                            </div>
-                            <div className={styles.work}>
-                                <div className={styles.gooffWork}>下班: <span>正常</span></div>
-                                <div className={styles.punchTime}>18:05</div>
-                            </div>
-                        </div>
-                        <div className={styles.item}>
-                            <div className={styles.displayDate}><span>2018.8.28</span><span>周一</span></div>
-                            <div className={styles.work}>
-                                <div className={styles.gotoWork}>上班: <span>正常</span></div>
-                                <div className={styles.punchTime}>08:25</div>
-                            </div>
-                            <div className={styles.work}>
-                                <div className={styles.gooffWork}>下班: <span>正常</span></div>
-                                <div className={styles.punchTime}>18:05</div>
-                            </div>
-                        </div>
-                        <div className={styles.item}>
-                            <div className={styles.displayDate}><span>2018.8.28</span><span>周一</span></div>
-                            <div className={styles.work}>
-                                <div className={styles.gotoWork}>上班: <span className={styles.unusual}>迟到</span></div>
-                                <div className={styles.punchTime}>09:25</div>
-                            </div>
-                            <div className={styles.work}>
-                                <div className={styles.gooffWork}>下班: <span>正常</span></div>
-                                <div className={styles.punchTime}>18:25</div>
-                            </div>
-                        </div>
-                        <div className={styles.item}>
-                            <div className={styles.displayDate}><span>2018.8.28</span><span>周一</span></div>
-                            <div className={styles.work}>
-                                <div className={styles.gotoWork}>上班: <span className={styles.unusual}>未打卡</span></div>
-                                <div className={styles.punchTime}>08:45</div>
-                            </div>
-                            <div className={styles.work}>
-                                <div className={styles.gooffWork}>下班: <span className={styles.unusual}>早退</span></div>
-                                <div className={styles.punchTime}>18:25</div>
-                            </div>
-                        </div>
+                        {
+                            record.map((item,index) =>
+                                <div className={styles.item} key={index}>
+                                    <div className={styles.displayDate}><span>{item.date}</span><span>{item.week}</span></div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gotoWork}>上班: <span>{item.goWorkState}</span></div>
+                                        <div className={styles.punchTime}>{item.goWorkTime}</div>
+                                    </div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gooffWork}>下班: <span>{item.offWorkState}</span></div>
+                                        <div className={styles.punchTime}>{item.offWorkTime}</div>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>             
                 </div>
                 <div className={styles.more}>查看更多</div>

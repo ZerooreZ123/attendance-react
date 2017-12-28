@@ -16,6 +16,67 @@ import person from '../asset/manager/person-1.png';
 import clock from '../asset/manager/location-2.png';
 import go from '../asset/manager/go.png';
 
+const Module = (props) => {
+    if (props.userId === 'superManagement') {
+      return (
+        <div className={styles.jurisdictionModule_1}>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={attendanceRecord} alt=""/>
+                <span className={styles.itemName}>员工考勤记录</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={administration} alt=""/>
+                <span className={styles.itemName}>企业管理</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={staff} alt=""/>
+                <span className={styles.itemName}>员工资料</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={release} alt=""/>
+                <span className={styles.itemName}>发布公告</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={setUp} alt=""/>
+                <span className={styles.itemName}>设置考勤</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>      
+        </div>    
+      );
+    } else if(props.userId === 'ordinaryManagement'){
+      return (
+        <div className={styles.jurisdictionModule_1}>
+            <div className={styles.item} onClick={ev =>this.attendanceData(ev)}>
+                <img className={styles.itemImg}src={attendanceRecord} alt=""/>
+                <span className={styles.itemName}>员工考勤记录</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={administration} alt=""/>
+                <span className={styles.itemName}>企业管理</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={staff} alt=""/>
+                <span className={styles.itemName}>员工资料</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+            <div className={styles.item}>
+                <img className={styles.itemImg}src={release} alt=""/>
+                <span className={styles.itemName}>发布公告</span>
+                <img className={styles.itemGo} src={go} alt=""/>
+            </div>
+        </div>
+      );
+    }else{
+      return null
+    }
+}
+
 class UserCenter extends Component{
     constructor() {
         super();
@@ -24,6 +85,21 @@ class UserCenter extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '个人中心';
     }
+    attendanceRecord() {
+        this.props.history.push('/attendanceRecord');
+    }
+    cardReminding() {
+        this.props.history.push('/cardReminding');
+    }
+    revisionDepartment() {
+        this.props.history.push('/revisionDepartment');
+    }
+    punchClock() {
+        this.props.history.push('/punchClock');
+    }
+    // attendanceData() {
+    //     this.props.history.push('/attendanceData')
+    // }
     render() {
         return(
             <div className={styles.container}>
@@ -48,51 +124,25 @@ class UserCenter extends Component{
                     </div>
                 </div>
                 <div className={styles.content}>
-                    <div className={styles.item}>
+                    <div className={styles.item} onClick={ev =>this.attendanceRecord(ev)}>
                         <img className={styles.itemImg}src={record} alt=""/>
                         <span className={styles.itemName}>考勤记录</span>
                         <img className={styles.itemGo} src={go} alt=""/>
                     </div>
-                    <div className={styles.item}>
+                    <div className={styles.item} onClick={ev =>this.cardReminding(ev)}>
                         <img className={styles.itemImg}src={remind} alt=""/>
                         <span className={styles.itemName}>打卡提醒</span>
                         <img className={styles.itemGo} src={go} alt=""/>
                     </div>
-                    <div className={styles.item}>
+                    <div className={styles.item} onClick={ev =>this.revisionDepartment(ev)}>
                         <img className={styles.itemImg}src={revise} alt=""/>
                         <span className={styles.itemName}>修改部门</span>
                         <img className={styles.itemGo} src={go} alt=""/>
                     </div>
                 </div>
-                <div className={styles.jurisdictionModule_1}>
-                    <div className={styles.item}>
-                        <img className={styles.itemImg}src={attendanceRecord} alt=""/>
-                        <span className={styles.itemName}>员工考勤记录</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <img className={styles.itemImg}src={administration} alt=""/>
-                        <span className={styles.itemName}>企业管理</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <img className={styles.itemImg}src={staff} alt=""/>
-                        <span className={styles.itemName}>员工资料</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <img className={styles.itemImg}src={release} alt=""/>
-                        <span className={styles.itemName}>发布公告</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <img className={styles.itemImg}src={setUp} alt=""/>
-                        <span className={styles.itemName}>设置考勤</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>      
-                </div>
+                <Module userId='superManagement'/>
                 <div className={styles.tabBox}>
-                    <div className={styles.tab}>
+                    <div className={styles.tab} onClick={ev =>this.punchClock(ev)}>
                         <img className={styles.tabImg} src={clock} alt=""/>
                         <div>考勤打卡</div>
                     </div>

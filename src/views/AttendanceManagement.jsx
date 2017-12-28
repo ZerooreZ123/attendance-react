@@ -4,6 +4,7 @@ import styles from '../styles/AttendanceManagement.css';
 
 import backImg from '../asset/ico/back.png';
 import icon from '../asset/ico/icon.png';
+import top from '../asset/manager/triangle-top.png';
 import check from '../asset/manager/Check.png';
 import nocheck from '../asset/manager/noCheck.png';
 import choose from '../asset/manager/choose.png';
@@ -16,13 +17,27 @@ const SelectBtn = (props) => {
       return <img className={styles.nochoose} src={nochoose} alt="" />;
     }
 }
+const CheckBtn = (props) => {
+    if (props.checked === true) {
+      return <img src={check} alt="" />;
+    } else {
+      return <img src={nocheck} alt="" />;
+    }
+}
+const Icon = (props) => {
+    if (props.checked === true) {
+      return <img className={styles.icon} src={top} alt=""/>;
+    } else {
+      return <img className={styles.icon} src={icon} alt=""/>;
+    }
+}
 
 class AttendanceManagement extends Component{
 
     constructor() {
         super();
         this.state = {
-
+            week:['周一','周二','周三','周四','周五','周六','周日']
         }
     }
     componentDidMount() {
@@ -30,6 +45,7 @@ class AttendanceManagement extends Component{
     }
 
     render() {
+        const {week} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -41,36 +57,34 @@ class AttendanceManagement extends Component{
                          <div className={styles.clock}>打卡时间</div>
                          <div className={styles.time}>
                              <div>上午</div>
-                             <div>08:45<img className={styles.icon} src={icon} alt=""/></div>
+                             <div>08:45<Icon checked={false}/></div>
                          </div>
                          <div className={styles.time}>
                              <div>下午</div>
-                             <div>18:00<img className={styles.icon} src={icon} alt=""/></div>
+                             <div>18:00<Icon checked={false}/></div>
                          </div>
                      </div>
                      <div className={styles.automaticTime}>
                         <div className={styles.clock}>打卡时间</div>
                             <div className={styles.time}>
                                 <div>上午</div>
-                                <div>08:45<img className={styles.icon} src={icon} alt=""/></div>
+                                <div>08:45<Icon checked={false}/></div>
                             </div>
                             <div className={styles.time}>
                                 <div>下午</div>
-                                <div>18:00<img className={styles.icon} src={icon} alt=""/></div>
+                                <div>18:00<Icon checked={true}/></div>
                             </div>
                         </div>
                      <div className={styles.workTime}>
                          <div className={styles.work}>工作时间</div>
-                         <div className={styles.holiday}><img className={styles.choose} src={choose} alt=""/>跟随节假日</div>
-                         <div className={styles.custom}><img className={styles.nochoose} src={nochoose} alt=""/>自定义</div>
+                         <div className={styles.holiday}><SelectBtn checked={true} />跟随节假日</div>
+                         <div className={styles.custom}><SelectBtn checked={true}/>自定义</div>
                          <div className={styles.week}>
-                             <div className={styles.item}><img src={check} alt=""/>周一</div>
-                             <div className={styles.item}><img src={check} alt=""/>周二</div>
-                             <div className={styles.item}><img src={check} alt=""/>周三</div>
-                             <div className={styles.item}><img src={check} alt=""/>周四</div>
-                             <div className={styles.item}><img src={check} alt=""/>周五</div>
-                             <div className={styles.item}><img src={nocheck} alt=""/>周六</div>
-                             <div className={styles.item}><img src={nocheck} alt=""/>周日</div>
+                            {
+                                    week.map((item,index) =>
+                                      <div className={styles.item} key={index}><CheckBtn checked={false}/>{item}</div>
+                                )
+                            }
                          </div>
                      </div>
                 </div> 

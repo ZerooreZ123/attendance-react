@@ -49,10 +49,22 @@
     height:146px;
     border-bottom:2px solid #ddd;
 }
-.timeSlot{
+.mask {
+    z-index: 1;
     position: absolute;
-    top:146px;
-    left:0;  
+    top: 0;
+    left: 0;
+    right:0;
+    bottom:0;
+    background: rgba(0, 0, 0, 0.3);
+}
+.maskBox {
+    position: absolute;
+    width: 100%;
+    top:220px;
+}
+.timeSlot{
+    background: #fff;
 }
 .timeSlot>div{
     width:706px;
@@ -73,4 +85,10 @@
     margin-top:24px;
     font-size:24px;
     color:#a8a8a8;
+}
+.icon{
+    width:20px;
+    height:10px;
+    margin-left:14px;
+    vertical-align: middle;
 }

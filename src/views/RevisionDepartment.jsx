@@ -6,12 +6,15 @@ import back from '../asset/ico/back.png'
 class RevisionDepartment extends Component{
     constructor(){
         super();
-        this.state={}
+        this.state={
+            section:['人事部','采购部','行政部','业务部','研发部','技术部','智慧园区']
+        }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '修改部门';
     }
     render() {
+        const {section} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -23,13 +26,11 @@ class RevisionDepartment extends Component{
                     <div className={styles.department}>智慧园区</div>
                 </div>
                 <div className={styles.departmentBox}>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.item}>部门01</div>
-                    <div className={styles.selectItem}>智慧园区</div>
+                {
+                    section.map((item,index) =>
+                        <div className={styles.item} key={index}>{item}</div>
+                    )
+                }
                 </div>
                 <div className={styles.edit}>
                     <div className={styles.cancel}>取消</div>

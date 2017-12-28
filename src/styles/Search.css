@@ -36,6 +36,9 @@
     outline:none;
     border: none;
 }
+input::-webkit-input-placeholder{
+    color:#b5b5b5;
+}
 .cleanButton{
     width:33px;
     height:33px;

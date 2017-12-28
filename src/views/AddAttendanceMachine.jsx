@@ -22,16 +22,16 @@ class AddAttendanceMachine extends Component{
                 <div className={styles.content}>
                      <div className={styles.item}>
                        <div className={styles.machineNum}>考勤机编号</div>
-                       <div className={styles.num}>HDHDKENDNE</div>
+                       <input className={styles.num} defaultValue='HDHDKENDNE'/>
                      </div>
                      <div className={styles.item}>
                        <div className={styles.companyInfo}>企业信息</div>
-                       <div className={styles.company}>南京XXXX责任有限公司</div>
+                       <input className={styles.company} defaultValue='南京XXXX责任有限公司'/>
                      </div>
                      <div className={styles.item}>
                        <div className={styles.superManage}>超级管理员信息</div>
-                       <div className={styles.name}>王小明</div>
-                       <div className={styles.phone}>13855667788</div>
+                       <input className={styles.name} defaultValue='王小明'/>
+                       <input className={styles.phone} defaultValue='13855667788'/>
                      </div>
                 </div>
                 <div className={styles.binding}>确认绑定</div>    

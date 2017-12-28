@@ -32,7 +32,6 @@
 }
 .codeWrap{
   margin-top:20%;
-  /* background: lightblue; */
   height: 50%;
   display: flex;
   flex-direction: column;
@@ -40,8 +39,6 @@
 }
 .codeContent{
   position:relative;
-  width:170;
-  height:170;
   
 }
 .code{
@@ -50,14 +47,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  line-height: 340px;
-  text-align: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
   color:#3db8fa;
-  font-size: 36px;
-  /* background: yellowgreen */
+  font-size: 48px;
 }
 .shareBtn{
-  padding: 20px;
+  width:656px;
+  margin:112px auto 0;
 }
 .shareBtn >div{
   height: 100px;

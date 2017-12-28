@@ -9,13 +9,17 @@ class Search extends Component {
     constructor() {
         super();
         this.state={
-
+            searchHistory:['叶湘伦','路小雨',13455667788]
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '搜索';
     }
+    empty() {
+        this.setState({searchHistory:[]});
+    }
     render() {
+        const {searchHistory} = this.state;
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -27,12 +31,12 @@ class Search extends Component {
                 </div>
                 <div className={styles.content}>
                     <div>搜索历史</div>
-                    <img className={styles.recycle} src={cleanUp} alt=""/>
+                    <img onClick={ev =>this.empty(ev)} className={styles.recycle} src={cleanUp} alt=""/>
                 </div>
                 <div className={styles.list}>
-                    <div>叶湘伦</div>
-                    <div>路小雨</div>
-                    <div>18955662211</div>
+                    {
+                        searchHistory.map((item,index) =><div key={index}>{item}</div>)
+                    }
                 </div>
             </div>
         )

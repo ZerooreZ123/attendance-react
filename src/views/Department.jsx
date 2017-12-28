@@ -10,13 +10,18 @@ class Department extends Component{
     constructor() {
         super();
         this.state={
+            name:['叶湘伦','路小雨','段千雪']
 
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '部门';
     }
+    personalInformation() {
+        this.props.history.push('/personalInformation');
+    }
     render() {
+        const {name} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -24,18 +29,14 @@ class Department extends Component{
                     <div className={styles.title}>人事部</div>
                 </div>
                 <div className={styles.content}>
-                    <div className={styles.item}>
-                        <div className={styles.name}>叶湘伦</div>
-                        <img className={styles.forward} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <div className={styles.name}>路小雨</div>
-                        <img className={styles.forward} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item}>
-                        <div className={styles.name}>段千雪</div>
-                        <img className={styles.forward} src={go} alt=""/>
-                    </div>
+                    {
+                        name.map((item,index) =>
+                            <div onClick={ev =>this.personalInformation(ev)} className={styles.item} key={index}>
+                                <div className={styles.name}>{item}</div>
+                                <img className={styles.forward} src={go} alt=""/>
+                            </div> 
+                        )
+                    }
                 </div>
             </div>
         )

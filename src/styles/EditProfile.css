@@ -75,3 +75,41 @@
     padding-left:24px;
     vertical-align: middle;
 }
+.mask {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+.maskBox {
+    position: absolute;
+    width: 100%;
+    top: 210px;
+    background:#fff;
+}
+.departmentBox{
+    padding:0 22px;
+    margin-bottom:104px;
+
+}
+.term,.selectTerm{
+    float:left;
+    width:30%;
+    height:94px;
+    margin: 0 8px 34px;
+    border:2px solid #ddd;
+    border-radius:2px;
+    line-height:94px;
+    text-align: center;
+    font-size:28px;
+    color:#000;
+}
+.selectTerm{
+    color:#fff;
+    background:#2295e8;
+}
+.clearBoth{
+    clear: both;
+}
