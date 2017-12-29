@@ -43,13 +43,15 @@ class AttendanceManagement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '考勤管理';
     }
-
+    backMove() {
+        window.history.go(-1);
+    }
     render() {
         const {week} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <img className={styles.back} src={backImg} alt=""/>
+                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
                     <div className={styles.title}>考勤管理</div>
                 </div> 
                 <div className={styles.content}>

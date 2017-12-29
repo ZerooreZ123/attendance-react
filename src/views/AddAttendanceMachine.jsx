@@ -12,11 +12,14 @@ class AddAttendanceMachine extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '添加考勤机';
     }
+    backMove() {
+        window.history.go(-1);
+     }
     render() {
         return(
             <div className={styles.contianer}>
                 <div className={styles.header}>
-                    <img className={styles.back} src={backImg} alt=""/>
+                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
                     <div className={styles.title}>添加考勤机</div>
                 </div>
                 <div className={styles.content}>

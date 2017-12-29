@@ -24,6 +24,7 @@ import EditProfile from './views/EditProfile';
 import PersonalInformation from './views/PersonalInformation';
 import EmployeeInformation from './views/EmployeeInformation';
 import AttendanceManagement from './views/AttendanceManagement';
+import OrdinaryEnterorise from './views/OrdinaryEnterorise';
 
 
 
@@ -69,6 +70,7 @@ class App extends Component {
                   <Route location={props.location} exact path="/personalInformation" component={PersonalInformation}/>
                   <Route location={props.location} exact path="/employeeInformation" component={EmployeeInformation}/>
                   <Route location={props.location} exact path="/attendanceManagement" component={AttendanceManagement}/>
+                  <Route location={props.location} exact path="/ordinaryEnterorise" component={OrdinaryEnterorise}/>
                 </div>
               </CSSTransitionGroup>
             )

@@ -34,12 +34,15 @@ class PersonalInformation extends Component {
     editData() {
         this.props.history.push('/editProfile');
     }
+    backMove() {
+        this.props.history.push('/userCenter');
+     }
     render() {
         const { record } = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>叶湘伦</div>
                     <div onClick={ev =>this.editData(ev)} className={styles.editProfile}>修改资料</div>     
                 </div>

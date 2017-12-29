@@ -20,12 +20,15 @@ class Department extends Component{
     personalInformation() {
         this.props.history.push('/personalInformation');
     }
+    backMove() {
+        this.props.history.push('/userCenter');
+     }
     render() {
         const {name} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>人事部</div>
                 </div>
                 <div className={styles.content}>

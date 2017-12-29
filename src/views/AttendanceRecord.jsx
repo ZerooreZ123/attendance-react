@@ -13,12 +13,14 @@ class AttendanceRecord extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '考勤记录';
     }
-
+    backMove() {
+        this.props.history.push('/userCenter');
+    }
     render() {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div className={styles.back} onClick={ev =>this.backMove(ev)}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>
                         <div className={styles.currentTab}>全部</div>
                         <div className={styles.tab}>异常</div>

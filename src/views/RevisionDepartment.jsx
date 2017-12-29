@@ -13,12 +13,15 @@ class RevisionDepartment extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '修改部门';
     }
+    backMove() {
+        this.props.history.push('/userCenter');
+     }
     render() {
         const {section} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>修改部门</div>
                 </div>
                 <div className={styles.information}>

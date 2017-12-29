@@ -31,6 +31,9 @@ class CardReminding extends Component {
     hideTimeList() {
         this.setState({timeList:false});
     }
+    backMove() {
+        this.props.history.push('/userCenter');
+     }
     render() {
         const list = ['前3分钟','前5分钟','前10分钟','前20分钟','前30分钟']
         const TimeList = props => {
@@ -53,7 +56,7 @@ class CardReminding extends Component {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>打卡提醒</div>
                 </div>
                 <div className={styles.content}>

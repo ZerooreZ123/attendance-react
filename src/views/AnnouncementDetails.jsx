@@ -15,11 +15,14 @@ class AnnouncementDetails extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '公告详情';
     }
+    backMove() {
+        this.props.history.push('/userCenter');
+     }
     render(){
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={backImg} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={backImg} alt=""/>个人中心</div>
                     <div className={styles.title}>公告详情</div>
                 </div>
                 <div className={styles.content}>

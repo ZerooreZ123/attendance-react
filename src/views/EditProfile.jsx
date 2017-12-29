@@ -32,6 +32,9 @@ class EditProfile extends Component{
     hideDepartment() {
         this.setState({mask:false});
     }
+    backMove() {
+        this.props.history.push('/employeeInformation');
+     }
     render() {
         const {section} = this.state;
         const Exhibition = props => {
@@ -57,7 +60,7 @@ class EditProfile extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>员工资料</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>员工资料</div>
                     <div className={styles.title}>修改资料</div>
                     <div onClick={ev =>this.hideDepartment(ev)} className={styles.confirm}>确定</div>     
                 </div>

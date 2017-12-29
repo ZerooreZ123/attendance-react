@@ -16,91 +16,92 @@ import person from '../asset/manager/person-1.png';
 import clock from '../asset/manager/location-2.png';
 import go from '../asset/manager/go.png';
 
-const Module = (props) => {
-    if (props.userId === 'superManagement') {
-      return (
-        <div className={styles.jurisdictionModule_1}>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={attendanceRecord} alt=""/>
-                <span className={styles.itemName}>员工考勤记录</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={administration} alt=""/>
-                <span className={styles.itemName}>企业管理</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={staff} alt=""/>
-                <span className={styles.itemName}>员工资料</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={release} alt=""/>
-                <span className={styles.itemName}>发布公告</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={setUp} alt=""/>
-                <span className={styles.itemName}>设置考勤</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>      
-        </div>    
-      );
-    } else if(props.userId === 'ordinaryManagement'){
-      return (
-        <div className={styles.jurisdictionModule_1}>
-            <div className={styles.item} onClick={ev =>this.attendanceData(ev)}>
-                <img className={styles.itemImg}src={attendanceRecord} alt=""/>
-                <span className={styles.itemName}>员工考勤记录</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={administration} alt=""/>
-                <span className={styles.itemName}>企业管理</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={staff} alt=""/>
-                <span className={styles.itemName}>员工资料</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-            <div className={styles.item}>
-                <img className={styles.itemImg}src={release} alt=""/>
-                <span className={styles.itemName}>发布公告</span>
-                <img className={styles.itemGo} src={go} alt=""/>
-            </div>
-        </div>
-      );
-    }else{
-      return null
-    }
-}
-
 class UserCenter extends Component{
     constructor() {
         super();
-        this.state={}
+        this.state={
+            userId:'superManagement',
+            user:[
+                {icon:record,name:'考勤记录'},
+                {icon:remind,name:'打卡提醒'},
+                {icon:revise,name:'修改部门'},
+            ],
+            superMan:[
+                {icon:attendanceRecord,name:'员工考勤记录'},
+                {icon:administration,name:'企业管理'},
+                {icon:staff,name:'员工资料'},
+                {icon:release,name:'发布公告'},
+                {icon:setUp,name:'设置考勤'}
+            ],
+            ordinary:[
+                {icon:attendanceRecord,name:'员工考勤记录'},
+                {icon:administration,name:'企业管理'},
+                {icon:staff,name:'员工资料'},
+                {icon:release,name:'发布公告'}
+            ],
+        }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人中心';
     }
-    attendanceRecord() {
-        this.props.history.push('/attendanceRecord');
-    }
-    cardReminding() {
-        this.props.history.push('/cardReminding');
-    }
-    revisionDepartment() {
-        this.props.history.push('/revisionDepartment');
-    }
     punchClock() {
         this.props.history.push('/punchClock');
     }
-    // attendanceData() {
-    //     this.props.history.push('/attendanceData')
-    // }
+    attendanceData() {
+        this.props.history.push('/attendanceData')
+    }
+    moveToUser(i){
+        const userUrl = ['/attendanceRecord','/cardReminding','/revisionDepartment'];
+        this.props.history.push(userUrl[i]);
+    }
+    moveToOrdinary(i){
+        const ordinaryUrl = ['/attendanceData','/ordinaryEnterorise','/employeeInformation','/releaseAnnouncement']
+        this.props.history.push(ordinaryUrl[i]);
+    }
+    moveToSuper(i) {
+        const superUrl = ['/attendanceData','/enterpriseManager','/employeeInformation','/releaseAnnouncement','/attendanceManagement']
+        this.props.history.push(superUrl[i]);
+    }
     render() {
+
+        const {userId,superMan,ordinary,user} = this.state;
+        
+        const Module = props => {
+            if ( userId === 'superManagement') {
+              return (
+                <div className={styles.jurisdictionModule_1}>
+                    {
+                        superMan.map((ev,index) =>
+                        <div className={styles.item} key={index} onClick={ev =>this.moveToSuper(index)}>
+                            <img className={styles.itemImg}src={ev.icon} alt=""/>
+                            <span className={styles.itemName}>{ev.name}</span>
+                            <img className={styles.itemGo} src={go} alt=""/>
+                        </div>
+
+                         )
+                    }
+                </div>    
+              );
+            } else if(userId === 'ordinaryManagement'){
+              return (
+                <div className={styles.jurisdictionModule_1}>
+                    {
+                        ordinary.map((ev,index) =>
+                        <div className={styles.item} key={index} onClick={ev =>this.moveToOrdinary(index)}>
+                            <img className={styles.itemImg}src={ev.icon} alt=""/>
+                            <span className={styles.itemName}>{ev.name}</span>
+                            <img className={styles.itemGo} src={go} alt=""/>
+                        </div>
+
+                         )
+                    }
+                </div>    
+              );
+            }else{
+              return null
+            }
+        }
+
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -124,23 +125,17 @@ class UserCenter extends Component{
                     </div>
                 </div>
                 <div className={styles.content}>
-                    <div className={styles.item} onClick={ev =>this.attendanceRecord(ev)}>
-                        <img className={styles.itemImg}src={record} alt=""/>
-                        <span className={styles.itemName}>考勤记录</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item} onClick={ev =>this.cardReminding(ev)}>
-                        <img className={styles.itemImg}src={remind} alt=""/>
-                        <span className={styles.itemName}>打卡提醒</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
-                    <div className={styles.item} onClick={ev =>this.revisionDepartment(ev)}>
-                        <img className={styles.itemImg}src={revise} alt=""/>
-                        <span className={styles.itemName}>修改部门</span>
-                        <img className={styles.itemGo} src={go} alt=""/>
-                    </div>
+                    {
+                        user.map((ev,index) =>
+                        <div className={styles.item} key={index} onClick={ev =>this.moveToUser(index)}>
+                            <img className={styles.itemImg}src={ev.icon} alt=""/>
+                            <span className={styles.itemName}>{ev.name}</span>
+                            <img className={styles.itemGo} src={go} alt=""/>
+                        </div>
+                       )
+                    }
                 </div>
-                <Module userId='superManagement'/>
+                <Module></Module>
                 <div className={styles.tabBox}>
                     <div className={styles.tab} onClick={ev =>this.punchClock(ev)}>
                         <img className={styles.tabImg} src={clock} alt=""/>

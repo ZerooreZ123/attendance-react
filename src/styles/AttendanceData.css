@@ -64,6 +64,10 @@
     color:#707070;
     border-bottom: 2px solid #ddd;
 }
+timetable>div{
+    width:100px;
+    height:102px;
+}
 .currentTimetable{
     color:#2295e8;
 }
@@ -92,8 +96,21 @@
 .punchTime{
     color:#999;
 }
-.abnormal{
-    color:rgb(236, 73, 73);
+.totalDay{
+    margin-top:26px;
+    padding-left:24px;
+    color:#000;
+}
+.nameBox{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:0 22px;
+    font-size:22px;
+    color:#999;
+}
+.detail{
+    color:#2295e8;
 }
 .footer{
     display:flex;

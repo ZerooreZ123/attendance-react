@@ -13,17 +13,20 @@ class ExportData extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '导出数据';
     }
+    backMove() {
+        window.history.go(-1);
+    }
     render() {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/></div>
                     <div className={styles.title}>导出数据</div>
                 </div>
                 <div className={styles.content}>
                     <div className={styles.describe}>
                         <div>数据描述</div>
-                        <div><span>2018.01.</span>/<span>智慧园区</span></div>
+                        <div><span>2018.01.12</span>/<span>智慧园区</span></div>
                     </div>
                     <div className={styles.mailbox}>
                         <div>接收邮箱</div>

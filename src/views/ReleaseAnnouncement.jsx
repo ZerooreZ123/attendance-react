@@ -16,7 +16,9 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
     }
-    
+    historyAnnouncement() {
+        this.props.history.push('/historyAnnouncement');
+    }
     render() {
         return(
             <div className={styles.container}>
@@ -45,7 +47,7 @@ class ReleaseAnnouncement extends Component{
                 </div>
                 <div className={styles.footer}>
                     <div className={styles.case}>
-                        <div className={styles.history}>历史公告</div>
+                        <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
                         <div className={styles.photoBox}>
                            <img className={styles.addphoto} src={addphoto} alt=""/>
                         </div>

@@ -14,14 +14,19 @@ class HistoryAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '历史公告';
     }
-
+    backMove() {
+        window.history.go(-1);
+    }
+    releaseAnnouncement() {
+        this.props.history.push('/releaseAnnouncement');
+    }
     render() {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <img className={styles.back} src={backImg} alt=""/>
+                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
                     <div className={styles.title}>历史公告</div>
-                    <div className={styles.release}>发布公告</div>
+                    <div onClick={ev =>this.releaseAnnouncement(ev)} className={styles.release}>发布公告</div>
                 </div>
                 <div className={styles.content}>
                     <div className={styles.item}>
