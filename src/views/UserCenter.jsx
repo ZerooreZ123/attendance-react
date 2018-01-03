@@ -1,17 +1,18 @@
 import React,{Component} from 'react';
 import styles from '../styles/UserCenter.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import headPortrait from '../asset/userCenter/headPortrait.png';
 import record from '../asset/userCenter/record.png';
 import remind from '../asset/userCenter/remind.png';
 import revise from '../asset/userCenter/revise.png';
-
 import attendanceRecord from '../asset/manager/attendanceRecord.png';
 import administration from '../asset/manager/administration.png';
 import staff from '../asset/manager/staff.png';
 import release from '../asset/manager/release.png';
 import setUp from '../asset/manager/setUp.png';
-
 import person from '../asset/manager/person-1.png';
 import clock from '../asset/manager/location-2.png';
 import go from '../asset/manager/go.png';
@@ -20,29 +21,13 @@ class UserCenter extends Component{
     constructor() {
         super();
         this.state={
-            userId:'superManagement',
-            user:[
-                {icon:record,name:'考勤记录'},
-                {icon:remind,name:'打卡提醒'},
-                {icon:revise,name:'修改部门'},
-            ],
-            superMan:[
-                {icon:attendanceRecord,name:'员工考勤记录'},
-                {icon:administration,name:'企业管理'},
-                {icon:staff,name:'员工资料'},
-                {icon:release,name:'发布公告'},
-                {icon:setUp,name:'设置考勤'}
-            ],
-            ordinary:[
-                {icon:attendanceRecord,name:'员工考勤记录'},
-                {icon:administration,name:'企业管理'},
-                {icon:staff,name:'员工资料'},
-                {icon:release,name:'发布公告'}
-            ],
+            roleid:'',
+            dataSource:{}
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人中心';
+        this.getUser();
     }
     punchClock() {
         this.props.history.push('/punchClock');
@@ -62,12 +47,36 @@ class UserCenter extends Component{
         const superUrl = ['/attendanceData','/enterpriseManager','/employeeInformation','/releaseAnnouncement','/attendanceManagement']
         this.props.history.push(superUrl[i]);
     }
+    async unbind() {
+        const result = await XHR.post(API.unbindUser,{loginName:"18550117460"});
+        if(JSON.parse(result).success === 'T') {
+            alert('解绑成功');
+        }else{
+            alert('解绑失败');
+        }
+    }
+    unbindUser() {
+        let mes = "解绑后您的资料与考勤数据将消失,确认解绑吗？";
+        if(window.confirm(mes) === true) {
+            this.unbind() 
+        }else{
+          return false
+        }
+    }
+    async getUser() {
+        const result = await XHR.post(API.getUser,{loginName:"18550117460"});
+        this.setState({ dataSource: JSON.parse(result).data });
+        this.setState({roleid:JSON.parse(result).data.roleid});
+    }
     render() {
 
-        const {userId,superMan,ordinary,user} = this.state;
+        const {roleid,dataSource} = this.state;
+        const user = [{icon:record,name:'考勤记录'},{icon:remind,name:'打卡提醒'},{icon:revise,name:'修改部门'}];
+        const superMan = [{icon:attendanceRecord,name:'员工考勤记录'},{icon:administration,name:'企业管理'},{icon:staff,name:'员工资料'},{icon:release,name:'发布公告'},{icon:setUp,name:'设置考勤'}];
+        const ordinary = [{icon:attendanceRecord,name:'员工考勤记录'},{icon:administration,name:'企业管理'},{icon:staff,name:'员工资料'},{icon:release,name:'发布公告'}];
         
         const Module = props => {
-            if ( userId === 'superManagement') {
+            if ( roleid === '2') {
               return (
                 <div className={styles.jurisdictionModule_1}>
                     {
@@ -82,7 +91,7 @@ class UserCenter extends Component{
                     }
                 </div>    
               );
-            } else if(userId === 'ordinaryManagement'){
+            } else if(roleid === '3'){
               return (
                 <div className={styles.jurisdictionModule_1}>
                     {
@@ -105,7 +114,7 @@ class UserCenter extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <span>解绑企业</span>
+                    <span onClick={ev =>this.unbindUser(ev)}>解绑企业</span>
                     <span>个人中心</span>
                     <span>后台登录</span>
                 </div>
@@ -114,12 +123,12 @@ class UserCenter extends Component{
                     <div className={styles.personalInformation}>
                         <div className={styles.name}>
                             <span>0001</span>
-                            <span>王小明</span>
-                            <span>(超级管理员)</span>
+                            <span>{dataSource.name}</span>
+                            <span>({dataSource.roleNames})</span>
                         </div>
-                        <div className={styles.phone}>13851712109</div>
+                        <div className={styles.phone}>{dataSource.loginName}</div>
                         <div className={styles.company}>
-                            <span>南京XXXX责任有限公司</span>/
+                            <span>{dataSource.companyName}</span>/
                             <span>人事部</span>
                         </div>
                     </div>

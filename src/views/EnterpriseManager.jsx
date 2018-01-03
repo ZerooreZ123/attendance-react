@@ -2,6 +2,9 @@
 import React,{Component} from 'react';
 import styles from '../styles/EnterpriseManager.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import back from '../asset/ico/back.png';
 import go from '../asset/manager/go.png';
 import circle from '../asset/userCenter/circle_code.png';
@@ -12,17 +15,19 @@ class EnterpriseManager extends Component{
         this.state={
             currentIndex:0,
             division:false,
-            section:['人事部','采购部','行政部','业务部','研发部'],
-            machineNum:['HASDKASDSD','SADFASFASA','ADSFASDFAS','DADSODPEDK']
+            section:[],
+            machineNum:[]
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '企业管理';
+        this.getOfficeList();
+        this.getAttendanceMachineList();
     }
     addAttendanceMachine() {
         this.props.history.push('/addAttendanceMachine')
     }
-    addDivision() {
+    addDivision() {        //添加部门
         this.setState({division:true});
     }
     backMove() {
@@ -30,6 +35,25 @@ class EnterpriseManager extends Component{
     }
     selectTab(i) {
         this.setState({currentIndex:i});
+    }
+    async getOfficeList() {                //获取公司部门列表
+        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const dataSource = JSON.parse(result).data;
+        const officeList = [];
+        dataSource.forEach((item,index) =>
+            officeList.push(dataSource[index].name)
+        )
+        this.setState({section:officeList});
+
+    }
+    async getAttendanceMachineList() {     //获取考勤机列表
+        const result = await XHR.post(API.getAttendanceMachineList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const dataSource = JSON.parse(result).data;
+        const machineList = [];
+        dataSource.forEach((item,index) =>
+            machineList.push(dataSource[index].id)   
+        )
+        this.setState({machineNum:machineList});
     }
     render() {
         const { section,machineNum,division} = this.state;
@@ -68,7 +92,7 @@ class EnterpriseManager extends Component{
                         {
                             machineNum.map((item,index) =>
                                 <div className={styles.item} key={index}>
-                                    <div className={styles.name}>考勤机{index}: {item}</div>
+                                    <div className={styles.name}>考勤机{index+1}: {item}</div>
                                 </div>
                             )
                         }
@@ -100,6 +124,7 @@ class EnterpriseManager extends Component{
                 <div className={styles.header}>
                     <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
                     <div className={styles.title}>南京XX责任有限公司</div>
+                    <div className={styles.edit}>编辑</div>
                 </div>
                 <div className={styles.timetable}>
                     {

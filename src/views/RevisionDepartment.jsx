@@ -1,6 +1,9 @@
 import React,{Component} from 'react';
 import styles from '../styles/RevisionDepartment.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import back from '../asset/ico/back.png'
 
 class RevisionDepartment extends Component{
@@ -12,10 +15,19 @@ class RevisionDepartment extends Component{
     }
     componentDidMount() {
         document.querySelector('title').innerText = '修改部门';
+        this.addOrUpdateOfficce();
     }
     backMove() {
         this.props.history.push('/userCenter');
-     }
+    }
+    async addOrUpdateOfficce() {
+        const result = await XHR.post(API.addOrUpdateOfficce,{
+                companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+                officeName:"测试5",
+                officeid:"1bf103d59edb4e0eabecf0e856b02e06"
+        })
+        console.log(result);
+    }
     render() {
         const {section} = this.state;
         return(

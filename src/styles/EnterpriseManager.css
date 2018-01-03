@@ -37,6 +37,16 @@
     margin: 0 auto;
     font-size:38px;
 }
+.edit{
+    position: absolute;
+    top:0px;
+    right:22px;
+    width:60px;
+    height:76px;
+    line-height:76px;
+    font-size:28px;
+    color:#2295e8;
+}
 .tab{
     color:#2295e8;
    
