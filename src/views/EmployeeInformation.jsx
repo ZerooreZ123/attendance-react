@@ -2,6 +2,9 @@
 import React,{Component} from 'react';
 import styles from '../styles/EmployeeInformation.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import back from '../asset/ico/back.png';
 import search from '../asset/manager/search.png';
 import forward from '../asset/manager/go.png';
@@ -23,40 +26,20 @@ class EmployeeInformation extends Component{
         super();
         this.state={
             mask:false,
-            departmentStaff:[{
-                department:'人事部',
-                staff:[{
-                    name:'叶湘伦',
-                    phone:13489785689
-                },{
-                    name:'路小雨',
-                    phone:12345678899
-                }]
-            },{
-                department:'采购部',
-                staff:[{
-                    name:'残月风',
-                    phone:13489785689
-                },{
-                    name:'江映雪',
-                    phone:12345678899
-                }]
-            }       
-            ],
-            section:['人事部','采购部','行政部','业务部','研发部','技术部','智慧园区']
+            departmentStaff:[],
+            section:[],
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '员工资料';
+        this.getOfficeList();
+        this.getOfficeUserList();
     }
     hideMask() {
         this.setState({ mask: false });
     }
       showMask() {
         this.setState({ mask: true });
-    }
-    clickTerm() {
-        alert('hello') 
     }
     jumpSearch() {
         this.props.history.push('/search')
@@ -66,7 +49,37 @@ class EmployeeInformation extends Component{
     }
     backMove() {
         this.props.history.push('/userCenter');
-     }
+    }
+    async getOfficeList() {
+        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const sectionList = [];
+        JSON.parse(result).data.forEach((item,index) =>{
+            sectionList.push({
+                name:item.name,
+                id:item.id
+            })
+        });
+        this.setState({section:sectionList});   
+    }
+    async getOfficeUserList() {
+        const result = await XHR.post(API.getOfficeUserList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const dataSource = JSON.parse(result).data;
+        const userList = [];
+        for(var i in dataSource) {
+            userList.push({
+                department:i,
+                staff:dataSource[i]
+           })
+        }
+        this.setState({departmentStaff:userList});
+    }
+    async clickTerm(i) {
+        const result = await XHR.post(API.getOfficeUserList,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            officeid:"68566bc636f8435e8bd1fc77dd7faa16"    
+        })
+        console.log(result);
+    }
     render() {
         const {departmentStaff,section} = this.state;
         const Mask = props => {
@@ -81,7 +94,7 @@ class EmployeeInformation extends Component{
                             <div className={styles.departmentBox}>
                                 {
                                     section.map((item,index) =>
-                                        <div onClick={ev =>this.clickTerm(ev)} className={styles.term} key={index}>{item}</div>
+                                        <div onClick={ev =>this.clickTerm(index)} className={styles.term} key={index}>{item.name}</div>
                                     )
                                 }
                                 <div className={styles.clearBoth}></div>
@@ -113,7 +126,7 @@ class EmployeeInformation extends Component{
                                     <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
                                         <div className={styles.information}>
                                             <div className={styles.name}>{item.name}</div>
-                                            <div className={styles.phone}>{item.phone}</div>
+                                            <div className={styles.phone}>{item.loginName}</div>
                                         </div>
                                         <img className={styles.forward} src={forward} alt=""/>
                                     </div>

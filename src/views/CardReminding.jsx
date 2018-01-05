@@ -2,6 +2,9 @@ import React,{Component} from 'react';
 import Switch from 'react-ios-switch';
 import styles from '../styles/CardReminding.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import back from '../asset/ico/back.png';
 import blueTop from '../asset/manager/triangle-top.png';
 import grayDown from '../asset/ico/icon.png';
@@ -19,11 +22,17 @@ class CardReminding extends Component {
     constructor() {
         super();
         this.state={
-            timeList:false
+            timeList:false,
+            upTime:'',
+            downTime:'',
+            upSwitch:'',
+            downSwitch:'',
+            dataSource:{}
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '打卡提醒';
+        this.getUserRemind();
     }
     showTimeList() {
         this.setState({timeList:true});
@@ -33,9 +42,33 @@ class CardReminding extends Component {
     }
     backMove() {
         this.props.history.push('/userCenter');
-     }
+    }
+    selectTime(i) {
+        const list = [3,5,10,20,30];
+        this.setState({upTime:list[i]});
+        this.hideTimeList();
+    }
+    async getUserRemind() {
+        const result = await XHR.post(API.getUserRemind,{loginName:"18550117460"});
+        this.setState({upTime:JSON.parse(result).data.upTime});
+        this.setState({downTime:JSON.parse(result).data.downTime});
+        this.setState({upSwitch:JSON.parse(result).data.upSwitch});
+        this.setState({downSwitch:JSON.parse(result).data.downSwitch});
+    }
+    async clockInRemind() {
+        const {dataSource} = this.state;
+        const result = await XHR.post(API.clockInRemind,{
+            loginName:"18550117460",
+            upTime:this.state.gotoTime,
+            upSwitch:this.state.gotoSwitch,
+            downTime:this.state.gooffTime,
+            downSwitch:this.state.gooffSwitch,
+            id:dataSource.id
+        });
+    }
     render() {
-        const list = ['前3分钟','前5分钟','前10分钟','前20分钟','前30分钟']
+        const list = [3,5,10,20,30];
+        const {upTime,upSwitch,downTime,downSwitch} = this.state;
         const TimeList = props => {
             if (this.state.timeList) {
                 return (
@@ -43,7 +76,7 @@ class CardReminding extends Component {
                         <div className={styles.maskBox}>
                             <div className={styles.timeSlot}>
                             {
-                                list.map((item,index) =><div key={index} onClick={ev =>this.hideTimeList(ev)}>{item}</div>)
+                                list.map((item,index) =><div key={index} onClick={ev =>this.selectTime(index)}>前{item}分钟</div>)
                             }
                             </div>
                         </div>
@@ -63,20 +96,20 @@ class CardReminding extends Component {
                     <div className={styles.item}>
                         <div>
                             <div className={styles.work}>上班打卡提醒</div>
-                            <div onClick={ev =>this.showTimeList(ev)} className={styles.workRemind}>上班前10分钟未打卡提醒
+                            <div onClick={ev =>this.showTimeList(ev)} className={styles.workRemind}>上班前{upTime}分钟未打卡提醒
                                <Icon direction={false}></Icon>
                             </div>
                         </div>
-                        <Switch checked={true}></Switch>
+                        <Switch onClick={ev =>this.toggleSwitch(ev)} checked={upSwitch === '0' ? true:false}></Switch>
                     </div>
                     <div className={styles.item}>
                         <div>
                             <div className={styles.work}>下班打卡提醒</div>
-                            <div onClick={ev =>this.showTimeList(ev)} className={styles.workRemind}>下班后10分钟未打卡提醒
+                            <div onClick={ev =>this.showTimeList(ev)} className={styles.workRemind}>下班后{downTime}分钟未打卡提醒
                                <Icon direction={false}></Icon>
                             </div>
                         </div>
-                        <Switch checked={true}></Switch>
+                        <Switch onClick={ev =>this.changeSwitch(ev)} checked={downSwitch === '0' ? true:false}></Switch>
                     </div>
                 </div>
                 <TimeList></TimeList>

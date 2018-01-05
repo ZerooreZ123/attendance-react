@@ -48,7 +48,7 @@
     border-bottom:2px solid #ddd;
 }
 .department{
-    color:#2295e8;
+    color:#000;
 }
 .departmentBox{
     padding:0 22px;
@@ -69,7 +69,7 @@
     color:#fff;
     background:#2295e8;
 }
-.edit{
+.editBox{
     position:fixed;
     left:0;
     bottom:0;
@@ -77,7 +77,15 @@
     justify-content: center;
     align-items: center;
     width:100%;
-    border-top:2px solid #ddd;
+    border-top:3px solid #ddd;
+}
+.edit{
+    width:100%;
+    font-size:30px;
+    text-align: center;
+    line-height: 100px;
+    color:#2295e8;
+    background:#fff;
 }
 .cancel,.confirm{
     width:50%;

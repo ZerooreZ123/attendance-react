@@ -13,14 +13,16 @@ class EnterpriseManager extends Component{
     constructor() {
         super();
         this.state={
-            currentIndex:0,
+            currentIndex:0,             //切换tab的index
             division:false,
-            section:[],
-            machineNum:[]
+            section:[],                 //部门列表
+            machineNum:[],              //考勤机列表
+            companyInfo:{}              //公司名称及邀请码
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '企业管理';
+        this.getCompany();
         this.getOfficeList();
         this.getAttendanceMachineList();
     }
@@ -35,6 +37,11 @@ class EnterpriseManager extends Component{
     }
     selectTab(i) {
         this.setState({currentIndex:i});
+    }
+    async getCompany() {                   //获取公司信息
+        const result = await XHR.post(API.getCompany,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        this.setState({companyInfo:JSON.parse(result).data})
+
     }
     async getOfficeList() {                //获取公司部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
@@ -56,7 +63,7 @@ class EnterpriseManager extends Component{
         this.setState({machineNum:machineList});
     }
     render() {
-        const { section,machineNum,division} = this.state;
+        const { section,machineNum,division,companyInfo} = this.state;
         const tab = ['邀请码','部门管理','考勤机编号']
         const Adddivision = props => {
             if(division) {
@@ -105,7 +112,7 @@ class EnterpriseManager extends Component{
                         <div className={styles.codeWrap}>
                         <div className={styles.codeContent}>
                             <img style={{width:170,height:170}} src={circle} alt=""/>
-                            <div className={styles.code}>5666</div>
+                            <div className={styles.code}>{companyInfo.invitationCode}</div>
                         </div>
                         <div style={{marginTop:10}}>邀请码</div>
                         <div style={{marginTop:10,color:'gray'}}>分享邀请码即可让员工注册</div>
@@ -123,7 +130,7 @@ class EnterpriseManager extends Component{
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
-                    <div className={styles.title}>南京XX责任有限公司</div>
+                    <div className={styles.title}>{companyInfo.name}</div>
                     <div className={styles.edit}>编辑</div>
                 </div>
                 <div className={styles.timetable}>

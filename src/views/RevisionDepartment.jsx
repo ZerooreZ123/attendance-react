@@ -9,27 +9,78 @@ import back from '../asset/ico/back.png'
 class RevisionDepartment extends Component{
     constructor(){
         super();
-        this.state={
-            section:['人事部','采购部','行政部','业务部','研发部','技术部','智慧园区']
+        this.state = {
+            edit:false,                //默认显示'修改'
+            section:[],                //部门列表
+            departmentName:'智慧园区',
+            departmentId:''
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '修改部门';
-        this.addOrUpdateOfficce();
+        this.getOfficeList();
+       
     }
     backMove() {
         this.props.history.push('/userCenter');
     }
-    async addOrUpdateOfficce() {
+    editDepartment() {
+        this.setState({edit:true});
+    }
+    choice(i) {                                         //选择部门
+       this.setState({departmentName:this.state.section[i].name});
+       this.setState({departmentId:this.state.section[i].id});
+
+    }
+    confirmBtn() {                                     //确认修改
+        this.setState({edit:false})
+        this.addOrUpdateOfficce();
+    }
+    async getOfficeList() {                           //部门列表
+        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const sectionList = [];
+        JSON.parse(result).data.forEach((item,index) =>{
+            sectionList.push({
+                name:item.name,
+                id:item.id
+            })
+        });
+        this.setState({section:sectionList});   
+    }
+    async addOrUpdateOfficce() {                      //修改部门API
         const result = await XHR.post(API.addOrUpdateOfficce,{
-                companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
-                officeName:"测试5",
-                officeid:"1bf103d59edb4e0eabecf0e856b02e06"
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            officeName:this.state.departmentName,
+            officeid:this.state.departmentId
         })
-        console.log(result);
     }
     render() {
-        const {section} = this.state;
+        const {section,edit,departmentName} = this.state;
+        const Revision = props => {
+            if (edit === false ) {
+                return(
+                    <div className={styles.editBox}>
+                        <div onClick={ev =>this.editDepartment(ev)} className={styles.edit}>修改</div>
+                    </div>
+                )
+            } else {
+                return(
+                    <div>
+                        <div className={styles.departmentBox}>
+                        {
+                            section.map((item,index) =>
+                                <div onClick={ev =>this.choice(index)} className={styles.item} key={index}>{item.name}</div>
+                            )
+                        }
+                        </div>
+                        <div className={styles.editBox}>
+                            <div className={styles.cancel}>取消</div>
+                            <div onClick={ev =>this.confirmBtn(ev)} className={styles.confirm}>确认</div>
+                        </div>
+                    </div>
+                )
+            }
+        }
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -38,19 +89,9 @@ class RevisionDepartment extends Component{
                 </div>
                 <div className={styles.information}>
                     <div className={styles.name}>王大宏</div>
-                    <div className={styles.department}>智慧园区</div>
+                    <div className={styles.department}>{departmentName}</div>
                 </div>
-                <div className={styles.departmentBox}>
-                {
-                    section.map((item,index) =>
-                        <div className={styles.item} key={index}>{item}</div>
-                    )
-                }
-                </div>
-                <div className={styles.edit}>
-                    <div className={styles.cancel}>取消</div>
-                    <div className={styles.confirm}>确认</div>
-                </div>
+                <Revision></Revision>
             </div>
         )
     }

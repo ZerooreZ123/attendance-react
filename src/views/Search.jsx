@@ -2,6 +2,9 @@
 import React,{Component} from 'react';
 import styles from '../styles/Search.css';
 
+// import XHR from '../utils/request';
+// import API from '../api/index';
+
 import cleanUp from '../asset/ico/cleanUp.png';
 import cleanButton from '../asset/ico/ClearButton.png';
 
@@ -14,6 +17,7 @@ class Search extends Component {
     }
     componentDidMount() {
         document.querySelector('title').innerText = '搜索';
+
     }
     empty() {
         this.setState({searchHistory:[]});
