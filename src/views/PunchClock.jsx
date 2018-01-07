@@ -25,7 +25,7 @@ class PunchClock extends Component {
           month:'',                //月
           day:'',                  //日
           weekday:'',              //周几
-          prompt:1,                //考勤机状态
+          prompt:3,                //考勤机状态
         };
       }
     componentDidMount() {
@@ -90,7 +90,7 @@ class PunchClock extends Component {
                 </div>
               </div>
               <div className={styles.prompt}>
-                <img className={styles.promptImg} src={load} alt=""/>正在搜索考勤机...
+                <img className={styles.promptImg} src={load} alt=""/><span className={styles.text}>正在搜索考勤机...</span>
               </div>
               <div className={styles.refreshHide}>刷新页面</div>
               <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
@@ -122,7 +122,7 @@ class PunchClock extends Component {
                 </div>
               </div>
               <div className={styles.prompt}>
-                <img className={styles.promptImg} src={warn} alt=""/>网络连接异常,蓝牙未打开
+                <img className={styles.promptImg} src={warn} alt=""/><span className={styles.text}>网络连接异常,蓝牙未打开</span>
               </div>
               <div className={styles.refreshShow}>刷新页面</div>
               <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
@@ -138,7 +138,7 @@ class PunchClock extends Component {
                 </div>
               </div>
               <div className={styles.prompt}>
-                <img className={styles.promptImg} src={successMin} alt=""/>打卡成功!
+                <img className={styles.promptImg} src={successMin} alt=""/><span className={styles.text}>打卡成功!</span>
               </div>
               <div className={styles.refreshHide}>刷新页面</div>
               <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>

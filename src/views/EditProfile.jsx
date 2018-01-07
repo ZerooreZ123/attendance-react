@@ -60,7 +60,7 @@ class EditProfile extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>员工资料</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>员工资料</span></div>
                     <div className={styles.title}>修改资料</div>
                     <div onClick={ev =>this.hideDepartment(ev)} className={styles.confirm}>确定</div>     
                 </div>

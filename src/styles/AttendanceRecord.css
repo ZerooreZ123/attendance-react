@@ -25,6 +25,11 @@
     line-height:50px;
     font-size:28px;
 }
+.backCaption{
+    position:relative;
+    top:4px;
+    left:0;
+}
 .backImg{
     display:inline-block;
     vertical-align: middle;

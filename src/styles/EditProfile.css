@@ -22,6 +22,11 @@
 .back{
     padding-left:22px;
 }
+.backCaption{
+    position:relative;
+    top:4px;
+    left:0;
+}
 .backImg{
     display:inline-block;
     width:28px;

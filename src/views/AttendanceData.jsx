@@ -112,7 +112,7 @@ class AttendanceData extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back} onClick={ev =>this.backMove(ev)}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div className={styles.back} onClick={ev =>this.backMove(ev)}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
                     <div className={styles.title}>
                         <div className={styles.currentTab}>全部</div>
                         <div className={styles.tab}>异常</div>

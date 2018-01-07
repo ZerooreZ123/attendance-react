@@ -110,7 +110,7 @@ class EmployeeInformation extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/>个人中心</div>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
                     <div className={styles.title}>员工资料</div>
                     <img onClick={ev =>this.jumpSearch(ev)} className={styles.search} src={search} alt=""/>     
                 </div>
