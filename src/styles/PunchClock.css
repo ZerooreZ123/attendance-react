@@ -64,6 +64,31 @@
     border-radius:50%;
     -webkit-animation:circle 1s infinite linear;/*匀速 循环*/
 }
+.circular{
+    z-index:1;
+    width:276px;
+    height:276px;
+    border:18px solid #b4dbf7;
+    border-radius:50%;
+}
+.cardFinish{
+    z-index:1;
+    width:276px;
+    height:276px;
+}
+.cardTime{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top:24px;
+    left:0;
+    z-index:2;
+    width:276px;
+    height:276px;
+    color:#6dbafe;
+}
 @-webkit-keyframes circle{
     0%{ transform:rotate(0deg); }
     100%{ transform:rotate(360deg); }
@@ -80,11 +105,15 @@
     width:276px;
     height:276px;
     border-radius: 50%;
-    color:#fff;
+    color:#6dbafe;
     background: #2093e6;
 }
 .clockOn{
     font-size:44px;
+}
+.clockCan{
+    font-size:44px;
+    color:#fff;
 }
 .clockDate{
     font-size:30px;
@@ -97,15 +126,26 @@
     width:32px;
     height: 32px;
 }
-.refresh{
+.refreshHide{
     width:376px;
     height:70px;
-    border: 3px solid #2295e8;
+    border: 3px solid #f0f8fd;
     border-radius:3px;
     line-height: 70px;
     text-align: center;
     font-size:26px;
-    color:#2295e8;
+    color:#f0f8fd;
+    margin:120px 0 22px;
+}
+.refreshShow{
+    width:376px;
+    height:70px;
+    border: 3px solid #2093e6;
+    border-radius:3px;
+    line-height: 70px;
+    text-align: center;
+    font-size:26px;
+    color:#2093e6;
     margin:120px 0 22px;
 }
 .promptText{

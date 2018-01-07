@@ -53,7 +53,7 @@
 .departmentBox{
     padding:0 22px;
 }
-.item,.selectItem{
+.itemList,.selectItem{
     float:left;
     width:30%;
     height:94px;

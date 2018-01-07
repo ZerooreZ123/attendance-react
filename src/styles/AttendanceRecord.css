@@ -67,6 +67,9 @@
 .currentMonth{
     color:#2295e8;
 }
+noMonth{
+    color:#000;
+}
 .item{
     border-bottom:1px solid #ddd;
     padding:20px 0 22px;

@@ -12,8 +12,9 @@ class RevisionDepartment extends Component{
         this.state = {
             edit:false,                //默认显示'修改'
             section:[],                //部门列表
-            departmentName:'智慧园区',
-            departmentId:''
+            departmentName:'智慧园区',  //默认部门
+            departmentId:'',           //部门Id
+            departmentIndex:''
         }
     }
     componentDidMount() {
@@ -28,6 +29,7 @@ class RevisionDepartment extends Component{
         this.setState({edit:true});
     }
     choice(i) {                                         //选择部门
+       this.setState({departmentIndex:i})
        this.setState({departmentName:this.state.section[i].name});
        this.setState({departmentId:this.state.section[i].id});
 
@@ -55,7 +57,7 @@ class RevisionDepartment extends Component{
         })
     }
     render() {
-        const {section,edit,departmentName} = this.state;
+        const {section,edit,departmentName,departmentIndex} = this.state;
         const Revision = props => {
             if (edit === false ) {
                 return(
@@ -69,7 +71,7 @@ class RevisionDepartment extends Component{
                         <div className={styles.departmentBox}>
                         {
                             section.map((item,index) =>
-                                <div onClick={ev =>this.choice(index)} className={styles.item} key={index}>{item.name}</div>
+                                <div onClick={ev =>this.choice(index)} className={departmentIndex === index?styles.selectItem:styles.itemList} key={index}>{item.name}</div>
                             )
                         }
                         </div>
