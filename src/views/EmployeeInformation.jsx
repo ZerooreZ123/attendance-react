@@ -25,9 +25,14 @@ class EmployeeInformation extends Component{
     constructor() {
         super();
         this.state={
-            mask:false,
-            departmentStaff:[],
-            section:[],
+            departmentStaff:[],         //部门及所属员工列表
+            departmentPart:[],          //部门人员列表
+            section:[],                 //部门列表
+            departmentName:'全部',       //默认部门
+            departmentIndex:'',         //部门的索引值
+            departmentId:'',            //部门Id
+            mask:false,                 //默认不显示部门
+            exhibition:0                //展示人员 0全部部门人员  1部门人员
         }
     }
     componentDidMount() {
@@ -38,7 +43,7 @@ class EmployeeInformation extends Component{
     hideMask() {
         this.setState({ mask: false });
     }
-      showMask() {
+    showMask() {
         this.setState({ mask: true });
     }
     jumpSearch() {
@@ -50,7 +55,12 @@ class EmployeeInformation extends Component{
     backMove() {
         this.props.history.push('/userCenter');
     }
-    async getOfficeList() {
+    clickTerm(i) {                              //设置部门索引、名字、Id  
+        this.setState({departmentIndex:i})
+        this.setState({departmentName:this.state.section[i].name});
+        this.setState({departmentId:this.state.section[i].id});
+    }
+    async getOfficeList() {                     //获取部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
         const sectionList = [];
         JSON.parse(result).data.forEach((item,index) =>{
@@ -61,7 +71,7 @@ class EmployeeInformation extends Component{
         });
         this.setState({section:sectionList});   
     }
-    async getOfficeUserList() {
+    async getOfficeUserList() {                //获取全部部门及部门人员列表
         const result = await XHR.post(API.getOfficeUserList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
         const dataSource = JSON.parse(result).data;
         const userList = [];
@@ -73,47 +83,32 @@ class EmployeeInformation extends Component{
         }
         this.setState({departmentStaff:userList});
     }
-    async clickTerm(i) {
-        const result = await XHR.post(API.getOfficeUserList,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
-            officeid:"68566bc636f8435e8bd1fc77dd7faa16"    
-        })
-        console.log(result);
+    async determineDepartment() {             //确认选定部门
+        this.hideMask();
+        if(this.state.departmentId){
+            const result = await XHR.post(API.getOfficeUserList,{
+                companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+                officeid:this.state.departmentId    
+            });
+            const dataSource = JSON.parse(result).data;
+            const userList = [];
+            dataSource.map((item,index) =>
+                userList.push({
+                    name:item.name,
+                    loginName:item.loginName
+                })
+            )
+            this.setState({departmentPart:userList});
+            this.setState({exhibition:1});
+        }else{
+            return null;
+        }
     }
     render() {
-        const {departmentStaff,section} = this.state;
-        const Mask = props => {
-            if (this.state.mask) {
-                return (
-                    <div className={styles.mask}>
-                        <div className={styles.maskBox}>
-                            <div className={styles.operation}>
-                                <img className={styles.spread} src={spread} alt=""/>
-                            </div>
-                            <div className={styles.determine} onClick={ev =>this.hideMask(ev)}>确定</div>
-                            <div className={styles.departmentBox}>
-                                {
-                                    section.map((item,index) =>
-                                        <div onClick={ev =>this.clickTerm(index)} className={styles.term} key={index}>{item.name}</div>
-                                    )
-                                }
-                                <div className={styles.clearBoth}></div>
-                            </div>
-                            <div className={styles.footer}>智慧园区<Direction checked={true}/></div>
-                        </div>
-                    </div>
-                );
-            } else {
-              return null;
-            }
-        }
-        return(
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>员工资料</div>
-                    <img onClick={ev =>this.jumpSearch(ev)} className={styles.search} src={search} alt=""/>     
-                </div>
+        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart} = this.state;
+        const Content = props =>{              //展示员工
+            if(exhibition === 0) {             //全部
+            return (
                 <div className={styles.content}>
                     {
                         departmentStaff.map((item,index) =>
@@ -138,7 +133,61 @@ class EmployeeInformation extends Component{
                         ) 
                     }
                 </div>
-                <div className={styles.footer} onClick={ev =>this.showMask(ev)}>全部<Direction checked={true}/></div>
+              )
+            }else{                            //部门
+                return(
+                    <div className={styles.content}>
+                        <div className={styles.personnel}>
+                            {
+                                departmentPart.map((item,index) =>
+                                <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
+                                    <div className={styles.information}>
+                                        <div className={styles.name}>{item.name}</div>
+                                        <div className={styles.phone}>{item.loginName}</div>
+                                    </div>
+                                    <img className={styles.forward} src={forward} alt=""/>
+                                </div>
+                            )
+                            }
+                        </div>
+                    </div>
+                )
+            }
+        }
+        const Mask = props => {               //部门列表
+            if (this.state.mask) {
+                return (
+                    <div className={styles.mask}>
+                        <div className={styles.maskBox}>
+                            <div className={styles.operation}>
+                                <img className={styles.spread} src={spread} alt=""/>
+                            </div>
+                            <div className={styles.determine} onClick={ev =>this.determineDepartment(ev)}>确定</div>
+                            <div className={styles.departmentBox}>
+                                {
+                                    section.map((item,index) =>
+                                        <div onClick={ev =>this.clickTerm(index)} className={departmentIndex === index?styles.selectTerm:styles.term} key={index}>{item.name}</div>
+                                    )
+                                }
+                                <div className={styles.clearBoth}></div>
+                            </div>
+                            <div className={styles.footer}>{departmentName}<Direction checked={true}/></div>
+                        </div>
+                    </div>
+                );
+            } else {
+              return null;
+            }
+        }
+        return(
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
+                    <div className={styles.title}>员工资料</div>
+                    <img onClick={ev =>this.jumpSearch(ev)} className={styles.search} src={search} alt=""/>     
+                </div>
+                <Content></Content>
+                <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={true}/></div>
                 <Mask></Mask>
             </div>
         )

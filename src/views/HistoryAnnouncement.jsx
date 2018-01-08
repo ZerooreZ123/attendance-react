@@ -5,7 +5,6 @@ import XHR from '../utils/request';
 import API from '../api/index';
 
 import backImg from '../asset/ico/back.png';
-import photoMin from '../asset/photo-min.jpg';
 
 class HistoryAnnouncement extends Component{
     constructor() {

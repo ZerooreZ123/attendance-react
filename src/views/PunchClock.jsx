@@ -25,19 +25,29 @@ class PunchClock extends Component {
           month:'',                //月
           day:'',                  //日
           weekday:'',              //周几
-          prompt:3,                //考勤机状态
+          prompt:1,                //考勤机状态
+          noticeState:true         //通知显示
         };
       }
     componentDidMount() {
         document.querySelector('title').innerText = '考勤打卡';
         this.showTime();
     }
-    userCenter() {
+    userCenter() {                    //切换至个人中心
       this.props.history.push('/userCenter');
     }
-                            
+    AnnouncementDetails(ev) {           //切换至公告详情
+      ev.stopPropagation();
+      this.props.history.push('/announcementDetails');
+    }                        
     showTime() {                      //刷新当前时间/1秒
       setInterval(ev =>this.getTime(ev),1000)
+    }
+    refresh() {
+      this.setState({prompt:0})
+    }
+    noteceDelete() {                  //删除通知
+      this.setState({noticeState:false});
     }
     getTime() {                       //获取当前时/分/秒/月/日/星期
       var data = new Date();
@@ -74,10 +84,25 @@ class PunchClock extends Component {
       const result = await XHR.post(API.clockIn,{loginName:"123456789"});
       if(JSON.parse(result).success === "T") {
         this.setState({prompt:3})
+      }else{
+        this.setState({prompt:2})
       }
     }
     render() {
-      const {prompt,h,m,s,month,day,weekday} = this.state;
+      const {prompt,h,m,s,month,day,weekday,noticeState} = this.state;
+      const Notice = props => {
+        if(noticeState){
+          return(
+            <div className={styles.noticeBoard}>
+              <img className={styles.noticeImg} src={notice} alt=""/>
+              <span onClick={ev =>this.AnnouncementDetails(ev)} className={styles.noticeText}>元旦放假通知,放假具体时间为30、31、1号</span>
+              <img onClick={ev =>this.noteceDelete(ev)} className={styles.noteceDelete} src={delete_1} alt=""/>
+            </div>
+          )
+          }else{
+            return null
+        }
+      } 
       const ClockPage = props => {
         if(prompt ===0) {            //搜索中
           return (
@@ -124,7 +149,7 @@ class PunchClock extends Component {
               <div className={styles.prompt}>
                 <img className={styles.promptImg} src={warn} alt=""/><span className={styles.text}>网络连接异常,蓝牙未打开</span>
               </div>
-              <div className={styles.refreshShow}>刷新页面</div>
+              <div onClick={ev =>this.refresh(ev)} className={styles.refreshShow}>刷新页面</div>
               <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
           )
@@ -151,11 +176,7 @@ class PunchClock extends Component {
           <div className={styles.header}>
             <div className={styles.title}><span>周{weekday}</span> <span>{month}月{day}日</span></div>
           </div>
-          <div className={styles.noticeBoard}>
-            <img className={styles.noticeImg} src={notice} alt=""/>
-            <span className={styles.noticeText}>元旦放假通知,放假具体时间为30、31、1号</span>
-            <img className={styles.noteceDelete} src={delete_1} alt=""/>
-          </div>
+          <Notice></Notice>
           <ClockPage></ClockPage>
           <div className={styles.tabBox}>
             <div className={styles.tab}>

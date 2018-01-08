@@ -2,6 +2,7 @@
     position:absolute;
     top:0;
     left:0;
+    width:100%;
     background:#fff;
 }
 .header{
@@ -33,7 +34,7 @@
 }
 .noticeText{
     display:inline-block;
-    width:632px;
+    width:580px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -44,6 +45,7 @@
     display:inline-block;
     width:30px;
     height:30px;
+    margin-left:30px;
 }
 .content{
     display:flex;

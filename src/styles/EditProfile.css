@@ -44,6 +44,7 @@
 .content{
     padding:76px 22px 140px;
     background:#fff;
+    z-index:100;
 }
 .information{
     display:flex;
@@ -80,14 +81,13 @@
     padding-left:24px;
     vertical-align: middle;
 }
-.mask {
+/* .mask {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1;
-}
+} */
 .maskBox {
     position: absolute;
     width: 100%;

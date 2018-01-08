@@ -23,7 +23,6 @@ class AttendanceRecord extends Component{
         document.querySelector('title').innerText = '考勤记录';
         this.getRecords();
         this.showMonth();
-        this.getParameter();
     }
     backMove() {
         this.props.history.push('/userCenter');
@@ -35,15 +34,16 @@ class AttendanceRecord extends Component{
         var data = new Date();
         var year = data.getFullYear();
         var month = data.getMonth()+1;
+        var list =[];
         switch(month) {
             case 1:
-               var list = [1,12,11,10];
+               list = [1,12,11,10];
                break;
             case 2:
-               var list = [2,1,12,11];
+               list = [2,1,12,11];
                break;
             case 3:
-               var list = [3,2,1,12];
+               list = [3,2,1,12];
                break;
             default:
                list =[month,month-1,month-2,month-3]
@@ -61,14 +61,12 @@ class AttendanceRecord extends Component{
         this.setState({tabIndex:1});
         this.getAbnormal();
     }
-    getParameter() {
-        var date = new Date();
-        var year = date.getFullYear();
+    // getParameter() {
+    //     var date = new Date();
+    //     var year = date.getFullYear();
         
-    }
+    // }
     async getRecords(i) {             //获取全部打卡记录
-        console.log(this.state.getYear);
-        console.log(this.state.monthList[i]);
         const result = await XHR.post(API.getRecords,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
             beginDate:"2017-11-26",  

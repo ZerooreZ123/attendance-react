@@ -14,7 +14,7 @@ class RevisionDepartment extends Component{
             section:[],                //部门列表
             departmentName:'智慧园区',  //默认部门
             departmentId:'',           //部门Id
-            departmentIndex:''
+            departmentIndex:''         //部门的索引值
         }
     }
     componentDidMount() {
