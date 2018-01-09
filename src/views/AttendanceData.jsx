@@ -21,42 +21,16 @@ class AttendanceData extends Component{
             currentIndex:0,             //日月年展示模块索引
             showState:true,             //默认展示全部
             tabIndex:0,                 //选择tab的索引
-            record:[
-                {
-                    name:'叶湘伦',
-                    goWorkState:'正常',
-                    goWorkTime:'08:05',
-                    offWorkState:'正常',
-                    offWorkTime:'18:05'
-                },{
-                    name:'路小雨',
-                    goWorkState:'迟到',
-                    goWorkTime:'08:50',
-                    offWorkState:'未打卡',
-                    offWorkTime:'18:05'
-                }
-
-            ],
-            dataSource:[
-                {
-                    name:'叶湘伦',
-                    already:'22天',
-                    total:'23天',
-                    normal:'20天',
-                    abnormal:'3天'
-                },{
-                    name:'路小雨',
-                    already:'20天',
-                    total:'23天',
-                    normal:'20天',
-                    abnormal:'2天'
-                }
-            ]
+            startTime:'2017-11-14',     //开始时间(传参)
+            endTime:'2017-11-14',
+            record:[],                  //展示打卡记录
+            dataSource:[]               //统计打卡记录
 
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '员工考勤记录';
+        this.getRecords();
         this.getOfficeList();
     }
     backMove() {                     //跳转至个人中心
@@ -67,6 +41,11 @@ class AttendanceData extends Component{
     }
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({currentIndex:i});
+        if(i === 0){
+            this.getRecords();
+        }else if(i === 1) {
+            this.getStatisticalInfo();
+        }
     }
     personalInformation() {
         this.props.history.push('/personalInformation');
@@ -102,7 +81,7 @@ class AttendanceData extends Component{
         });
         this.setState({section:sectionList});   
     }
-    clickTerm(i) {             //设置部门索引、名字、Id  
+    clickTerm(i) {                   //设置部门索引、名字、Id  
         this.setState({departmentIndex:i})
         this.setState({departmentName:this.state.section[i].name});
         this.setState({departmentId:this.state.section[i].id});
@@ -114,7 +93,33 @@ class AttendanceData extends Component{
             officeid:this.state.departmentId    
         });
     }
-
+    async getRecords() {            //获取全部员工某日考勤记录
+        const result = await XHR.post(API.getRecords,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:this.state.startTime,    
+            endDate:this.state.endTime 
+        })
+        this.setState({record:JSON.parse(result).data} || []);
+    }
+    async getStatisticalInfo() {     //获取全部员工考勤记录统计
+        const result = await XHR.post(API.getStatisticalInfo,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:"2017-11-20",
+            endDate:"2017-11-30",
+        })
+        const data = JSON.parse(result).data;
+        const list = [];
+        data.forEach((ev,index) =>{
+            list.push({
+                name:ev.userName,
+                already:ev.clockIn,
+                total:ev.totalClockIn,
+                normal:ev.normal,
+                abnormal:ev.anomaly
+            })
+        })
+        this.setState({dataSource:list});
+    }
     render() {
         const {record,currentIndex,dataSource,tabIndex,section,departmentIndex,departmentName} = this.state;
         const timeSlot = ['日','月','年'];
@@ -149,14 +154,14 @@ class AttendanceData extends Component{
                     {
                         record.map((item,index) =>
                             <div className={styles.item} key={index}>
-                                <div className={styles.name}>{item.name}</div>
+                                <div className={styles.name}>{item.userName}</div>
                                 <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班: <span>{item.goWorkState}</span></div>
-                                    <div className={styles.punchTime}>{item.goWorkTime}</div>
+                                    <div className={styles.gotoWork}>上班: <span>{item.gotoWork}</span></div>
+                                    <div className={styles.punchTime}>{item.gotoWork}</div>
                                 </div>
                                 <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班: <span>{item.offWorkState}</span></div>
-                                    <div className={styles.punchTime}>{item.offWorkTime}</div>
+                                    <div className={styles.gooffWork}>下班: <span>{item.getoffWork}</span></div>
+                                    <div className={styles.punchTime}>{item.getoffWork}</div>
                                 </div>
                             </div>
                         )
@@ -174,7 +179,7 @@ class AttendanceData extends Component{
                                     <div onClick={ev =>this.personalInformation(ev)} className={styles.detail}>详情</div>
                                 </div>
                                 <div className={styles.totalDay}>
-                                    <div className={styles.totalDay}>已打卡: <span>{item.already}</span> 共需({item.total})</div>
+                                    <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
                                 </div>
                                 <div className={styles.work}>
                                     <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>

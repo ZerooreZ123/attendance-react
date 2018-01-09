@@ -1,6 +1,9 @@
 import React,{Component} from 'react';
 import styles from '../styles/ReleaseAnnouncement.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import photoMin from '../asset/photo-min.jpg';
 import addphoto from '../asset/ico/photo.png';
 import top from '../asset/manager/triangle-top.png';
@@ -9,8 +12,9 @@ import top from '../asset/manager/triangle-top.png';
 class ReleaseAnnouncement extends Component{
     constructor(){
         super();
-        this.state={
-
+        this.state = {
+            announcementTitle:'公告标题',
+            announcementContent:'公告内容'
         };
     }
     componentDidMount() {
@@ -19,29 +23,40 @@ class ReleaseAnnouncement extends Component{
     historyAnnouncement() {
         this.props.history.push('/historyAnnouncement');
     }
+    selectImg() {
+        var objUrl = window.ajaxFileUpload(this.files[0]);
+    }
+    getTitle(ev) {
+        this.setState({announcementTitle: ev.target.value});
+    }
+    getContent(ev) {
+        this.setState({announcementContent: ev.target.value});
+    }
+    async announce() {  
+        const result = await XHR.post(API.announce,{
+            userid:"e7c800b0d173438292dab8cd23be8ba5",
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            title:this.state.announcementTitle,
+            content:this.state.announcementContent,
+            startDate:"2018-01-02 00:00:00",
+	        endDate:"2018-01-03 00:00:00"    
+        })
+    }
     render() {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.cancel}>取消</div>
                     <div className={styles.title}>发布公告</div>
-                    <div className={styles.release}>发布</div>     
+                    <div onClick={ev =>this.announce(ev)} className={styles.release}>发布</div>     
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                       <input type="text" className={styles.inputBox} placeholder='公告标题' />
+                       <input type="text" className={styles.inputBox} onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
                     </div>
-                    <textarea className={styles.inputBlock} placeholder="公告内容"></textarea>
+                    <textarea className={styles.inputBlock} onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>
-                        <img className={styles.img} src={photoMin} alt=""/> 
-                        <img className={styles.img} src={photoMin} alt=""/> 
-                        <img className={styles.img} src={photoMin} alt=""/>  
-                        <img className={styles.img} src={photoMin} alt=""/>  
-                        <img className={styles.img} src={photoMin} alt=""/>  
-                        <img className={styles.img} src={photoMin} alt=""/>  
-                        <img className={styles.img} src={photoMin} alt=""/>    
-                        <img className={styles.img} src={photoMin} alt=""/>   
-                        <img className={styles.img} src={photoMin} alt=""/>                         
+                        <img className={styles.img} src={photoMin} alt=""/>                   
                     </div>
                     <div className={styles.releaseTime}>公告将发布于:<span>2018年1月18日</span>-<span>2018年1月21日</span></div>
                 </div>
@@ -49,7 +64,8 @@ class ReleaseAnnouncement extends Component{
                     <div className={styles.case}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
                         <div className={styles.photoBox}>
-                           <img className={styles.addphoto} src={addphoto} alt=""/>
+                           <img onClick={ev =>this.selectImg(ev)} className={styles.addphoto} src={addphoto} alt=""/>
+                           <input type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     </div>
                     <div className={styles.selectDate}>选择起止日期<img src={top} alt=""/></div>

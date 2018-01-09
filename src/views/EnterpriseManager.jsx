@@ -1,5 +1,6 @@
 //企业管理（xxx有限公司）
 import React,{Component} from 'react';
+import QRCode from 'qrcode.react';
 import styles from '../styles/EnterpriseManager.css';
 
 import XHR from '../utils/request';
@@ -13,6 +14,7 @@ class EnterpriseManager extends Component{
     constructor() {
         super();
         this.state={
+            invitationCode:'',
             currentIndex:0,             //切换tab的index
             division:false,
             section:[],                 //部门列表
@@ -41,6 +43,7 @@ class EnterpriseManager extends Component{
     async getCompany() {                   //获取公司信息
         const result = await XHR.post(API.getCompany,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
         this.setState({companyInfo:JSON.parse(result).data})
+        this.setState({invitationCode:JSON.parse(result).data.invitationCode})
 
     }
     async getOfficeList() {                //获取公司部门列表
@@ -63,7 +66,7 @@ class EnterpriseManager extends Component{
         this.setState({machineNum:machineList});
     }
     render() {
-        const { section,machineNum,division,companyInfo} = this.state;
+        const { section,machineNum,division,companyInfo,currentIndex} = this.state;
         const tab = ['邀请码','部门管理','考勤机编号']
         const Adddivision = props => {
             if(division) {
@@ -110,17 +113,12 @@ class EnterpriseManager extends Component{
                 return(
                     <div className={styles.content}>
                         <div className={styles.codeWrap}>
-                        <div className={styles.codeContent}>
-                            <img style={{width:170,height:170}} src={circle} alt=""/>
-                            <div className={styles.code}>{companyInfo.invitationCode}</div>
-                        </div>
-                        <div style={{marginTop:10}}>邀请码</div>
-                        <div style={{marginTop:10,color:'gray'}}>分享邀请码即可让员工注册</div>
-                        </div>
-
-                        <div className={styles.shareBtn}>
-                            <div>分享邀请码</div>
-                        </div>
+                            <div className={styles.code}>
+                                <QRCode value={this.state.invitationCode} />
+                            </div>
+                            <div className={styles.codetext}>邀请码</div>
+                            <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+                        </div>    
                     </div>
                 )
             
@@ -135,7 +133,7 @@ class EnterpriseManager extends Component{
                 </div>
                 <div className={styles.timetable}>
                     {
-                        tab.map((item,index) =><div onClick={ev =>this.selectTab(index)} key={index}>{item}</div>)
+                        tab.map((item,index) =><div onClick={ev =>this.selectTab(index)} className={currentIndex === index?styles.currentTab:styles.elseTab} key={index}>{item}</div>)
                     }
                 </div>
                 <TabContent></TabContent>

@@ -1,44 +1,159 @@
 //员工个人信息(王大陆)
 import React,{Component} from 'react';
+import moment from 'moment';
 import styles from '../styles/PersonalInformation.css';
+
+import XHR from '../utils/request';
+import API from '../api/index';
 
 import back from '../asset/ico/back.png';
 
 class PersonalInformation extends Component {
     constructor() {
         super();
-        this.state={
-            record:[
-                {
-                    date:'2018.8.27',
-                    week:'周一',
-                    goWorkState:'正常',
-                    goWorkTime:'08:05',
-                    offWorkState:'正常',
-                    offWorkTime:'18:05'
-                },{
-                    date:'2018.8.28',
-                    week:'周二',
-                    goWorkState:'迟到',
-                    goWorkTime:'08:50',
-                    offWorkState:'未打卡',
-                    offWorkTime:'18:05'
-                }
-
-            ]
+        this.state = {
+            dataSource:[],              //全部
+            dataAbnormal:[],            //异常
+            showState:true,             //默认展示全部
+            monthList:[],               //月份列表
+            monthIndex:0,               //月份索引
+            tabIndex:0,                 //tab索引
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人考勤记录';
+        this.showAll();
+        this.getTime();
     }
-    editData() {
+    editData() {                     //跳转至修改资料
         this.props.history.push('/editProfile');
     }
-    backMove() {
+    backMove() {                     //跳转至个人中心
         this.props.history.push('/userCenter');
-     }
+    }
+    showAll() {                      //展示所有
+        this.setState({showState:true});
+        this.setState({tabIndex:0});
+        this.getRecords();
+    }
+    showAbnormal() {                 //展示异常
+        this.setState({showState:false});
+        this.setState({tabIndex:1});
+        this.getAbnormal();
+    }
+    getTime() {                      //获取当前月及前三月
+        var nowMonth = moment().format("M");
+        var previous = moment().subtract(1, "months").format("M");
+        var penult = moment().subtract(2, "months").format("M");
+        var last = moment().subtract(3, "months").format("M");
+        var list =[nowMonth,previous,penult,last];
+        this.setState({monthList:list});
+    }
+    async getRecords(i) {          //切换月份展示记录
+        this.setState({monthIndex:i});
+        var startTime ='';
+        var endTime = '';
+        switch(i){
+            case 0:
+                 startTime = moment().startOf('month').format("YYYY-MM-DD");
+                 endTime = moment().endOf('month').format("YYYY-MM-DD");
+                break;
+            case 1:
+                 startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                 endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                break;
+            case 2:
+                 startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                 endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                break;
+            default:
+                 startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
+                 endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+        }
+        const result = await XHR.post(API.getRecords,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:startTime,    
+            endDate:endTime,
+            userids:"92548d4571604ff2912652ec8e3d44a6"    
+        })
+        this.setState({dataSource:JSON.parse(result).data} || []);
+
+    }
+    async getAbnormal(i) {            //获取异常打卡记录
+        this.setState({monthIndex:i});
+        var startTime ='';
+        var endTime = '';
+        switch(i){
+            case 0:
+                startTime = moment().startOf('month').format("YYYY-MM-DD");
+                endTime = moment().endOf('month').format("YYYY-MM-DD");
+                break;
+            case 1:
+                startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                break;
+            case 2:
+                startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                break;
+            default:
+                startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+        }
+        const result = await XHR.post(API.getRecords,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:startTime, 
+            endDate:endTime,
+            userids:"92548d4571604ff2912652ec8e3d44a6",
+            abnormity:"abnormity"    
+        })
+        this.setState({dataAbnormal:JSON.parse(result).data || []});
+    }
     render() {
-        const { record } = this.state;
+        const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState} = this.state;
+        const Show = props =>{
+            if(showState === true) {
+                return (
+                    <div className={styles.detailsList}>
+                    {
+                        dataSource.map((item,index) =>
+                            <div className={styles.item} key={index}>
+                                <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
+                                <div className={styles.work}>
+                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork}</span></div>
+                                    <div className={styles.punchTime}>{item.gotoWork}</div>
+                                </div>
+                                <div className={styles.work}>
+                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork}</span></div>
+                                    <div className={styles.punchTime}>{item.getoffWork}</div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>   
+                )
+            }else{
+                return (
+                    <div className={styles.detailsList}>
+                    {
+                        dataAbnormal.map((item,index) =>
+                            <div className={styles.item} key={index}>
+                                <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
+                                <div className={styles.work}>
+                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork.split('/')[1] ||''}</span></div>
+                                    <div className={styles.punchTime}>{item.gotoWork.split('/')[0] || ''}</div>
+                                </div>
+                                <div className={styles.work}>
+                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork.split('/')[1] || ''}</span></div>
+                                    <div className={styles.punchTime}>{item.getoffWork.split('/')[0] || ''}</div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>   
+                )
+            }
+        }
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -52,32 +167,17 @@ class PersonalInformation extends Component {
                         <div className={styles.department}>智慧部门</div>
                     </div>
                     <div className={styles.tabBox}>
-                        <div className={styles.all}>全部</div>
-                        <div className={styles.abnormal}>异常</div>
+                        <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
+                        <div onClick={ev =>this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab:styles.tab}>异常</div>
                     </div>
                     <div className={styles.month}>
-                    <div className={styles.currentMonth}>12月</div>
-                    <div>11月</div>
-                    <div>10月</div>
-                    <div>9月</div>
-                    </div>
-                    <div className={styles.detailsList}>
                         {
-                            record.map((item,index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.displayDate}><span>{item.date}</span><span>{item.week}</span></div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gotoWork}>上班: <span>{item.goWorkState}</span></div>
-                                        <div className={styles.punchTime}>{item.goWorkTime}</div>
-                                    </div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gooffWork}>下班: <span>{item.offWorkState}</span></div>
-                                        <div className={styles.punchTime}>{item.offWorkTime}</div>
-                                    </div>
-                                </div>
-                            )
+                          monthList.map((item,index) =>
+                            <div onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} key={index} className={monthIndex === index ? styles.currentMonth:styles.noMonth}>{item}月</div>
+                        )  
                         }
-                    </div>             
+                    </div>
+                    <Show></Show>
                 </div>
                 <div className={styles.more}>查看更多</div>
             </div>

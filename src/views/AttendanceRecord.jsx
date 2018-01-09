@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import moment from 'moment';
+
 import styles from '../styles/AttendanceRecord.css';
 
 import XHR from '../utils/request';
@@ -27,29 +29,13 @@ class AttendanceRecord extends Component{
     backMove() {
         this.props.history.push('/userCenter');
     }
-    selectMonth(i) {
-        this.setState({monthIndex:i});
-    }
     showMonth() {                    //展示当前及前三月
-        var data = new Date();
-        var year = data.getFullYear();
-        var month = data.getMonth()+1;
-        var list =[];
-        switch(month) {
-            case 1:
-               list = [1,12,11,10];
-               break;
-            case 2:
-               list = [2,1,12,11];
-               break;
-            case 3:
-               list = [3,2,1,12];
-               break;
-            default:
-               list =[month,month-1,month-2,month-3]
-        }
+        var nowMonth = moment().format("M");
+        var previous = moment().subtract(1, "months").format("M");
+        var penult = moment().subtract(2, "months").format("M");
+        var last = moment().subtract(3, "months").format("M");
+        var list =[nowMonth,previous,penult,last];
         this.setState({monthList:list});
-        this.setState({getYear:year});
     }
     showAll() {                      //展示所有
         this.setState({showState:true});
@@ -61,30 +47,65 @@ class AttendanceRecord extends Component{
         this.setState({tabIndex:1});
         this.getAbnormal();
     }
-    // getParameter() {
-    //     var date = new Date();
-    //     var year = date.getFullYear();
-        
-    // }
-    async getRecords(i) {             //获取全部打卡记录
+    async getRecords(i) {            //切换月份展示记录
+        this.setState({monthIndex:i});
+        var startTime = '';
+        var endTime = '';
+        switch(i){                   //动态传参
+            case 0:
+                startTime = moment().startOf('month').format("YYYY-MM-DD");
+                endTime = moment().endOf('month').format("YYYY-MM-DD");
+                break;
+            case 1:
+                startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                break;
+            case 2:
+                startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                break;
+            default:
+                startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+        }
         const result = await XHR.post(API.getRecords,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
-            beginDate:"2017-11-26",  
-            endDate:"2017-11-30",
+            beginDate:startTime,    
+            endDate:endTime,
             userids:"92548d4571604ff2912652ec8e3d44a6"    
         })
-        this.setState({dataSource:JSON.parse(result).data});
+        this.setState({dataSource:JSON.parse(result).data} || []);
 
     }
-    async getAbnormal() {            //获取异常打卡记录
+    async getAbnormal(i) {            //获取异常打卡记录
+        this.setState({monthIndex:i});
+        var startTime = '';
+        var endTime = '';
+        switch(i){                    //动态传参
+            case 0:
+                startTime = moment().startOf('month').format("YYYY-MM-DD");
+                endTime = moment().endOf('month').format("YYYY-MM-DD");
+                break;
+            case 1:
+                startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                break;
+            case 2:
+                startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                break;
+            default:
+                startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+        }
         const result = await XHR.post(API.getRecords,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
-            beginDate:"2017-11-26",    //
-            endDate:"2017-11-30",
+            beginDate:startTime, 
+            endDate:endTime,
             userids:"92548d4571604ff2912652ec8e3d44a6",
             abnormity:"abnormity"    
         })
-        this.setState({dataAbnormal:JSON.parse(result).data});
+        this.setState({dataAbnormal:JSON.parse(result).data || []});
     }
     render() {
         const {dataSource,dataAbnormal,showState,tabIndex,monthList,monthIndex} = this.state;
@@ -97,12 +118,12 @@ class AttendanceRecord extends Component{
                             <div className={styles.item} key={index}>
                                 <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
                                 <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork.split('/')[1]}</span></div>
-                                    <div className={styles.punchTime}>{item.gotoWork.split('/')[0]}</div>
+                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork}</span></div>
+                                    <div className={styles.punchTime}>{item.gotoWork}</div>
                                 </div>
                                 <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork.split('/')[1]}</span></div>
-                                    <div className={styles.punchTime}>{item.getoffWork.split('/')[0]}</div>
+                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork}</span></div>
+                                    <div className={styles.punchTime}>{item.getoffWork}</div>
                                 </div>
                             </div>
                         )
@@ -117,12 +138,12 @@ class AttendanceRecord extends Component{
                             <div className={styles.item} key={index}>
                                 <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
                                 <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork.split('/')[1]}</span></div>
-                                    <div className={styles.punchTime}>{item.gotoWork.split('/')[0]}</div>
+                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork}</span></div>
+                                    <div className={styles.punchTime}>{item.gotoWork}</div>
                                 </div>
                                 <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork.split('/')[1]}</span></div>
-                                    <div className={styles.punchTime}>{item.getoffWork.split('/')[0]}</div>
+                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork}</span></div>
+                                    <div className={styles.punchTime}>{item.getoffWork}</div>
                                 </div>
                             </div>
                         )
@@ -142,7 +163,7 @@ class AttendanceRecord extends Component{
                 </div>
                 <div className={styles.month}>
                    {
-                       monthList.map((item,index) =><div key={index} onClick={ev =>this.selectMonth(index)} className={monthIndex === index? styles.currentMonth:styles.noMonth}>{item}月</div>)
+                       monthList.map((item,index) =><div key={index} onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} className={monthIndex === index? styles.currentMonth:styles.noMonth}>{item}月</div>)
                    } 
                 </div>
                 <Show></Show>          

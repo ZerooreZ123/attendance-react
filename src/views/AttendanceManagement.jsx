@@ -98,7 +98,7 @@ class AttendanceManagement extends Component{
         })
     }
     render() {
-        const {custom,status,forenoonLatest,afternoonFirst,forenoonStartTime,forenoonEndTime,afternoonStartTime,afternoonEndTime} = this.state;
+        const {custom,status,forenoonLatest,afternoonFirst} = this.state;
         const week = ['周一','周二','周三','周四','周五','周六','周日'];
         return(
             <div className={styles.container}>
