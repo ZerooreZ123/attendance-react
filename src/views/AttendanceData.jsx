@@ -1,5 +1,9 @@
 //员工考勤记录（普通管理员）
 import React,{Component} from 'react';
+import InfiniteCalendar from 'react-infinite-calendar';
+import 'react-infinite-calendar/styles.css'; 
+
+
 import styles from '../styles/AttendanceData.css';
 
 import XHR from '../utils/request';
@@ -7,7 +11,26 @@ import API from '../api/index';
 
 import back from '../asset/ico/back.png';
 import top from '../asset/manager/triangle-top.png';
-import spread from '../asset/manager/spread.png';
+import spread from '../asset/manager/spread.png'
+import search from '../asset/manager/search.png';
+
+const Mask = props => {
+    var today = new Date();
+        var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    if (props.click) {
+      return (
+            <InfiniteCalendar
+              width={400}
+              height={600}
+              selected={today}
+              disabledDays={[0,6]}
+              minDate={lastWeek}
+            />
+      )
+     }else {
+      return null;
+    }
+  }
 
 class AttendanceData extends Component{
     constructor() {
@@ -19,10 +42,10 @@ class AttendanceData extends Component{
             departmentId:'',            //部门Id
             mask:false,                 //默认不显示部门
             currentIndex:0,             //日月年展示模块索引
-            showState:true,             //默认展示全部
+            showState:0,                //默认展示全部
             tabIndex:0,                 //选择tab的索引
             startTime:'2017-11-14',     //开始时间(传参)
-            endTime:'2017-11-14',
+            endTime:'2017-11-14',       //结束时间(传参)
             record:[],                  //展示打卡记录
             dataSource:[]               //统计打卡记录
 
@@ -57,19 +80,34 @@ class AttendanceData extends Component{
         this.setState({ mask: true });
     }
     showAll() {                      //展示所有
-        this.setState({showState:true});
+        this.setState({showState:0});
         this.setState({tabIndex:0});
     }
     showAbnormal() {                 //展示异常
-        this.setState({showState:false});
+        this.setState({showState:1});
         this.setState({tabIndex:1});
+    }
+    showNotAbsenteeism(){            //展示全勤
+        this.setState({showState:2});
+        this.setState({tabIndex:2});
     }
     choice(i) {                      //选择部门
         this.setState({departmentIndex:i})
         this.setState({departmentName:this.state.section[i].name});
         this.setState({departmentId:this.state.section[i].id});
  
-     }
+    }
+    clickTerm(i) {                   //设置部门索引、名字、Id  
+        this.setState({departmentIndex:i})
+        this.setState({departmentName:this.state.section[i].name});
+        this.setState({departmentId:this.state.section[i].id});
+    }
+    selectDate() {
+
+    }
+    // async notAbsenteeism() {         //获取全勤信息
+
+    // }
     async getOfficeList() {          //部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
         const sectionList = [];
@@ -80,11 +118,6 @@ class AttendanceData extends Component{
             })
         });
         this.setState({section:sectionList});   
-    }
-    clickTerm(i) {                   //设置部门索引、名字、Id  
-        this.setState({departmentIndex:i})
-        this.setState({departmentName:this.state.section[i].name});
-        this.setState({departmentId:this.state.section[i].id});
     }
     async determineDepartment() {    //确认选定部门
         this.hideMask();
@@ -123,6 +156,8 @@ class AttendanceData extends Component{
     render() {
         const {record,currentIndex,dataSource,tabIndex,section,departmentIndex,departmentName} = this.state;
         const timeSlot = ['日','月','年'];
+        var today = new Date();
+        var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
         const Mask = props => {                     //部门列表
             if (this.state.mask) {
                 return (
@@ -191,19 +226,40 @@ class AttendanceData extends Component{
                    </div>         
                 )
             }else{                                   //年
-                return null;
+                return (
+                    <div className={styles.detailsList}>
+                    {
+                        dataSource.map((item,index) =>
+                            <div className={styles.item} key={index}>
+                                <div className={styles.nameBox}>
+                                    <div className={styles.personName}>{item.name}</div>
+                                    <div onClick={ev =>this.personalInformation(ev)} className={styles.detail}>详情</div>
+                                </div>
+                                <div className={styles.totalDay}>
+                                    <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
+                                </div>
+                                <div className={styles.work}>
+                                    <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>
+                                    <div className={styles.punchTime}>异常：<span>{item.abnormal}</span></div>
+                                </div>
+                            </div>
+                        )
+                    }
+                   </div>        
+                );
             }
         }
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.back} onClick={ev =>this.backMove(ev)}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
                     <div className={styles.title}>
-                    <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
-                    <div onClick={ev =>this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab:styles.tab}>异常</div>
-                    </div>    
+                        <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
+                        <div onClick={ev =>this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab:styles.tab}>异常</div>
+                        <div onClick={ev =>this.showNotAbsenteeism(ev)} className={tabIndex === 2 ? styles.currentTab:styles.tab}>全勤</div>
+                    </div>
+                    <img className={styles.searchImg} src={search} alt=""/>  
                 </div>
-                <div className={styles.timetable}>
+                <div className={tabIndex === 2 ?styles.hide:styles.timetable}>
                     {
                         timeSlot.map((item,index) =><div onClick={ev =>this.selectTime(index)} key={index} className={currentIndex === index? styles.currentMonth:styles.noMonth}>{item}</div>)
                     }
@@ -211,12 +267,19 @@ class AttendanceData extends Component{
                 <DateChange></DateChange>
                 <div className={styles.footer}>
                     <div className={styles.brief}>
-                        <span>2017.12.15</span>/<span onClick={ev =>this.showMask(ev)}>{departmentName}</span>
+                        <span onClick={ev =>this.selectDate(ev)}>2017.12.15</span>/<span onClick={ev =>this.showMask(ev)}>{departmentName}</span>
                         <img className={styles.top} src={top} alt=""/>
                     </div>
                     <div onClick={ev =>this.export(ev)} className={styles.exportData}>导出数据</div>
                 </div>
-                <Mask></Mask>           
+                <Mask></Mask>
+                <InfiniteCalendar
+                width={400}
+                height={600}
+                selected={today}
+                disabledDays={[0,6]}
+                minDate={lastWeek}
+                />         
             </div>
         )
     }

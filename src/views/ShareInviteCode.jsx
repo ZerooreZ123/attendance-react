@@ -1,44 +1,38 @@
 import React, { Component } from 'react';
-
+import QRCode from 'qrcode.react';
 import styles from '../styles/ShareInviteCode.css';
 
-import back from '../asset/ico/back.png'
-import circle from '../asset/userCenter/circle_code.png'
-
+import XHR from '../utils/request';
+import API from '../api/index';
 
 class ShareInviteCode extends Component {
   constructor() {
     super();
     this.state = {
-      
+      invitationCode:'' 
     }
   }
-  setTime(){
-
+  componentDidMount() {
+    document.querySelector('title').innerText = '分享邀请码';
+    this.getCompany();
   }
-  shareClick() {
-    console.log(999)
+  async getCompany() {                   //获取公司信息
+    const result = await XHR.post(API.getCompany,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+    this.setState({invitationCode:JSON.parse(result).data.invitationCode})
   }
   render() {
     return (
-      <div className = {styles.container}>
-        <div className={styles.header}>
-          <div className={styles.back}><img className={styles.backImg} alt='' src={back} /></div>
-          <div style={{marginRight:20}} onClick={()=>this.setTime()}>设置考勤时间</div>
+      <div className={styles.container}>
+        <div className={styles.content}>
+            <div className={styles.codeWrap}>
+                <div className={styles.code}>
+                    <QRCode value={this.state.invitationCode} />
+                </div>
+                <div className={styles.codetext}>邀请码</div>
+                <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+            </div>    
         </div>
-
-        <div className={styles.codeWrap}>
-          <div className={styles.codeContent}>
-            <img style={{width:170,height:170}} src={circle} alt=""/>
-            <div className={styles.code}>5666</div>
-          </div>
-          <div style={{marginTop:20}}>邀请码</div>
-          <div style={{marginTop:20,color:'gray'}}>分享邀请码即可让员工注册</div>
-        </div>
-
-        <div className={styles.shareBtn}>
-            <div onClick={()=>this.shareClick()}>分享邀请码</div>
-        </div>
+        <div className={styles.footer}>完成并设置考勤时间</div>
       </div>
     );
   }

@@ -6,30 +6,45 @@
     background: #ededed;
 }
 .header{
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    height:94px;
+    padding:0 22px;
     background:#33b5fc;
     font-size:26px;
     color:#fff;
 }
-.header>span{
-    display:inline-block;
-    width:33.3%;
-    height:80px;
-    text-align: center;
-    line-height: 80px;
+.Userheader{
+    display:flex;
+    justify-content: flex-end;
+    align-items:center;
+    height:94px;
+    padding:0 22px;
+    background:#33b5fc;
+    font-size:26px;
+    color:#fff;
 }
-.header>span:nth-child(2){
-    font-size:38px;
+.scanBox{
+    width:168px;
+    height:36px;
+}
+.scanImg{
+    width:36px;
+    height:36px;
+    vertical-align: middle;
+}
+.scanText{
+    display:inline-block;
+    position: relative;
+    top:3px;
+    margin-left:12px;
 }
 .information{
     display:flex;
     align-items: center;
     justify-content: center;
-    padding-top: 80px;
-    height:216px;
+    height:189px;
     width:100%;
     background: #33b5fc;
 }

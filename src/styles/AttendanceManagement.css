@@ -6,34 +6,9 @@
     height:100%;
     background: #fff;
 }
-.header{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:76px;
-}
-.back{
-    position: absolute;
-    top:18px;
-    left:24px;
-    display:inline-block;
-    width:26px;
-    height:40px;
-}
-.title{
-    width:50%;
-    height:76px;
-    line-height: 76px;
-    text-align:center;
-    margin:0 auto;
-    font-size:38px;
-    color:#000;
-}
 .content{
     background:#fff;
     padding-bottom:110px;
-    margin-top:76px;
 }
 .clockTime,.automaticTime{
     width:100%;

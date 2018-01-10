@@ -1,5 +1,9 @@
 //考勤管理（超级管理）
 import React,{Component} from 'react';
+import moment from 'moment';
+// import Datetime from 'react-datetime'
+
+
 import styles from '../styles/AttendanceManagement.css';
 
 import XHR from '../utils/request';
@@ -43,12 +47,8 @@ class AttendanceManagement extends Component{
             status:[],            //勾选状态
             custom:true,
             data:[],
-            forenoonLatest:'',
-            afternoonFirst:''
-            // forenoonStartTime:'',
-            // forenoonEndTime:'',
-            // afternoonStartTime:'',
-            // afternoonEndTime:''
+            forenoonLatest:'',    //上午最晚打卡时间
+            afternoonFirst:''     //下午最早打卡时间
         }
     }
     componentDidMount() {
@@ -68,10 +68,6 @@ class AttendanceManagement extends Component{
         this.setState({data:dataSource});
         this.setState({forenoonLatest:dataSource.forenoonLatest});           //上午最迟时间
         this.setState({afternoonFirst:dataSource.afternoonFirst});           //下午最早时间
-        // this.setState({forenoonStartTime:dataSource.forenoonStartTime});     //上午开始时间
-        // this.setState({forenoonEndTime:dataSource.forenoonEndTime});         //上午结束时间
-        // this.setState({afternoonStartTime:dataSource.afternoonStartTime});   //下午开始时间
-        // this.setState({afternoonEndTime:dataSource.afternoonEndTime});       //下午结束时间
         const Num = [1,2,3,4,5,6,7];                                         //一周时间
         const weekDay = JSON.parse(result).data[0].workingTime.split(',');   //初始勾选日期
         const weekDayNum =[];                                     //初始勾选日期类型转换
@@ -89,10 +85,6 @@ class AttendanceManagement extends Component{
             companyid:this.state.data.companyid,
             forenoonLatest:"09:00:00",
             forenoonStartTime:"08:00:00",
-            // forenoonEndTime:"09:00:00",
-            // afternoonFirst:"18:00:00",
-            // afternoonStartTime:"17:00:00",
-            // afternoonEndTime:"18:00:00",
             workingTime:"1,2,3,4,5",
             id: this.state.data.id
         })
@@ -102,16 +94,13 @@ class AttendanceManagement extends Component{
         const week = ['周一','周二','周三','周四','周五','周六','周日'];
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
-                    <div className={styles.title}>考勤管理</div>
-                </div> 
                 <div className={styles.content}>
                      <div className={styles.clockTime}>
                          <div className={styles.clock}>打卡时间</div>
                          <div className={styles.time}>
                              <div>上午</div>
                              <div>{forenoonLatest}<Icon checked={false}/></div>
+
                          </div>
                          <div className={styles.time}>
                              <div>下午</div>
@@ -130,7 +119,8 @@ class AttendanceManagement extends Component{
                             }
                          </div>
                      </div>
-                </div> 
+                </div>
+                {/* <Datetime input={false} locale="zh-ch" /> */}
                 <div onClick={ev =>this.attendanceManagement(ev)} className={styles.determine}>确认</div> 
             </div>
         )

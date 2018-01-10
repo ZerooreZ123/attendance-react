@@ -182,9 +182,10 @@ class EmployeeInformation extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>员工资料</div>
-                    <img onClick={ev =>this.jumpSearch(ev)} className={styles.search} src={search} alt=""/>     
+                   <div className={styles.searchBox}>
+                        <img className={styles.search}src={search} alt=""/>
+                        <input type="text" placeholder="搜索姓名或手机号"  />
+                    </div>
                 </div>
                 <Content></Content>
                 <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={true}/></div>

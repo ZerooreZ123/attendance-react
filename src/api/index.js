@@ -3,7 +3,7 @@
 // const admin = 'http://106.14.28.70/'
 // const admin ="http://www.junl.cn/"
 // const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
-const admin = 'http://192.168.1.46:8080/AM/f/yk/api/';
+const admin = 'http://192.168.1.34:8080/AM/f/yk/api/';
 const API = {
   update: admin + 'update.do',                                     //更新用户信息和公司信息
   getOfficeList: admin + 'getOfficeList.do',                       //获取公司部门列表
