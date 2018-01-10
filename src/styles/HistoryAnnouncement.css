@@ -6,45 +6,8 @@
     height:100%;
     background: #fff;
 }
-.header{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:76px;
-    color:#000;
-    background: #fff;
-}
-.back{
-    display:inline-block;
-    position: absolute;
-    top:18px;
-    left:22px;
-    vertical-align: middle;
-    width:28px;
-    height: 42px;
-    line-height:42px;
-    font-size:28px;
-}
-.title{
-    width:50%;
-    text-align: center;
-    line-height:76px;
-    margin: 0 auto;
-    font-size:38px;
-    background: #fff;
-}
-.release{
-    position: absolute;
-    top:0;
-    right:22px;
-    width:120px;
-    height:76px;
-    line-height: 76px;
-    font-size:30px;
-}
 .content{
-    padding:76px 22px 0;
+    padding:0 22px;
     background:#fff;
 }
 .item{

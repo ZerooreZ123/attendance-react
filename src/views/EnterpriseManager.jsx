@@ -126,11 +126,6 @@ class EnterpriseManager extends Component{
         }
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>{companyInfo.name}</div>
-                    <div className={styles.edit}>编辑</div>
-                </div>
                 <div className={styles.timetable}>
                     {
                         tab.map((item,index) =><div onClick={ev =>this.selectTab(index)} className={currentIndex === index?styles.currentTab:styles.elseTab} key={index}>{item}</div>)

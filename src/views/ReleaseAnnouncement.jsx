@@ -47,7 +47,6 @@ class ReleaseAnnouncement extends Component{
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.cancel}>取消</div>
-                    <div className={styles.title}>发布公告</div>
                     <div onClick={ev =>this.announce(ev)} className={styles.release}>发布</div>     
                 </div>
                 <div className={styles.content}>

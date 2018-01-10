@@ -156,11 +156,6 @@ class PersonalInformation extends Component {
         }
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>叶湘伦</div>
-                    <div onClick={ev =>this.editData(ev)} className={styles.editProfile}>修改资料</div>     
-                </div>
                 <div className={styles.content}>
                     <div className={styles.information}>
                         <div className={styles.phone}>13855667788</div>

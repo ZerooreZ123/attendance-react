@@ -33,10 +33,6 @@ class AnnouncementDetails extends Component{
         const admin = 'http://192.168.1.46:8080';
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={backImg} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>公告详情</div>
-                </div>
                 <div className={styles.content}>
                     <div className={styles.caption}>{dataSource.title}</div>
                     <div className={styles.text}>{dataSource.content}</div>

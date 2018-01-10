@@ -31,10 +31,6 @@ class AddAttendanceMachine extends Component{
     render() {
         return(
             <div className={styles.contianer}>
-                <div className={styles.header}>
-                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
-                    <div className={styles.title}>添加考勤机</div>
-                </div>
                 <div className={styles.content}>
                      <div className={styles.item}>
                        <div className={styles.machineNum}>考勤机编号</div>

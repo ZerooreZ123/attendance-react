@@ -12,7 +12,33 @@ import warn from '../asset/punchClock/abnormal.png';
 import load from '../asset/punchClock/load.png';
 import successMin from '../asset/punchClock/successMin.png';
 import success from '../asset/punchClock/success.png';
+import rankingListIco from '../asset/punchClock/rankingListIco.png';
 
+
+const Mask = ({visible,parent}) => {
+  if (visible) {
+    return (
+      <div className={styles.mask}>
+        <div className={styles.maskBox}>
+          <div className={styles.maskHeader}>
+              <div className={styles.maskTitle}><div>一月排行榜</div></div>
+              {/* <img src={} className={} alt=""/> */}
+          </div>
+          <div className={styles.own}>
+               <div><img src={} alt=""/><span>王大宏</span> <span>30</span><img src={} alt=""/><span>2</span></div>
+               <div>140小时50分钟</div>
+          </div>
+          <div className={styles.chartsList}>
+              <div><span>1</span><span>王小明</span><span>人事部</span></div>
+              <div>140小时50分钟</div>
+          </div>
+        </div>
+      </div>
+    );
+  } else {
+    return null;
+  }
+}
 
 
 class PunchClock extends Component {
@@ -26,12 +52,13 @@ class PunchClock extends Component {
           day:'',                  //日
           weekday:'',              //周几
           prompt:1,                //考勤机状态
-          noticeState:true         //通知显示
+          noticeState:true,        //通知显示
+          mask:false
         };
       }
     componentDidMount() {
         document.querySelector('title').innerText = '考勤打卡';
-        this.showTime();
+        // this.showTime();
     }
     userCenter() {                    //切换至个人中心
       this.props.history.push('/userCenter');
@@ -42,6 +69,12 @@ class PunchClock extends Component {
     }                        
     showTime() {                      //刷新当前时间/1秒
       setInterval(ev =>this.getTime(ev),1000)
+    }
+    hideMask() {
+      this.setState({ mask: false });
+    }
+    showMask() {
+      this.setState({ mask: true });
     }
     refresh() {
       this.setState({prompt:0})
@@ -89,7 +122,7 @@ class PunchClock extends Component {
       }
     }
     render() {
-      const {prompt,h,m,s,month,day,weekday,noticeState} = this.state;
+      const {prompt,h,m,s,noticeState} = this.state;
       const Notice = props => {
         if(noticeState){
           return(
@@ -173,8 +206,9 @@ class PunchClock extends Component {
       }
       return (
         <div className={styles.container}>
-          <div className={styles.header}>
-            <div className={styles.title}><span>周{weekday}</span> <span>{month}月{day}日</span></div>
+          <div className={styles.headerTip}>
+              <div className={styles.time}><span>连续正常打卡100天</span></div>
+              <div onClick={ev =>this.showMask(ev)} className={styles.rankingList}><img className={styles.rankingListImg} src={rankingListIco} alt=""/><span className={styles.rankingListText}>排行榜</span></div>
           </div>
           <Notice></Notice>
           <ClockPage></ClockPage>
@@ -188,6 +222,7 @@ class PunchClock extends Component {
               <div>个人中心</div>
             </div>
           </div>
+          <Mask visible={this.state.mask}></Mask>
         </div>
       );
     }

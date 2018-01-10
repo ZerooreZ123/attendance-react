@@ -6,43 +6,8 @@
     height:100%;
     background: #fff;
 }
-.header{
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:76px;
-    font-size:28px;
-    color:#000;
-    background: #fff;
-}
-.back{
-    padding-left:22px;
-}
-.backCaption{
-    position:relative;
-    top:4px;
-    left:0;
-}
-.backImg{
-    display:inline-block;
-    width:28px;
-    height: 42px;
-    vertical-align: middle;
-}
-.editProfile{
-    padding-right:22px;
-    color:#2e79ca;
-}
-.title{
-    font-size:36px;
-    margin-left:-78px;
-}
 .content{
-    padding:76px 0 140px;
+    padding-bottom: 140px;
     background:#fff;
 }
 .information{

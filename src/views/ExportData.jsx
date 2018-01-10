@@ -19,10 +19,6 @@ class ExportData extends Component{
     render() {
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/></div>
-                    <div className={styles.title}>导出数据</div>
-                </div>
                 <div className={styles.content}>
                     <div className={styles.describe}>
                         <div>数据描述</div>

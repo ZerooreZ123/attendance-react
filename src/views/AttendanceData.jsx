@@ -3,31 +3,29 @@ import React,{Component} from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
 import 'react-infinite-calendar/styles.css'; 
 
-
 import styles from '../styles/AttendanceData.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png';
 import top from '../asset/manager/triangle-top.png';
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
-const Mask = props => {
-    var today = new Date();
-        var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-    if (props.click) {
+const Datemask = ({parent,visible}) => {
+    if (visible) {
       return (
-            <InfiniteCalendar
-              width={400}
-              height={600}
-              selected={today}
-              disabledDays={[0,6]}
-              minDate={lastWeek}
-            />
+           <div className={styles.mask}>
+                <div className={styles.operation}>
+                    <img className={styles.spread} src={spread} alt=""/>
+                </div>
+                <div className={styles.determine} onClick={ev =>parent.determineDepartment(ev)}>确定</div>>
+                <div>
+                    <InfiniteCalendar/>
+                </div>   
+            </div>
       )
-     }else {
+    }else {
       return null;
     }
   }
@@ -41,6 +39,7 @@ class AttendanceData extends Component{
             departmentIndex:'',         //部门的索引值
             departmentId:'',            //部门Id
             mask:false,                 //默认不显示部门
+            maskDate:false,             //默认不显示日历
             currentIndex:0,             //日月年展示模块索引
             showState:0,                //默认展示全部
             tabIndex:0,                 //选择tab的索引
@@ -77,7 +76,9 @@ class AttendanceData extends Component{
         this.setState({ mask: false });
     }
     showMask() {                     //显示部门
-        this.setState({ mask: true });
+        // this.setState({ mask: true });
+        this.setState({maskDate:true});
+
     }
     showAll() {                      //展示所有
         this.setState({showState:0});
@@ -267,19 +268,13 @@ class AttendanceData extends Component{
                 <DateChange></DateChange>
                 <div className={styles.footer}>
                     <div className={styles.brief}>
-                        <span onClick={ev =>this.selectDate(ev)}>2017.12.15</span>/<span onClick={ev =>this.showMask(ev)}>{departmentName}</span>
+                        <span onClick={ev => this.showMask(ev)}>2017.12.15</span>/<span onClick={ev =>this.showMask(ev)}>{departmentName}</span>
                         <img className={styles.top} src={top} alt=""/>
                     </div>
                     <div onClick={ev =>this.export(ev)} className={styles.exportData}>导出数据</div>
                 </div>
                 <Mask></Mask>
-                <InfiniteCalendar
-                width={400}
-                height={600}
-                selected={today}
-                disabledDays={[0,6]}
-                minDate={lastWeek}
-                />         
+                <Datemask visible={this.state.maskDate} parent={this}></Datemask>
             </div>
         )
     }

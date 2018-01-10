@@ -44,11 +44,6 @@ class HistoryAnnouncement extends Component{
         const {dataSource} = this.state;
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <img onClick={ev =>this.backMove(ev)} className={styles.back} src={backImg} alt=""/>
-                    <div className={styles.title}>历史公告</div>
-                    <div onClick={ev =>this.releaseAnnouncement(ev)} className={styles.release}>发布公告</div>
-                </div>
                 <div className={styles.content}>
                     {
                         dataSource.map((ev,index) =>
