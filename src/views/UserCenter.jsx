@@ -23,7 +23,7 @@ class UserCenter extends Component{
     constructor() {
         super();
         this.state={
-            roleid:'',
+            roleid:'2',
             dataSource:{}
         }
     }
@@ -77,7 +77,7 @@ class UserCenter extends Component{
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser,{loginName:"18550117460"});
         this.setState({ dataSource: JSON.parse(result).data });
-        this.setState({roleid:JSON.parse(result).data.roleid});
+        // this.setState({roleid:JSON.parse(result).data.roleid});
     }
     render() {
 

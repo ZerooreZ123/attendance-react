@@ -129,6 +129,7 @@ timetable>div{
     color:#2295e8;
     font-size:30px;
     z-index:1;
+    background:#fff;
 }
 .brief{
     width:560px;
@@ -164,6 +165,8 @@ timetable>div{
     width: 100%;
     bottom: 0;
     background:#fff;
+    width:100%;
+    height:920px;
     padding-bottom:102px;
 }
 .operation{

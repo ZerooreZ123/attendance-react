@@ -1,89 +1,142 @@
 //企业管理（普通管理员）
-import React,{Component} from 'react';
-import styles from '../styles/OrdinaryEnterorise.css';
+import React, { Component } from 'react';
+import QRCode from 'qrcode.react';
+import styles from '../styles/EnterpriseManager.css';
 
-import back from '../asset/ico/back.png';
+import XHR from '../utils/request';
+import API from '../api/index';
+
 import go from '../asset/manager/go.png';
-import circle from '../asset/userCenter/circle_code.png';
 
-class OrdinaryEnterorise extends Component{
+class OrdinaryEnterorise extends Component {
     constructor() {
         super();
-        this.state={
-            tab:'numbe',
-            division:false,
-            section:['人事部','采购部','行政部','业务部','研发部'],
-            machineNum:['HASDKASDSD','SADFASFASA','ADSFASDFAS','DADSODPEDK']
+        this.state = {
+            invitationCode: '',
+            currentIndex: 0,             //切换tab的index
+            division: false,
+            section: [],                 //部门列表
+            machineNum: [],              //考勤机列表
+            inputText:''                 //部门名称
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '企业管理';
+        this.getCompany();
+        this.getOfficeList();
+        this.getAttendanceMachineList();
     }
-    backMove() {
-        this.props.history.push('/userCenter');
-     }
+    cancelSelect() {        //取消选择
+        this.setState({ division: false });
+        this.setState({selectState:true});
+    }
+    confirmSelect(ev) {       //确认选择
+        this.setState({ division: false });
+        this.setState({selectState:true});
+        this.state.section.unshift(this.state.inputText);
+        this.setState({section:this.state.section});
+
+    }          
+    selectTab(i) {                         //获取当前tab索引
+        this.setState({ currentIndex: i });
+    }
+    getInput(ev) {
+        this.setState({inputText:ev.target.value})
+    }
+    goToDepartment() {
+        this.props.history.push("/department");
+    }
+    async getCompany() {                   //获取公司信息
+        const result = await XHR.post(API.getCompany, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        this.setState({ companyInfo: JSON.parse(result).data })
+        this.setState({ invitationCode: JSON.parse(result).data.invitationCode })
+
+    }
+    async getOfficeList() {                //获取公司部门列表
+        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const dataSource = JSON.parse(result).data;
+        const officeList = [];
+        dataSource.forEach((item, index) =>
+            officeList.push(dataSource[index].name)
+        )
+        this.setState({ section: officeList });
+
+    }
+    async getAttendanceMachineList() {     //获取考勤机列表
+        const result = await XHR.post(API.getAttendanceMachineList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const dataSource = JSON.parse(result).data;
+        const machineList = [];
+        dataSource.forEach((item, index) =>
+            machineList.push(dataSource[index].id)
+        )
+        this.setState({ machineNum: machineList });
+    }
     render() {
-        const { section,machineNum} = this.state;
+        const { section, machineNum, division, companyInfo, currentIndex ,inputText} = this.state;
+        const tab = ['邀请码', '部门管理', '考勤机编号']
+        const Adddivision = props => {
+            if (division) {
+                return (
+                    <div className={styles.item}>
+                        <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText} />
+                        <img className={styles.forward} src={go} alt="" />
+                    </div>
+                )
+            } else {
+                return false;
+            }
+        }
         const TabContent = props => {
-            if (this.state.tab === 'department') {
+            if (this.state.currentIndex === 1) {
                 return (
                     <div className={styles.content}>
                         {
-                            section.map((item,index) =>
-                                <div className={styles.item} key={index}>
+                            section.map((item, index) =>
+                                <div onClick={ev =>this.goToDepartment(ev)} className={styles.item} key={index}>
                                     <div className={styles.name}>{item}</div>
-                                    <img className={styles.forward} src={go} alt=""/>
+                                    <img className={styles.forward} src={go} alt="" />
                                 </div>
                             )
                         }
                     </div>
                 );
-            } else if(this.state.tab === 'number'){
+            } else if (this.state.currentIndex === 2) {
                 return (
                     <div className={styles.content}>
                         {
-                            machineNum.map((item,index) =>
+                            machineNum.map((item, index) =>
                                 <div className={styles.item} key={index}>
-                                    <div className={styles.name}>考勤机{index}: {item}</div>
+                                    <div className={styles.name}>考勤机{index + 1}: {item}</div>
                                 </div>
                             )
                         }
                     </div>
-              )
-            }else{
-                return(
+                )
+            } else {
+                return (
                     <div className={styles.content}>
                         <div className={styles.codeWrap}>
-                        <div className={styles.codeContent}>
-                            <img style={{width:170,height:170}} src={circle} alt=""/>
-                            <div className={styles.code}>5666</div>
-                        </div>
-                        <div style={{marginTop:10}}>邀请码</div>
-                        <div style={{marginTop:10,color:'gray'}}>分享邀请码即可让员工注册</div>
-                        </div>
-
-                        <div className={styles.shareBtn}>
-                            <div>分享邀请码</div>
+                            <div className={styles.code}>
+                                <QRCode value={this.state.invitationCode} />
+                            </div>
+                            <div className={styles.codetext}>邀请码</div>
+                            <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
                         </div>
                     </div>
                 )
-            
+
             }
         }
-        return(
+        return (
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev => this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>南京XX责任有限公司</div>
-                </div>
                 <div className={styles.timetable}>
-                   <div>邀请码</div>
-                   <div className={styles.currentTimetable}>部门管理</div>
-                   <div>考勤机编号</div>
+                    {
+                        tab.map((item, index) => <div onClick={ev => this.selectTab(index)} className={currentIndex === index ? styles.currentTab : styles.elseTab} key={index}>{item}</div>)
+                    }
                 </div>
                 <TabContent></TabContent>
             </div>
         )
     }
 }
-export default OrdinaryEnterorise
+export default OrdinaryEnterorise;

@@ -104,7 +104,11 @@ class EditProfile extends Component{
                         <div className={styles.department}>{departmentName}</div>
                     </div>
                 </div>
-                <div onClick={ev =>this.showDepartment(ev)} className={styles.selectDepartment}>选择部门<Direction checked={true}/></div>
+                <div className={styles.bottomBar}>
+                    <div onClick={ev =>this.showDepartment(ev)} className={styles.add}>选择部门<Direction checked={true}/></div>
+                    <div onClick={ev =>this.determineDepartment(ev)} className={styles.editor}>确定</div>
+                </div>
+                
                 <Exhibition></Exhibition>
             </div>
         )

@@ -121,7 +121,7 @@ class EmployeeInformation extends Component{
                                     <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
                                         <div className={styles.information}>
                                             <div className={styles.name}>{item.name}</div>
-                                            <div className={styles.phone}>{item.loginName}</div>
+                                            <div className={styles.phone}>{item.phone}</div>
                                         </div>
                                         <img className={styles.forward} src={forward} alt=""/>
                                     </div>
@@ -143,7 +143,7 @@ class EmployeeInformation extends Component{
                                 <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
                                     <div className={styles.information}>
                                         <div className={styles.name}>{item.name}</div>
-                                        <div className={styles.phone}>{item.loginName}</div>
+                                        <div className={styles.phone}>{item.phone}</div>
                                     </div>
                                     <img className={styles.forward} src={forward} alt=""/>
                                 </div>

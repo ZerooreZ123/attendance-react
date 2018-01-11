@@ -13,24 +13,35 @@ import load from '../asset/punchClock/load.png';
 import successMin from '../asset/punchClock/successMin.png';
 import success from '../asset/punchClock/success.png';
 import rankingListIco from '../asset/punchClock/rankingListIco.png';
+import headPortrait from '../asset/userCenter/headPortrait.png';
+import X from '../asset/punchClock/X.png';
+import up from '../asset/punchClock/up.png';
+import down from '../asset/punchClock/down.png';
 
 
-const Mask = ({visible,parent}) => {
+
+const Mask = ({visible,parent,information}) => {
   if (visible) {
     return (
       <div className={styles.mask}>
         <div className={styles.maskBox}>
           <div className={styles.maskHeader}>
-              <div className={styles.maskTitle}><div>一月排行榜</div></div>
-              {/* <img src={} className={} alt=""/> */}
+              <div className={styles.maskTitle}><div className={styles.titleText}>一月排行榜</div></div>
+              <img  onClick={ev =>parent.hideMask(ev)}src={X} className={styles.x}  alt=""/>
           </div>
           <div className={styles.own}>
-               <div><img src={} alt=""/><span>王大宏</span> <span>30</span><img src={} alt=""/><span>2</span></div>
-               <div>140小时50分钟</div>
+               <div className={styles.ownInfo}><img src={headPortrait} className={styles.touXiang} alt=""/><span className={styles.ownName}>王大宏</span> <span className={styles.num}>30</span><img  className={styles.up} src={up} alt=""/><span className={styles.numUp}>2</span></div>
+               <div className={styles.allTime}>140小时50分钟</div>
           </div>
           <div className={styles.chartsList}>
-              <div><span>1</span><span>王小明</span><span>人事部</span></div>
-              <div>140小时50分钟</div>
+            {
+              information.map((item,index) =>
+              <div className={styles.personal} key={index}>
+                <div><span>{index+1}</span><span className={styles.personalName}>{item.name}</span><span className={styles.branch}>{item.officeName}</span></div>
+                <div className={styles.allTime}>{item.duration}</div>
+              </div>
+              )
+            }
           </div>
         </div>
       </div>
@@ -53,17 +64,21 @@ class PunchClock extends Component {
           weekday:'',              //周几
           prompt:1,                //考勤机状态
           noticeState:true,        //通知显示
-          mask:false
+          mask:false,              //排行榜遮罩
+          dataList:[],             //排行榜数据
+          normalDay:''
+
         };
       }
     componentDidMount() {
         document.querySelector('title').innerText = '考勤打卡';
+        this.getNormalDays();
         // this.showTime();
     }
     userCenter() {                    //切换至个人中心
       this.props.history.push('/userCenter');
     }
-    AnnouncementDetails(ev) {           //切换至公告详情
+    AnnouncementDetails(ev) {         //切换至公告详情
       ev.stopPropagation();
       this.props.history.push('/announcementDetails');
     }                        
@@ -71,12 +86,13 @@ class PunchClock extends Component {
       setInterval(ev =>this.getTime(ev),1000)
     }
     hideMask() {
-      this.setState({ mask: false });
+      this.setState({ mask: false }); //隐藏
     }
-    showMask() {
-      this.setState({ mask: true });
+    showMask() {                      
+      this.setState({ mask: true });  //显示
+      this.rankingList();
     }
-    refresh() {
+    refresh() {                       //刷新页面
       this.setState({prompt:0})
     }
     noteceDelete() {                  //删除通知
@@ -121,8 +137,17 @@ class PunchClock extends Component {
         this.setState({prompt:2})
       }
     }
+    async rankingList() {            //获取排行榜
+      const result = await XHR.post(API.rankingList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+      this.setState({dataList:JSON.parse(result).data || []});
+     
+    }
+    async getNormalDays() {         //获取正常打卡天数
+      const result = await XHR.post(API.getTime,{loginName:"18550117460"})
+      this.setState({normalDay:JSON.parse(result).data});
+    }
     render() {
-      const {prompt,h,m,s,noticeState} = this.state;
+      const {prompt,h,m,s,noticeState,normalDay} = this.state;
       const Notice = props => {
         if(noticeState){
           return(
@@ -207,7 +232,7 @@ class PunchClock extends Component {
       return (
         <div className={styles.container}>
           <div className={styles.headerTip}>
-              <div className={styles.time}><span>连续正常打卡100天</span></div>
+              <div className={styles.time}><span>连续正常打卡{normalDay}天</span></div>
               <div onClick={ev =>this.showMask(ev)} className={styles.rankingList}><img className={styles.rankingListImg} src={rankingListIco} alt=""/><span className={styles.rankingListText}>排行榜</span></div>
           </div>
           <Notice></Notice>
@@ -222,7 +247,7 @@ class PunchClock extends Component {
               <div>个人中心</div>
             </div>
           </div>
-          <Mask visible={this.state.mask}></Mask>
+          <Mask visible={this.state.mask} parent={this} information={this.state.dataList}></Mask>
         </div>
       );
     }

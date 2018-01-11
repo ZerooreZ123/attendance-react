@@ -107,16 +107,28 @@
 .punchTime{
     color:#999;
 }
-.more{
+.bottomBar{
     position:fixed;
-    bottom: 0;
+    bottom:0;
     left:0;
-    height:102px;
     width:100%;
-    border:2px solid #ddd;
-    text-align: center;
+    height:102px;
     line-height: 102px;
+    border-top:3px solid #ddd;
     font-size:32px;
-    color: #2e79ca;
+}
+.editor{
+    display:inline-block;
+    width:24%;
+    text-align: center;
+    color:#fff;
+    background:#389fe9; 
+
+}
+.add{
+    display:inline-block;
+    width:76%;
+    text-align: center; 
+    color:#389fe9;
     background: #fff;
 }

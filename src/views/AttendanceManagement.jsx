@@ -9,21 +9,11 @@ import styles from '../styles/AttendanceManagement.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import backImg from '../asset/ico/back.png';
 import icon from '../asset/ico/icon.png';
 import top from '../asset/manager/triangle-top.png';
 import check from '../asset/manager/Check.png';
 import nocheck from '../asset/manager/noCheck.png';
-import choose from '../asset/manager/choose.png';
-import nochoose from '../asset/manager/noChoose.png';
 
-const SelectBtn = (props) => {
-    if (props.checked === true) {
-      return <img className={styles.choose} src={choose} alt="" />;
-    } else {
-      return <img className={styles.nochoose} src={nochoose} alt="" />;
-    }
-}
 const CheckBtn = (props) => {
     if (props.checked === true) {
       return <img src={check} alt="" />;
@@ -84,7 +74,7 @@ class AttendanceManagement extends Component{
         const result = await XHR.post(API.attendanceManagement,{
             companyid:this.state.data.companyid,
             forenoonLatest:"09:00:00",
-            forenoonStartTime:"08:00:00",
+            afternoonFirst:"18:00:00",
             workingTime:"1,2,3,4,5",
             id: this.state.data.id
         })
@@ -110,7 +100,6 @@ class AttendanceManagement extends Component{
                      
                      <div className={styles.workTime}>
                          <div className={styles.work}>工作时间</div>
-                         <div onClick={ev =>this.selectBtn()} className={styles.custom}><SelectBtn checked={custom}/>自定义</div>
                          <div className={styles.week}>
                             {
                                     week.map((item,index) =>

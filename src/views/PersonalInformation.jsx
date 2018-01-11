@@ -174,7 +174,10 @@ class PersonalInformation extends Component {
                     </div>
                     <Show></Show>
                 </div>
-                <div className={styles.more}>查看更多</div>
+                <div className={styles.bottomBar}>
+                    <div className={styles.add}>查看更多</div>
+                    <div onClick={ev =>this.editData(ev)} className={styles.editor}>修改资料</div>
+                </div>
             </div>
         )
     }

@@ -2,8 +2,8 @@
 // const admin = 'http://192.168.1.170:18080/AM/f/yk/api/';
 // const admin = 'http://106.14.28.70/'
 // const admin ="http://www.junl.cn/"
-const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
-// const admin = 'http://192.168.1.34:8080/AM/f/yk/api/';
+// const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
+const admin = 'http://192.168.1.40:8080/AM/f/yk/api/';
 const API = {
   update: admin + 'update.do',                                     //更新用户信息和公司信息
   getOfficeList: admin + 'getOfficeList.do',                       //获取公司部门列表
@@ -25,8 +25,9 @@ const API = {
   noticeList: admin + 'noticeList.do',                             //公告列表
   getAttendanceManagement: admin + 'getAttendanceManagement.do',   //获取公司考勤时间配置
   attendanceManagement: admin + 'attendanceManagement.do',         //公司考勤时间设置
-  getOfficeUserList: admin + 'getOfficeUserList.do'                //公司所有部门员工
-
+  getOfficeUserList: admin + 'getOfficeUserList.do',               //公司每个部门员工
+  rankingList: admin + 'rankingList.do',                           //排行榜
+  getTime: admin + 'getTime.do'                                    //连续正常打卡天数
 };
   
 export {
