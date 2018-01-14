@@ -5,7 +5,6 @@ import styles from '../styles/CardReminding.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png';
 import blueTop from '../asset/manager/triangle-top.png';
 import grayDown from '../asset/ico/icon.png';
 
@@ -17,6 +16,43 @@ const Icon = (props) => {
     }
 }
 
+const TimeList =({parent,visible})  => {
+    const list = [3,5,10,20,30];
+    if (visible) {
+        return (
+            <div className={styles.mask}>
+                <div className={styles.maskBox}>
+                    <div className={styles.timeSlot}>
+                    {
+                        list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>parent.selectTime(index)}>前{item}分钟</div>)
+                    }
+                    </div>
+                </div>
+            </div>
+        );
+    } else {
+      return null;
+    }
+}
+
+const TimeSlot = ({parent,visible})  => {
+    const list = [3,5,10,20,30];
+    if (visible) {
+        return (
+            <div className={styles.maskCopy}>
+                <div className={styles.maskBox}>
+                    <div className={styles.timeDuan}>
+                    {
+                        list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>parent.choiceTime(index)}>前{item}分钟</div>)
+                    }
+                    </div>
+                </div>
+            </div>
+        );
+    } else {
+      return null;
+    }
+}
 
 class CardReminding extends Component {
     constructor() {
@@ -47,22 +83,19 @@ class CardReminding extends Component {
     hideTimeSlot(){                        //隐藏2
         this.setState({timeSlot:false})
     }
-    backMove() {                          //跳转至个人中心
-        this.props.history.push('/userCenter');
-    }
     selectTime(i) {                       //选择分钟数NO.1
-        const list = [3,5,10,20,30];
+        const list = ['3','5','10','20','30'];
         this.setState({upTime:list[i]});
-        this.clockInRemind();
         this.hideTimeList();
+        this.clockInRemind();
     }
     choiceTime(i) {                       //选择分钟数NO.2
-        const list = [3,5,10,20,30];
+        const list = ['3','5','10','20','30'];
         this.setState({downTime:list[i]});
-        this.clockInRemind();
         this.hideTimeSlot();
+        this.clockInRemind();
     }
-    toggleSwitch() {
+    toggleSwitch() {                     //Switch切换1
         if(this.state.upSwitch === '0') {
             this.setState({upSwitch:'1'})
         }else{
@@ -70,7 +103,7 @@ class CardReminding extends Component {
         }
         this.clockInRemind();
     }
-    changeSwitch() {
+    changeSwitch() {                     //Switch切换2
         if(this.state.downSwitch === '0') {
             this.setState({downSwitch:'1'})
         }else{
@@ -84,61 +117,28 @@ class CardReminding extends Component {
         this.setState({downTime:JSON.parse(result).data.downTime});
         this.setState({upSwitch:JSON.parse(result).data.upSwitch});
         this.setState({downSwitch:JSON.parse(result).data.downSwitch});
+        this.setState({dataSource:JSON.parse(result).data});
     }
     async clockInRemind() {              //设置提醒设置
-        const {dataSource} = this.state;
+        console.log(this.state.upTime,this.state.upSwitch,this.state.downTime,this.state.downSwitch)
         const result = await XHR.post(API.clockInRemind,{
             loginName:"18550117460",
             upTime:this.state.upTime,
             upSwitch:this.state.upSwitch,
             downTime:this.state.downTime,
             downSwitch:this.state.downSwitch,
-            id:dataSource.id
+            id:this.state.dataSource.id
         });
+       
+        this.setState({downTime:this.state.downTime});
+        this.setState({upSwitch:this.state.upSwitch});
+        this.setState({downSwitch:this.state.downSwitch});
+        this.setState({dataSource:JSON.parse(result).data.id});
     }
     render() {
-        const list = [3,5,10,20,30];
-        const {upTime,upSwitch,downTime,downSwitch} = this.state;
-        const TimeList = props => {
-            if (this.state.timeList) {
-                return (
-                    <div className={styles.mask}>
-                        <div className={styles.maskBox}>
-                            <div className={styles.timeSlot}>
-                            {
-                                list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>this.selectTime(index)}>前{item}分钟</div>)
-                            }
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else {
-              return null;
-            }
-        }
-        const TimeSlot = props => {
-            if (this.state.timeSlot) {
-                return (
-                    <div className={styles.maskCopy}>
-                        <div className={styles.maskBox}>
-                            <div className={styles.timeDuan}>
-                            {
-                                list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>this.choiceTime(index)}>前{item}分钟</div>)
-                            }
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else {
-              return null;
-            }
-        }
+        const {upTime,upSwitch,downTime,downSwitch,timeList,timeSlot} = this.state;
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>打卡提醒</div>
-                </div>
                 <div className={styles.content}>
                     <div className={styles.item}>
                         <div>
@@ -158,8 +158,8 @@ class CardReminding extends Component {
                         </div>
                         <Switch onChange={ev =>this.changeSwitch(ev)} checked={downSwitch === '0' ? true:false}></Switch>
                     </div>
-                    <TimeList></TimeList>
-                    <TimeSlot></TimeSlot>
+                    <TimeList parent={this} visible={timeList}></TimeList>
+                    <TimeSlot parent={this} visible={timeSlot}></TimeSlot>
                 </div>
             </div>
         )

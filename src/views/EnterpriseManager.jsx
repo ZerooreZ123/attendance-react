@@ -30,13 +30,12 @@ class EnterpriseManager extends Component {
     constructor() {
         super();
         this.state = {
-            selectState:true,           //底部栏展示
-            invitationCode: '',
+            selectState:true,            //底部栏展示
+            invitationCode: '',          //邀请码
             currentIndex: 0,             //切换tab的index
-            division: false,
+            division: false,             //添加部门输入框状态
             section: [],                 //部门列表
             machineNum: [],              //考勤机列表
-            companyInfo: {},             //公司名称及邀请码
             inputText:''                 //部门名称
         }
     }
@@ -49,7 +48,8 @@ class EnterpriseManager extends Component {
     addAttendanceMachine() {
         this.props.history.push('/addAttendanceMachine')
     }
-    addDivision() {        //添加部门
+    addDivision() {         //添加部门
+        this.setState({inputText:''})
         this.setState({ division: true });
         this.setState({selectState:false});
     }
@@ -57,7 +57,7 @@ class EnterpriseManager extends Component {
         this.setState({ division: false });
         this.setState({selectState:true});
     }
-    confirmSelect(ev) {       //确认选择
+    confirmSelect(ev) {     //确认选择
         this.setState({ division: false });
         this.setState({selectState:true});
         this.state.section.unshift(this.state.inputText);
@@ -68,11 +68,10 @@ class EnterpriseManager extends Component {
         this.setState({ currentIndex: i });
     }
     getInput(ev) {
-        this.setState({inputText:ev.target.value})
+        this.setState({inputText:ev.target.value});
     }
     async getCompany() {                   //获取公司信息
         const result = await XHR.post(API.getCompany, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
-        this.setState({ companyInfo: JSON.parse(result).data })
         this.setState({ invitationCode: JSON.parse(result).data.invitationCode })
 
     }
@@ -95,14 +94,15 @@ class EnterpriseManager extends Component {
         )
         this.setState({ machineNum: machineList });
     }
+
     render() {
-        const { section, machineNum, division, companyInfo, currentIndex ,inputText} = this.state;
+        const { section, machineNum, division,currentIndex,inputText} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
         const Adddivision = props => {
             if (division) {
                 return (
                     <div className={styles.item}>
-                        <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText} />
+                        <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
                         <img className={styles.forward} src={go} alt="" />
                     </div>
                 )

@@ -4,7 +4,32 @@ import styles from '../styles/RevisionDepartment.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png'
+
+const Revision = ({visible,section,departmentIndex,parent}) => {
+    if (!visible ) {
+        return(
+            <div className={styles.editBox}>
+                <div onClick={ev =>parent.editDepartment(ev)} className={styles.edit}>修改</div>
+            </div>
+        )
+    } else {
+        return(
+            <div>
+                <div className={styles.departmentBox}>
+                {
+                    section.map((item,index) =>
+                        <div onClick={ev =>parent.choice(index)} className={departmentIndex === index?styles.selectItem:styles.itemList} key={index}>{item.name}</div>
+                    )
+                }
+                </div>
+                <div className={styles.editBox}>
+                    <div onClick={ev =>parent.cancelBtn(ev)}className={styles.cancel}>取消</div>
+                    <div onClick={ev =>parent.confirmBtn(ev)} className={styles.confirm}>确认</div>
+                </div>
+            </div>
+        )
+    }
+}
 
 class RevisionDepartment extends Component{
     constructor(){
@@ -22,9 +47,6 @@ class RevisionDepartment extends Component{
         this.getOfficeList();
        
     }
-    backMove() {
-        this.props.history.push('/userCenter');
-    }
     editDepartment() {
         this.setState({edit:true});
     }
@@ -32,7 +54,9 @@ class RevisionDepartment extends Component{
        this.setState({departmentIndex:i})
        this.setState({departmentName:this.state.section[i].name});
        this.setState({departmentId:this.state.section[i].id});
-
+    }
+    cancelBtn(){                                       //取消修改
+        this.setState({edit:false});
     }
     confirmBtn() {                                     //确认修改
         this.setState({edit:false})
@@ -55,45 +79,21 @@ class RevisionDepartment extends Component{
             officeName:this.state.departmentName,
             officeid:this.state.departmentId
         })
+        if (JSON.parse(result).success === "T") {
+            alert("修改部门成功")
+        }else{
+            alert(JSON.parse(result).msg);
+        }
     }
     render() {
         const {section,edit,departmentName,departmentIndex} = this.state;
-        const Revision = props => {
-            if (edit === false ) {
-                return(
-                    <div className={styles.editBox}>
-                        <div onClick={ev =>this.editDepartment(ev)} className={styles.edit}>修改</div>
-                    </div>
-                )
-            } else {
-                return(
-                    <div>
-                        <div className={styles.departmentBox}>
-                        {
-                            section.map((item,index) =>
-                                <div onClick={ev =>this.choice(index)} className={departmentIndex === index?styles.selectItem:styles.itemList} key={index}>{item.name}</div>
-                            )
-                        }
-                        </div>
-                        <div className={styles.editBox}>
-                            <div className={styles.cancel}>取消</div>
-                            <div onClick={ev =>this.confirmBtn(ev)} className={styles.confirm}>确认</div>
-                        </div>
-                    </div>
-                )
-            }
-        }
         return(
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div onClick={ev =>this.backMove(ev)} className={styles.back}><img className={styles.backImg} src={back} alt=""/><span className={styles.backCaption}>个人中心</span></div>
-                    <div className={styles.title}>修改部门</div>
-                </div>
                 <div className={styles.information}>
                     <div className={styles.name}>王大宏</div>
                     <div className={styles.department}>{departmentName}</div>
                 </div>
-                <Revision></Revision>
+                <Revision visible={edit} section={section} departmentIndex={departmentIndex} parent={this}></Revision>
             </div>
         )
     }

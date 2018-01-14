@@ -21,7 +21,7 @@ class Search extends Component {
     }
     empty() {
         this.setState({searchHistory:[]});
-    }
+    }   
     render() {
         const {searchHistory} = this.state;
         return (

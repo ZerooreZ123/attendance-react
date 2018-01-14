@@ -4,8 +4,6 @@ import styles from '../styles/AnnouncementDetails.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import backImg from '../asset/ico/back.png';
-
 class AnnouncementDetails extends Component{
     constructor() {
         super();

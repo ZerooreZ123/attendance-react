@@ -5,7 +5,6 @@ import styles from '../styles/EmployeeInformation.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png';
 import search from '../asset/manager/search.png';
 import forward from '../asset/manager/go.png';
 import upBlue from '../asset/manager/triangle-top.png';
@@ -32,7 +31,8 @@ class EmployeeInformation extends Component{
             departmentIndex:'',         //部门的索引值
             departmentId:'',            //部门Id
             mask:false,                 //默认不显示部门
-            exhibition:0                //展示人员 0全部部门人员  1部门人员
+            exhibition:0,               //展示人员 0全部部门人员  1部门人员
+            inputValue:'',              //输入框文字
         }
     }
     componentDidMount() {
@@ -52,8 +52,12 @@ class EmployeeInformation extends Component{
     personalInformation() {
         this.props.history.push('/personalInformation')
     }
-    backMove() {
-        this.props.history.push('/userCenter');
+    getInputValue(ev) {
+        this.setState({inputValue:ev.target.value});
+        console.log(this.state.inputValue);
+    }
+    searchPeople() {
+        
     }
     clickTerm(i) {                              //设置部门索引、名字、Id  
         this.setState({departmentIndex:i})
@@ -105,7 +109,7 @@ class EmployeeInformation extends Component{
         }
     }
     render() {
-        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart} = this.state;
+        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue} = this.state;
         const Content = props =>{              //展示员工
             if(exhibition === 0) {             //全部
             return (
@@ -184,7 +188,7 @@ class EmployeeInformation extends Component{
                 <div className={styles.header}>
                    <div className={styles.searchBox}>
                         <img className={styles.search}src={search} alt=""/>
-                        <input type="text" placeholder="搜索姓名或手机号"  />
+                        <input onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
                     </div>
                 </div>
                 <Content></Content>

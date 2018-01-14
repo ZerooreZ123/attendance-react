@@ -2,103 +2,113 @@ import React,{Component} from 'react';
 
 import styles from '../styles/InviteCodeDetail.css';
 
-import back from '../asset/ico/left_arrow.png';
-import depart from '../asset/userCenter/down_arrow.png'
-import departDown from '../asset/userCenter/gray_arrow.png'
+import XHR from '../utils/request';
+import API from '../api/index';
 
-const departArr = ['部门01','人事部','财务部','移动开发','商务部','市场部']
+import down from '../asset/userCenter/down_arrow.png';
+import spread from '../asset/manager/spread.png';
+
+
+
+const Mask = ({visible,parent,List,Index}) => {               //部门列表
+  if (visible) {
+      return (
+          <div className={styles.mask}>
+              <div className={styles.maskBox}>
+                  <div className={styles.operation}>
+                      <img onClick={ev =>parent.hideMask(ev)} className={styles.spread} src={spread} alt=""/>
+                  </div>
+                  <div className={styles.determine} onClick={ev =>parent.determineDepartment(ev)}>确定</div>
+                  <div className={styles.departmentBox}>
+                      {
+                          List.map((item,index) =>
+                              <div onClick={ev =>parent.clickTerm(index)} className={Index === index?styles.selectTerm:styles.term} key={index}>{item.name}</div>
+                          )
+                      }
+                      <div className={styles.clearBoth}></div>
+                  </div>
+              </div>
+          </div>
+      );
+  } else {
+    return null;
+  }
+}
 
 class InviteCodeDetail extends Component {
   constructor() {
     super();
     this.state = {
-      showModal: false,
-      selectDepart:0
+        InputText:'',               //输入名字
+        InputValue:'',              //输入部门
+        departmentId:'',            //部门Id
+        departmentIndex:'',         //部门的索引值
+        mask:false,                 //遮罩层
+        section:[],                 //部门列表
+        status:true
     }
-  }
-  codeChange(){
-    const text = this.refs.depart.value;
-    if (text.length>0){
-      this.refs.nextStep.removeAttribute("disabled");
-      this.refs.nextStep.setAttribute("style","background-color:#FFF");
-    }else{
-      this.refs.nextStep.setAttribute("disabled" ,"disabled");
-      this.refs.nextStep.setAttribute("style","background-color:lightgray");
-    }
-  }
-  nextStep() {
-    console.log(this.refs.name.value)
-  }
-  showDepart() {
-    // const container = this.refs.container;
-    // const modal = this.refs.modal;
-    // container.appendChild(modal);
-    this.setState({showModal:true});
-    this.selectDepart(0);
-  }
-  sureClick() {
-    // const container = this.refs.container;
-    // const modal = this.refs.modal;
-    // container.removeChild(modal);
-    this.setState({showModal:false});
-    // 主动判断部门字符，如果有完成按钮可点击
-    this.codeChange()
-  }
-  selectDepart(index) {
-    this.setState({selectDepart:index});
-    const depart = this.refs.depart;
-    depart.value = departArr[index];
-  }
-  componentDidMount() {
-    
-  }
-  render() {
+}
+componentDidMount() {
+    document.querySelector('title').innerText = '填写资料';
+    this.getOfficeList();
+}
+hideMask() {
+  this.setState({ mask: false });
+}
+showMask() {
+  this.setState({ mask: true });
+}
+getValue(ev) {          //获取部门的输入值
+  this.setState({InputValue:ev.target.value})
+}
+getName(ev) {           //获取输入的姓名
+  this.setState({InputText:ev.target.value})
+}
+clickTerm(i) {                              //设置部门索引、名字、Id  
+  this.setState({departmentIndex:i})
+  this.setState({departmentName:this.state.section[i].name});
+  this.setState({departmentId:this.state.section[i].id});
+}
+determineDepartment(){
+  this.hideMask();
+  this.setState({InputValue:this.state.departmentName});
+}
+async getOfficeList() {                     //获取部门列表
+  const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+  const sectionList = [];
+  JSON.parse(result).data.forEach((item,index) =>{
+      sectionList.push({
+          name:item.name,
+          id:item.id
+      })
+  });
+  this.setState({section:sectionList});   
+}
+render() {
+    const {status,mask,section,departmentIndex,InputValue,InputText} = this.state;
     return (
-      <div className = {styles.container} ref = "container">
-        <div className={styles.header}>
-            <div className={styles.back}><img className={styles.backImg} src={back} alt=""/>企业邀请码</div>
-        </div>
-        
-        <div className = {styles.headImage}><div style={{width:70,height:70,borderRadius: 35,background:'lightgray'}}></div></div>
-
-        <div className = {styles.invite}>
-          <input ref = "name" type="text" placeholder = "姓名" onChange={()=>this.codeChange()}/>必填
-          <div style={{height:1,background:'#FFF',marginTop:8}}></div>
+      <div className = {styles.container}>
+        <div className = {styles.headImage}>
+           <div style={{width:70,height:70,borderRadius: 35,background:'lightgray'}}></div>
         </div>
 
-        <div className = {styles.invite}>
-          <input ref = "depart" type="text" placeholder = "部门" onChange={()=>this.codeChange()}/>
-          <div style={{display:"inline-block",width:15,height:15}} onClick = {()=>this.showDepart()}>
-            <img src={depart} alt=""/>
-          </div>
-          <div style={{height:1,background:'#FFF',marginTop:8}}></div>
+        <div className = {styles.getCode}>
+          <input onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
+          <div>必填</div>
+        </div>
+
+        <div className = {styles.getCode}>
+          <input onChange={ev =>this.getValue(ev)} type="text" placeholder = "部门" value={InputValue}/>
+          <img onClick={ev =>this.showMask(ev)} src={down} className={styles.down} alt=''/>
         </div>
 
         <div className={styles.next}>
-          <button ref = "nextStep" type = "button" className = {styles.nextStep} onClick={()=>this.nextStep()} disabled="disabled">完成</button>
+          <div className = {(InputText && InputValue) ? styles.nextCan:styles.nextStep}>完成</div>
         </div>
-
-        {this.state.showModal?<div className={styles.modal} ref = "modal">
-          <div className = {styles.modalContent}>
-            <div className={styles.sureBtn} onClick={()=>this.sureClick()}>
-              <img src={departDown} style={{width:35,height:12}} alt=""/>
-              <div>确定</div>
-            </div>
-            <div className={styles.depart}>
-                {
-                  departArr.map((value,index)=>{
-                    return(
-                      <div key={index} className={this.state.selectDepart!==index? styles.departItem : styles.selDepartItem} onClick={()=>this.selectDepart(index)}>{value}</div>
-                    )
-                  })
-                }
-            </div>
-          </div>
-        </div>:null}
+        <Mask visible={mask} parent={this} List={section} Index={departmentIndex} />
       </div>
     );
   }
 }
-
 export default InviteCodeDetail;
 

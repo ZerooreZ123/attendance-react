@@ -16,7 +16,7 @@
     font-size:32px;
     color:#000;
 }
-.rankingList{
+/* .rankingList{
     position:absolute;
     top:41px;
     right:25px;
@@ -32,7 +32,7 @@
     position: relative;
     top:-2px;
     color:#2093e6;
-}
+} */
 .noticeBoard{
     padding:22px;
     background:#fdf0ec;
@@ -192,7 +192,7 @@
     width:48px;
     height:48px;
 }
-.mask {
+/* .mask {
     z-index: 3;
     display:flex;
     justify-content:center;
@@ -289,5 +289,5 @@
 }
 .allTime{
     font-size:26px;
-    color:#2093e6;
-}
+    color:#2093e6; */
+/* } */

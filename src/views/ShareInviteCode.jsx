@@ -11,10 +11,13 @@ class ShareInviteCode extends Component {
     this.state = {
       invitationCode:'' 
     }
-  }
+  } 
   componentDidMount() {
     document.querySelector('title').innerText = '分享邀请码';
     this.getCompany();
+  }
+  goToManagement() {
+    this.props.history.push('/attendanceManagement');
   }
   async getCompany() {                   //获取公司信息
     const result = await XHR.post(API.getCompany,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
@@ -32,7 +35,7 @@ class ShareInviteCode extends Component {
                 <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
             </div>    
         </div>
-        <div className={styles.footer}>完成并设置考勤时间</div>
+        <div onClick={ev =>this.goToManagement(ev)} className={styles.footer}>完成并设置考勤时间</div>
       </div>
     );
   }

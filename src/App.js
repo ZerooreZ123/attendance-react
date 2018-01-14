@@ -26,6 +26,9 @@ import EmployeeInformation from './views/EmployeeInformation';
 import AttendanceManagement from './views/AttendanceManagement';
 import OrdinaryEnterorise from './views/OrdinaryEnterorise';
 import Backstagelogon from './views/Backstagelogon';
+import PersonalRegister from './views/PersonalRegister';
+import EnterpriseRegistration from './views/EnterpriseRegistration';
+import WriteInformation from './views/WriteInformation';
 
 
 
@@ -58,9 +61,9 @@ class App extends Component {
                   <Route location={props.location} exact path="/exportData" component={ExportData}/>
                   <Route location={props.location} exact path="/historyAnnouncement" component={HistoryAnnouncement}/>
                   <Route location={props.location} exact path="/inviteCode" component={InviteCode}/>
-                  <Route location={props.location} exact path="/InviteCodeDetail" component={InviteCodeDetail}/>
+                  <Route location={props.location} exact path="/inviteCodeDetail" component={InviteCodeDetail}/>
                   <Route location={props.location} exact path="/announcementDetails" component={AnnouncementDetails}/>
-                  <Route location={props.location} exact path="/ShareInviteCode" component={ShareInviteCode}/>
+                  <Route location={props.location} exact path="/shareInviteCode" component={ShareInviteCode}/>
                   <Route location={props.location} exact path="/releaseAnnouncement" component={ReleaseAnnouncement}/>
                   <Route location={props.location} exact path="/addAttendanceMachine" component={AddAttendanceMachine}/>
                   <Route location={props.location} exact path="/search" component={Search}/>
@@ -73,6 +76,10 @@ class App extends Component {
                   <Route location={props.location} exact path="/attendanceManagement" component={AttendanceManagement}/>
                   <Route location={props.location} exact path="/ordinaryEnterorise" component={OrdinaryEnterorise}/>
                   <Route location={props.location} exact path="/backstagelogon" component={Backstagelogon}/>
+                  <Route location={props.location} exact path="/personalRegister" component={PersonalRegister}/>
+                  <Route location={props.location} exact path="/enterpriseRegistration" component={EnterpriseRegistration}/>
+                  <Route location={props.location} exact path="/writeInformation" component={WriteInformation}/>
+                  
                 </div>
               </CSSTransitionGroup>
             )
