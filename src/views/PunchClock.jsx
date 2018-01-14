@@ -73,7 +73,7 @@ class PunchClock extends Component {
     componentDidMount() {
         document.querySelector('title').innerText = '考勤打卡';
         // this.getNormalDays();
-        // this.showTime();
+        this.showTime();
     }
     userCenter() {                    //切换至个人中心
       this.props.history.push('/userCenter');

@@ -6,8 +6,6 @@ import styles from '../styles/PersonalInformation.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png';
-
 class PersonalInformation extends Component {
     constructor() {
         super();
@@ -28,18 +26,17 @@ class PersonalInformation extends Component {
     editData() {                     //跳转至修改资料
         this.props.history.push('/editProfile');
     }
-    backMove() {                     //跳转至个人中心
-        this.props.history.push('/userCenter');
-    }
-    showAll() {                      //展示所有
+    showAll(i) {                      //展示所有
         this.setState({showState:true});
         this.setState({tabIndex:0});
-        this.getRecords();
+        this.getRecords(i);
+        this.setState({monthIndex:0});
     }
-    showAbnormal() {                 //展示异常
+    showAbnormal(i) {                 //展示异常
         this.setState({showState:false});
         this.setState({tabIndex:1});
-        this.getAbnormal();
+        this.getAbnormal(i);
+        this.setState({monthIndex:0});
     }
     getTime() {                      //获取当前月及前三月
         var nowMonth = moment().format("M");
@@ -54,21 +51,21 @@ class PersonalInformation extends Component {
         var startTime ='';
         var endTime = '';
         switch(i){
-            case 0:
-                 startTime = moment().startOf('month').format("YYYY-MM-DD");
-                 endTime = moment().endOf('month').format("YYYY-MM-DD");
-                break;
             case 1:
-                 startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
-                 endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
                 break;
             case 2:
-                 startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
-                 endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
+                break;
+            case 3:
+                startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
+                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD"); 
                 break;
             default:
-                 startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
-                 endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+                startTime = moment().startOf('month').format("YYYY-MM-DD");
+                endTime = moment().endOf('month').format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
@@ -84,10 +81,6 @@ class PersonalInformation extends Component {
         var startTime ='';
         var endTime = '';
         switch(i){
-            case 0:
-                startTime = moment().startOf('month').format("YYYY-MM-DD");
-                endTime = moment().endOf('month').format("YYYY-MM-DD");
-                break;
             case 1:
                 startTime = moment().startOf('month').subtract(1, "months").format("YYYY-MM-DD");
                 endTime = moment().endOf('month').subtract(1, "months").format("YYYY-MM-DD");
@@ -96,9 +89,13 @@ class PersonalInformation extends Component {
                 startTime = moment().startOf('month').subtract(2, "months").format("YYYY-MM-DD");
                 endTime = moment().endOf('month').subtract(2, "months").format("YYYY-MM-DD");
                 break;
-            default:
+            case 3:
                 startTime = moment().startOf('month').subtract(3, "months").format("YYYY-MM-DD");
-                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD");     
+                endTime = moment().endOf('month').subtract(3, "months").format("YYYY-MM-DD"); 
+                break;
+            default:
+                startTime = moment().startOf('month').format("YYYY-MM-DD");
+                endTime = moment().endOf('month').format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",

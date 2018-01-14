@@ -4,7 +4,42 @@ import styles from '../styles/HistoryAnnouncement.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import backImg from '../asset/ico/back.png';
+const Module =({imgState,data,parent}) =>{
+    if(imgState){
+        return(
+            <div className={styles.content}>
+                {
+                    data.map((ev,index) =>
+                        <div className={styles.item} key={index} onClick={ev =>parent.announcementDetail()}>
+                            <div className={styles.itemText}>
+                                <div className={styles.caption}>{ev.title}</div>
+                                <div className={styles.itemContent}>{ev.content}</div>
+                                <div className={styles.itemDate}>{ev.createDate}</div>
+                            </div>
+                            <img className={styles.itemImg}src={ev.image} alt=""/>
+                        </div>
+                    )
+                }
+            </div>
+        )   
+    }else{
+        return(
+            <div className={styles.content}>
+                {
+                    data.map((ev,index) =>
+                        <div className={styles.item} key={index}  onClick={ev =>parent.announcementDetail()}>
+                            <div>
+                                <div className={styles.caption}>{ev.title}</div>
+                                <div className={styles.itemContent}>{ev.content}</div>
+                                <div className={styles.itemDate}>{ev.createDate}</div>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+        )   
+    }
+}
 
 class HistoryAnnouncement extends Component{
     constructor() {
@@ -17,8 +52,8 @@ class HistoryAnnouncement extends Component{
         document.querySelector('title').innerText = '历史公告';
         this.noticeList();
     }
-    backMove() {
-        window.history.go(-1);
+    announcementDetail() {
+        this.props.history.push('/announcementDetails');
     }
     releaseAnnouncement() {
         this.props.history.push('/releaseAnnouncement');
@@ -44,20 +79,8 @@ class HistoryAnnouncement extends Component{
         const {dataSource} = this.state;
         return(
             <div className={styles.container}>
-                <div className={styles.content}>
-                    {
-                        dataSource.map((ev,index) =>
-                            <div className={styles.item} key={index}>
-                                <div className={styles.itemText}>
-                                    <div className={styles.caption}>{ev.title}</div>
-                                    <div className={styles.itemContent}>{ev.content}</div>
-                                    <div className={styles.itemDate}>{ev.createDate}</div>
-                                </div>
-                                <img className={styles.itemImg}src={ev.image} alt=""/>
-                            </div>
-                        )
-                    }
-                </div>
+                <Module imgState={dataSource.image} data={dataSource} parent={this}/>
+                <div onClick={ev =>this.releaseAnnouncement(ev)} className={styles.release}>发布公告</div>
             </div>
         )
     }

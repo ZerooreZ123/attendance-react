@@ -12,27 +12,38 @@ import top from '../asset/manager/triangle-top.png';
 class ReleaseAnnouncement extends Component{
     constructor(){
         super();
+        window.temp = {};               
         this.state = {
-            announcementTitle:'公告标题',
-            announcementContent:'公告内容'
+            announcementTitle:window.localStorage.getItem('title') || '',
+            announcementContent:window.localStorage.getItem('content') || ''
         };
     }
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
     }
-    historyAnnouncement() {
+    historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
     }
-    selectImg() {
+    cancelRelease() {
+        let mes = "是否保存草稿";
+        if(window.confirm(mes) === true) {
+            window.localStorage.setItem('title',this.state.announcementTitle);
+            window.localStorage.setItem('content',this.state.announcementContent);
+           window.history.go(-1);
+        }else{
+            window.history.go(-1);
+        }
+    }
+    selectImg() {                              //调用相册
         var objUrl = window.ajaxFileUpload(this.files[0]);
     }
-    getTitle(ev) {
+    getTitle(ev) {                             //获取标题
         this.setState({announcementTitle: ev.target.value});
     }
-    getContent(ev) {
+    getContent(ev) {                           //获取内容
         this.setState({announcementContent: ev.target.value});
     }
-    async announce() {  
+    async announce() {                         //发布公告
         const result = await XHR.post(API.announce,{
             userid:"e7c800b0d173438292dab8cd23be8ba5",
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
@@ -41,21 +52,27 @@ class ReleaseAnnouncement extends Component{
             startDate:"2018-01-02 00:00:00",
 	        endDate:"2018-01-03 00:00:00"    
         })
+        if(JSON.parse(result).success === 'T'){
+            alert("发布成功");
+            window.history.go(-1);
+        }else{
+            alert(JSON.parse(result).msg)
+        }
     }
     render() {
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <div className={styles.cancel}>取消</div>
+                    <div onClick={ev =>this.cancelRelease(ev)} className={styles.cancel}>取消</div>
                     <div onClick={ev =>this.announce(ev)} className={styles.release}>发布</div>     
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                       <input type="text" className={styles.inputBox} onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
+                       <input type="text" className={styles.inputBox} placeholder="公告标题" onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
                     </div>
-                    <textarea className={styles.inputBlock} onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
+                    <textarea className={styles.inputBlock} placeholder="公告内容" onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>
-                        <img className={styles.img} src={photoMin} alt=""/>                   
+                        {/* <img className={styles.img} src={photoMin} alt=""/>                    */}
                     </div>
                     <div className={styles.releaseTime}>公告将发布于:<span>2018年1月18日</span>-<span>2018年1月21日</span></div>
                 </div>

@@ -141,6 +141,7 @@ class EmployeeInformation extends Component{
             }else{                            //部门
                 return(
                     <div className={styles.content}>
+                        <div className={styles.department}>{this.state.departmentName}</div>
                         <div className={styles.personnel}>
                             {
                                 departmentPart.map((item,index) =>
@@ -164,7 +165,7 @@ class EmployeeInformation extends Component{
                     <div className={styles.mask}>
                         <div className={styles.maskBox}>
                             <div className={styles.operation}>
-                                <img className={styles.spread} src={spread} alt=""/>
+                                <img  onClick={ev =>this.hideMask(ev)} className={styles.spread} src={spread} alt=""/>
                             </div>
                             <div className={styles.determine} onClick={ev =>this.determineDepartment(ev)}>确定</div>
                             <div className={styles.departmentBox}>

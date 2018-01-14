@@ -37,7 +37,7 @@ class RevisionDepartment extends Component{
         this.state = {
             edit:false,                //默认显示'修改'
             section:[],                //部门列表
-            departmentName:'智慧园区',  //默认部门
+            departmentName:window.temp.officeName,  //默认部门
             departmentId:'',           //部门Id
             departmentIndex:''         //部门的索引值
         }
@@ -90,7 +90,7 @@ class RevisionDepartment extends Component{
         return(
             <div className={styles.container}>
                 <div className={styles.information}>
-                    <div className={styles.name}>王大宏</div>
+                    <div className={styles.name}>{window.temp.name}</div>
                     <div className={styles.department}>{departmentName}</div>
                 </div>
                 <Revision visible={edit} section={section} departmentIndex={departmentIndex} parent={this}></Revision>

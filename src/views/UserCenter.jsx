@@ -22,8 +22,9 @@ import scan from '../asset/manager/scan.png';
 class UserCenter extends Component{
     constructor() {
         super();
+        window.temp = {};
         this.state={
-            roleid:'2',
+            roleid:'',
             dataSource:{}
         }
     }
@@ -77,7 +78,11 @@ class UserCenter extends Component{
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser,{loginName:"18550117460"});
         this.setState({ dataSource: JSON.parse(result).data });
-        // this.setState({roleid:JSON.parse(result).data.roleid});
+        this.setState({roleid:JSON.parse(result).data.roleid});
+        window.temp = {
+            name:JSON.parse(result).data.name,
+            officeName:JSON.parse(result).data.officeName
+        }
     }
     render() {
 
@@ -151,7 +156,7 @@ class UserCenter extends Component{
                         <div className={styles.phone}>{dataSource.loginName}</div>
                         <div className={styles.company}>
                             <span>{dataSource.companyName}</span>/
-                            <span>人事部</span>
+                            <span>{dataSource.officeName}</span>
                         </div>
                     </div>
                 </div>
