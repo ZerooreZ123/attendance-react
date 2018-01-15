@@ -1,6 +1,8 @@
 //员工考勤记录（普通管理员）
 import React, { Component } from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
+import DatePicker from 'react-date-picker'
+
 import Picker from 'react-mobile-picker';
 import moment from 'moment';
 
@@ -13,9 +15,9 @@ import top from '../asset/manager/triangle-top.png';
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
-const MaskAttendance = ({list,parent,tabIndex,divisionIndx,optionGroups, valueGroups,})  => {   //部门列表组件
+const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, valueGroups, Value, dateIndex}) => {   //部门列表组件
     if (tabIndex === 1) {
-        return (    
+        return (
             <div className={styles.departmentBox}>
                 {
                     list.map((item, index) =>
@@ -26,39 +28,53 @@ const MaskAttendance = ({list,parent,tabIndex,divisionIndx,optionGroups, valueGr
             </div>
         );
     } else {
-        return (
-            <div>
-                <InfiniteCalendar
-                width={320} height={170}
-                locale={{
-                headerFormat: 'MM D',
-                weekdays: ["日","一","二","三","四","五","六"]
-                }}
-                // onSelect={function(date) {
-                //     alert(format(date, 'ddd, MMM Do YYYY'))
-                //  }}
-                 />
-
-
-
-
-
-
-
-                 {/* <Picker
-                    optionGroups={optionGroups}
-                    valueGroups={valueGroups}
-                    onChange={parent.handleChange}
-                 /> */}
-            </div>
-            
-        );
+        if (dateIndex === 0) {
+            return (
+                <div>
+                    <InfiniteCalendar
+                        width={320} height={170}
+                        locale={{
+                            headerFormat: 'MM D',
+                            weekdays: ["日", "一", "二", "三", "四", "五", "六"]
+                        }}
+                        onSelect={function (date) {
+                            var d = new Date(date);
+                            var dateTime = d.getFullYear() + '.' + (d.getMonth() + 1) + '.' + d.getDate();
+                            window.time = dateTime;
+                        }}
+                    />
+                </div>
+            )
+        } else if (dateIndex === 1) {
+            return (
+                <div>
+                    <Picker
+                        optionGroups={optionGroups}
+                        valueGroups={valueGroups}
+                        onChange={parent.handleChange}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <Picker
+                        optionGroups={optionGroups}
+                        valueGroups={valueGroups}
+                        onChange={parent.handleChange}
+                    />
+                </div>
+            )
+        }    
     }
 }
 class AttendanceData extends Component {
     constructor() {
         super();
         this.state = {
+            defaultTime:'',
+            Value: '',
+            date: new Date(),
             section: [],                 //部门列表
             departmentName: '智慧园区',   //默认部门
             departmentIndex: '',         //部门的索引值
@@ -71,16 +87,16 @@ class AttendanceData extends Component {
             startTime: '2017-11-14',     //开始时间(传参)
             endTime: '2017-11-14',       //结束时间(传参)
             record: [],                  //展示打卡记录
-            dataSource:[],               //统计打卡记录
-            toggleIndex:'',              //切换选择时间与部门的索引值
-            maskToggle:0,                //默认不展示mask
-            selectDate:'',
-            valueGroups: {
+            dataSource: [],               //统计打卡记录
+            toggleIndex: '',              //切换选择时间与部门的索引值
+            maskToggle: 0,                //默认不展示mask
+            selectDate: '',
+            valueGroups: {                //月组件
                 data: ''
-              },
-              optionGroups: {
-                data:[]
-              }
+            },
+            optionGroups: {
+                data: []
+            }
 
         }
     }
@@ -88,49 +104,38 @@ class AttendanceData extends Component {
         document.querySelector('title').innerText = '员工考勤记录';
         this.getRecords();
         this.getOfficeList();
-        this.getYearMonth();
     }
-
-
-
-    getChange() {
-       var time = moment().format('MM D');
-       console.log(time);
-    }
-
-
-
-
-    getYearMonth() {     
-        // 获取年份
-        var myDate= new Date();
-        var startYear=myDate.getFullYear();//起始年份
-        var endYear=myDate.getFullYear()+10;//结束年份
+    getYearMonth() {
+        var myDate = new Date();
+        this.setState({defaultTime:myDate.getFullYear() + '.' + (myDate.getMonth() + 1) + '.' + myDate.getDate()})
+        var startYear = myDate.getFullYear();//起始年份
+        var endYear = myDate.getFullYear() + 10;//结束年份
         var list = []
-        for(var i= startYear;i<endYear;i++){
+        for (var i = startYear; i < endYear; i++) {
             list.push(i);
         }
-        
-
-        // 获取年+月份
-      
-        var Months = [1,2,3,4,5,6,7,8,9,10,11,12];
-        var result =[];
-        list.forEach(ev => 
-            Months.forEach(el=>{
-                result.push(ev + '年' + el + '月')
+        if(this.state.currentIndex === 1) {
+            this.setState({
+                optionGroups: {
+                    data: list
+                }
             })
-        )
-
-        this.setState({optionGroups: {
-            data:result
-        }})
-
-        // console.log(result);
+        }else{
+            var Months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+            var result = [];
+            list.forEach(ev =>
+                Months.forEach(el => {
+                    result.push(ev + '.' + el )
+                })
+            )
+            this.setState({
+                optionGroups: {
+                    data: result
+                }
+            })
+        }
+          
     }
-    handleChange = (name, value) => {
-        this.setState({ valueGroups: { data: value } });
-      }
     search() {                     //跳转至搜索页面
         this.props.history.push('/search');
     }
@@ -143,22 +148,24 @@ class AttendanceData extends Component {
             this.getRecords();
         } else if (i === 1) {
             this.getStatisticalInfo();
+            this.getYearMonth();
+        }else{
+            this.getStatisticalInfo();
+            this.getYearMonth();
         }
     }
     personalInformation() {
         this.props.history.push('/personalInformation');
     }
+    handleChange = (name, value) => {
+        this.setState({ valueGroups: { data: value } });
+      }
     showMask() {                     //显示mask  
-        this.setState({maskToggle:1})
+        this.setState({ maskToggle: 1 })
     }
     hideMask() {                     //隐藏mask
-        this.setState({maskToggle:0});
+        this.setState({ maskToggle: 0 });
     }
-    // showMask() {                     //显示部门
-    //     this.setState({ mask: true });
-    //     this.setState({ maskDate: true });
-
-    // }
     showAll() {                      //展示所有
         this.setState({ showState: 0 });
         this.setState({ tabIndex: 0 });
@@ -172,9 +179,9 @@ class AttendanceData extends Component {
     //     this.setState({ tabIndex: 2 });
     // }
     choiceTab(i) {                   //组件切换部门与时间索引
-        this.setState({toggleIndex:i});
+        this.setState({ toggleIndex: i });
         this.setState({ mask: true });
-        
+
     }
     choice(i) {                      //选择部门
         this.setState({ departmentIndex: i })
@@ -233,9 +240,9 @@ class AttendanceData extends Component {
         this.setState({ dataSource: list });
     }
     render() {
-        const { record, currentIndex, dataSource, tabIndex, section, departmentIndex, departmentName,toggleIndex,maskToggle,optionGroups, valueGroups,} = this.state;
+        const { record, currentIndex, dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime} = this.state;
         const timeSlot = ['日', '月', '年'];
-        const list = ['时间','部门']
+        const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
             if (currentIndex === 0) {                //日
                 return (
@@ -321,28 +328,37 @@ class AttendanceData extends Component {
                 <DateChange></DateChange>
                 <div className={styles.footer}>
                     <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                        <span>{valueGroups.data}</span>/<span>{departmentName}</span>
+                        <span>{currentIndex === 0 ?window.time:valueGroups.data}</span>/<span>{departmentName}</span>
                         <img className={styles.top} src={top} alt="" />
                     </div>
                     <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
                 </div>
-                <div className={maskToggle === 0? styles.hideMask:styles.mask}>
-                        <div className={styles.maskBox}>
-                            <div className={styles.operation}>
-                                <img onClick={ev =>this.hideMask(ev)} className={styles.spread} src={spread} alt="" />
-                            </div>
-                            <div className={styles.determine} onClick={ev => this.determineDepartment(ev)}>确定</div>
-                            <div className={styles.toggleBox}>
-                               {
-                                   list.map((item,index) => <div key={index} onClick={ev =>this.choiceTab(index)} className={toggleIndex === index? styles.selectTimeTab:styles.timeTab}>{item}</div>)
-                               }
-                            </div> 
-                            <div>
-                                <MaskAttendance parent={this} tabIndex={toggleIndex} list={section} divisionIndx={departmentIndex} optionGroups={optionGroups} valueGroups={valueGroups} /> 
-                            </div>
+                <div className={maskToggle === 0 ? styles.hideMask : styles.mask}>
+                    <div className={styles.maskBox}>
+                        <div className={styles.operation}>
+                            <img onClick={ev => this.hideMask(ev)} className={styles.spread} src={spread} alt="" />
+                        </div>
+                        <div className={styles.determine} onClick={ev => this.determineDepartment(ev)}>确定</div>
+                        <div className={styles.toggleBox}>
+                            {
+                                list.map((item, index) => <div key={index} onClick={ev => this.choiceTab(index)} className={toggleIndex === index ? styles.selectTimeTab : styles.timeTab}>{item}</div>)
+                            }
+                        </div>
+                        <div>
+                            <MaskAttendance
+                                parent={this}
+                                tabIndex={toggleIndex}
+                                list={section}
+                                divisionIndx={departmentIndex}
+                                optionGroups={optionGroups}
+                                valueGroups={valueGroups}
+                                Value={this.state.date}
+                                dateIndex={currentIndex}
+                            />
                         </div>
                     </div>
-               
+                </div>
+
             </div>
         )
     }

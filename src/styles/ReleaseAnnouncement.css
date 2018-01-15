@@ -75,6 +75,7 @@ textarea{
     align-items: center;
 }
 .footer{
+    z-index:10;
     position:fixed;
     bottom:0;
     left:0;
@@ -117,4 +118,32 @@ textarea{
     color: transparent;
     vertical-align: middle;
     opacity:0;
+}
+.showMask {
+    background: rgba(0, 0, 0, 0.3);
+    position:absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+.hideMask {
+    display:none;
+    background: rgba(0, 0, 0, 0.3);
+    position:absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+} 
+.maskBox {
+    display:flex;
+    justify-content:center;
+    position: fixed;
+    width: 100%;
+    left:0;
+    bottom:0;
+    background:#fff;
 }

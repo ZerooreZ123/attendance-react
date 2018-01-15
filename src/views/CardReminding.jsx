@@ -87,13 +87,13 @@ class CardReminding extends Component {
         const list = ['3','5','10','20','30'];
         this.setState({upTime:list[i]});
         this.hideTimeList();
-        this.clockInRemind();
+        this.preClockInRemind();
     }
     choiceTime(i) {                       //选择分钟数NO.2
         const list = ['3','5','10','20','30'];
         this.setState({downTime:list[i]});
         this.hideTimeSlot();
-        this.clockInRemind();
+        this.preClockInRemind();
     }
     toggleSwitch() {                     //Switch切换1
         if(this.state.upSwitch === '0') {
@@ -101,7 +101,7 @@ class CardReminding extends Component {
         }else{
             this.setState({upSwitch:'0'}) 
         }
-        this.clockInRemind();
+        this.preClockInRemind();
     }
     changeSwitch() {                     //Switch切换2
         if(this.state.downSwitch === '0') {
@@ -109,7 +109,7 @@ class CardReminding extends Component {
         }else{
             this.setState({downSwitch:'0'}) 
         }
-        this.clockInRemind();
+        this.preClockInRemind();
     }
     async getUserRemind() {              //初始化提醒设置
         const result = await XHR.post(API.getUserRemind,{loginName:"18550117460"});
@@ -118,6 +118,9 @@ class CardReminding extends Component {
         this.setState({upSwitch:JSON.parse(result).data.upSwitch});
         this.setState({downSwitch:JSON.parse(result).data.downSwitch});
         this.setState({dataSource:JSON.parse(result).data});
+    }
+    preClockInRemind() {
+        setTimeout(()=>this.clockInRemind(), 0);
     }
     async clockInRemind() {              //设置提醒设置
         console.log(this.state.upTime,this.state.upSwitch,this.state.downTime,this.state.downSwitch)
@@ -129,11 +132,6 @@ class CardReminding extends Component {
             downSwitch:this.state.downSwitch,
             id:this.state.dataSource.id
         });
-       
-        this.setState({downTime:this.state.downTime});
-        this.setState({upSwitch:this.state.upSwitch});
-        this.setState({downSwitch:this.state.downSwitch});
-        this.setState({dataSource:JSON.parse(result).data.id});
     }
     render() {
         const {upTime,upSwitch,downTime,downSwitch,timeList,timeSlot} = this.state;
