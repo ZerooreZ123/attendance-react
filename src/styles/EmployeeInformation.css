@@ -42,22 +42,6 @@ input::-webkit-input-placeholder{
     height:33px;
     margin:0 15px 0 23px;
 }
-/* .search{
-    display:inline-block;
-    position:absolute;
-    top:26px;
-    right:22px;
-    width:40px;
-    height:40px;
-    padding-right:22px;
-    color:#2e79ca;
-} */
-/* .title{
-    font-size:36px;
-    width:50%;
-    text-align: center;
-    margin:0 auto;
-} */
 .content{
     padding:114px 0 104px;
 }
@@ -173,4 +157,10 @@ input::-webkit-input-placeholder{
 }
 .clearBoth{
     clear: both;
+}
+.showContent{
+    display:block;
+}
+.hideContent{
+    display:none
 }

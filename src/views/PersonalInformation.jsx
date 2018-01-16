@@ -154,20 +154,22 @@ class PersonalInformation extends Component {
         return(
             <div className={styles.container}>
                 <div className={styles.content}>
-                    <div className={styles.information}>
-                        <div className={styles.phone}>13855667788</div>
-                        <div className={styles.department}>智慧部门</div>
-                    </div>
-                    <div className={styles.tabBox}>
-                        <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
-                        <div onClick={ev =>this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab:styles.tab}>异常</div>
-                    </div>
-                    <div className={styles.month}>
-                        {
-                          monthList.map((item,index) =>
-                            <div onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} key={index} className={monthIndex === index ? styles.currentMonth:styles.noMonth}>{item}月</div>
-                        )  
-                        }
+                    <div className={styles.header}>
+                        <div className={styles.information}>
+                            <div className={styles.phone}>13855667788</div>
+                            <div className={styles.department}>智慧部门</div>
+                        </div>
+                        <div className={styles.tabBox}>
+                            <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
+                            <div onClick={ev =>this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab:styles.tab}>异常</div>
+                        </div>
+                        <div className={styles.month}>
+                            {
+                            monthList.map((item,index) =>
+                                <div onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} key={index} className={monthIndex === index ? styles.currentMonth:styles.noMonth}>{item}月</div>
+                            )  
+                            }
+                        </div>
                     </div>
                     <Show></Show>
                 </div>

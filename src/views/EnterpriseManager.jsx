@@ -7,20 +7,21 @@ import XHR from '../utils/request';
 import API from '../api/index';
 
 import go from '../asset/manager/go.png';
+import deleteImg from '../asset/manager/delete.png';
 
-const BottomBar = ({add,parent}) => {           //底部选择栏组件
+const BottomBar = ({add,parent,deleteState}) => {           //底部选择栏组件
     if(add) {
         return(
             <div className={styles.bottomBar}>
-                <div onClick={ev => parent.addDivision(ev)} className={styles.add}>添加部门</div>
-                <div className={styles.editor}>编辑</div>
+                <div onClick={ev => parent.addDivision(ev)} className={ deleteState === true?styles.hideAdd:styles.add}>添加部门</div>
+                <div onClick={ev =>parent.editor(ev)} className={styles.editor}>编辑</div>
             </div>
         )
     }else{
         return(
             <div className={styles.bottomBar}>
                 <div onClick={ev =>parent.cancelSelect(ev)} className={styles.cancel}>取消</div>
-                <div onClick={ev =>parent.confirmSelect(ev)} className={styles.determine}>确定</div>
+                <div onClick={ev =>parent.addOrUpdateOfficce(ev)} className={styles.determine}>确定</div>
             </div>
         )
     }
@@ -31,12 +32,13 @@ class EnterpriseManager extends Component {
         super();
         this.state = {
             selectState:true,            //底部栏展示
-            invitationCode: '',          //邀请码
+            invitationCode:'0',          //邀请码
             currentIndex: 0,             //切换tab的index
             division: false,             //添加部门输入框状态
             section: [],                 //部门列表
             machineNum: [],              //考勤机列表
-            inputText:''                 //部门名称
+            inputText:0,                 //部门名称
+            deleteSection:false          //删除部门状态
         }
     }
     componentDidMount() {
@@ -48,6 +50,9 @@ class EnterpriseManager extends Component {
     addAttendanceMachine() {
         this.props.history.push('/addAttendanceMachine')
     }
+    editor() {
+        this.setState({deleteSection:true})
+    }
     addDivision() {         //添加部门
         this.setState({inputText:''})
         this.setState({ division: true });
@@ -56,19 +61,46 @@ class EnterpriseManager extends Component {
     cancelSelect() {        //取消选择
         this.setState({ division: false });
         this.setState({selectState:true});
-    }
-    confirmSelect(ev) {     //确认选择
-        this.setState({ division: false });
-        this.setState({selectState:true});
-        this.state.section.unshift(this.state.inputText);
-        this.setState({section:this.state.section});
-
-    }          
+    }   
     selectTab(i) {                         //获取当前tab索引
         this.setState({ currentIndex: i });
     }
-    getInput(ev) {
+    getInput(ev) {                         //获取输入的部门
         this.setState({inputText:ev.target.value});
+        console.log(this.state.inputText);
+    }
+    deleteClick(i) {
+        var meg = '确认删除'+ this.state.section[i].officeName + '吗？';
+        if(window.confirm(meg) === true){
+           this.deleteOfficce(i);
+        }else{
+            return null
+        }
+    }
+    async addOrUpdateOfficce() {            //增加部门
+        this.setState({ division: false });
+        this.setState({selectState:true});
+        this.setState({section:this.state.section});
+        const result = await XHR.post(API.addOrUpdateOfficce,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            officeName:this.state.inputText,
+        })
+        if (JSON.parse(result).success === "T") {
+            alert("添加部门成功")
+        }else{
+            alert(JSON.parse(result).msg);
+        }
+    }
+    async deleteOfficce(i) {              //删除部门
+        const Id = this.state.section[i].officeId;
+        const result = await XHR.post(API.deleteOfficce,{officeid:Id});
+        if(JSON.parse(result).success === 'T') {
+            this.state.section.splice(i,1);
+            this.setState({section:this.state.section});
+            this.setState({deleteSection:false});
+        }else{
+            alert(JSON.parse(result).msg)
+        }
     }
     async getCompany() {                   //获取公司信息
         const result = await XHR.post(API.getCompany, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
@@ -80,7 +112,10 @@ class EnterpriseManager extends Component {
         const dataSource = JSON.parse(result).data;
         const officeList = [];
         dataSource.forEach((item, index) =>
-            officeList.push(dataSource[index].name)
+            officeList.push({
+                officeName:dataSource[index].name,
+                officeId:dataSource[index].id
+            })
         )
         this.setState({ section: officeList });
 
@@ -96,37 +131,45 @@ class EnterpriseManager extends Component {
     }
 
     render() {
-        const { section, machineNum, division,currentIndex,inputText} = this.state;
+        const { section, machineNum, division,currentIndex,inputText,deleteSection} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
-        const Adddivision = props => {
-            if (division) {
-                return (
-                    <div className={styles.item}>
-                        <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
-                        <img className={styles.forward} src={go} alt="" />
-                    </div>
-                )
-            } else {
-                return false;
-            }
-        }
         const TabContent = props => {
-            if (this.state.currentIndex === 1) {
-                return (
-                    <div className={styles.content}>
-                        <Adddivision></Adddivision>
-                        {
-                            section.map((item, index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.name}>{item}</div>
-                                    <img className={styles.forward} src={go} alt="" />
-                                </div>
-                            )
-                        }
-                        <BottomBar add={this.state.selectState} parent={this}></BottomBar>
-                    </div>
-                );
-            } else if (this.state.currentIndex === 2) {
+            if (currentIndex === 1) {
+                 if(deleteSection === false) {
+                    return (
+                        <div className={styles.content}>
+                            <div className={ division === true ?styles.item:styles.hideInput}>
+                                <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
+                                <img className={styles.forward} src={go} alt="" />
+                            </div>
+                            {
+                                section.map((item, index) =>
+                                    <div className={styles.item} key={index}>
+                                        <div className={styles.name}>{item.officeName}</div>
+                                        <img className={styles.forward} src={go} alt="" />
+                                    </div>
+                                )
+                            }
+                            <BottomBar add={this.state.selectState} parent={this} deleteState={deleteSection}></BottomBar>
+                        </div>
+                    );
+                 }else{
+                    return (
+                        <div className={styles.content}>
+                            {
+                                section.map((item, index) =>
+                                    <div className={styles.deleteItem} key={index} onClick={ev =>this.deleteClick(index)}>
+                                        <img className={styles.deleteImg} src={deleteImg} alt=''/>
+                                        <div className={styles.name}>{item.officeName}</div>
+                                        <img className={styles.forward} src={go} alt="" />
+                                    </div>
+                                )
+                            }
+                            <BottomBar add={this.state.selectState} parent={this} deleteState={deleteSection}></BottomBar>
+                        </div>
+                    ); 
+                 }
+            } else if (currentIndex === 2) {
                 return (
                     <div className={styles.content}>
                         {

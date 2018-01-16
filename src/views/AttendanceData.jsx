@@ -1,8 +1,6 @@
 //员工考勤记录（普通管理员）
 import React, { Component } from 'react';
 import InfiniteCalendar from 'react-infinite-calendar';
-import DatePicker from 'react-date-picker'
-
 import Picker from 'react-mobile-picker';
 import moment from 'moment';
 
@@ -39,7 +37,7 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
                         }}
                         onSelect={function (date) {
                             var d = new Date(date);
-                            var dateTime = d.getFullYear() + '.' + (d.getMonth() + 1) + '.' + d.getDate();
+                            var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
                             window.time = dateTime;
                         }}
                     />
@@ -76,16 +74,15 @@ class AttendanceData extends Component {
             Value: '',
             date: new Date(),
             section: [],                 //部门列表
-            departmentName: '智慧园区',   //默认部门
+            departmentName:'',           //默认部门
             departmentIndex: '',         //部门的索引值
             departmentId: '',            //部门Id
-            // mask: false,                 //默认不显示部门
             maskDate: false,             //默认不显示日历
             currentIndex: 0,             //日月年展示模块索引
             showState: 0,                //默认展示全部
             tabIndex: 0,                 //选择tab的索引
-            startTime: '2017-11-14',     //开始时间(传参)
-            endTime: '2017-11-14',       //结束时间(传参)
+            startTime: moment().format('YYYY-MM-DD'),     //开始时间(传参)
+            endTime: moment().format('YYYY-MM-DD'),       //结束时间(传参)
             record: [],                  //展示打卡记录
             dataSource: [],               //统计打卡记录
             toggleIndex: '',              //切换选择时间与部门的索引值
@@ -102,8 +99,8 @@ class AttendanceData extends Component {
     }
     componentDidMount() {
         document.querySelector('title').innerText = '员工考勤记录';
-        this.getRecords();
-        this.getOfficeList();
+        this.getRecords(moment().format('YYYY-MM-DD'),moment().format('YYYY-MM-DD'),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
+        this.getOfficeList(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
     }
     getYearMonth() {
         var myDate = new Date();
@@ -125,7 +122,7 @@ class AttendanceData extends Component {
             var result = [];
             list.forEach(ev =>
                 Months.forEach(el => {
-                    result.push(ev + '.' + el )
+                    result.push(ev + '-' + el )
                 })
             )
             this.setState({
@@ -157,9 +154,15 @@ class AttendanceData extends Component {
     personalInformation() {
         this.props.history.push('/personalInformation');
     }
+    selectDay(date) {
+        console.log(date)
+        // var d = new Date(date);
+        // var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        // window.time = dateTime;
+    }
     handleChange = (name, value) => {
         this.setState({ valueGroups: { data: value } });
-      }
+    }
     showMask() {                     //显示mask  
         this.setState({ maskToggle: 1 })
     }
@@ -204,29 +207,37 @@ class AttendanceData extends Component {
             })
         });
         this.setState({ section: sectionList });
+        this.setState({departmentName:sectionList[0].name});
     }
-    async determineDepartment() {    //确认选定部门
+    determineDepartment() {    //确认选择
+        if(this.state.currentIndex === 0) {
+            this.getRecords(window.time,window.time,this.state.departmentId)
+        }else if(this.state.currentIndex === 1) {
+            this.getStatisticalInfo(this.state.valueGroups.data+'-1',this.state.valueGroups.data + '-28',this.state.departmentId)
+        }else{
+            this.getStatisticalInfo(this.state.valueGroups.data,this.state.valueGroups.data,this.state.departmentId)
+        }
         this.hideMask();
-        const result = await XHR.post(API.getOfficeUserList, {
-            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
-            officeid: this.state.departmentId
-        });
     }
-    async getRecords() {            //获取全部员工某日考勤记录
+    async getRecords(startTime,endTime,officeId) {            //获取全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {
             companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
-            beginDate: this.state.startTime,
-            endDate: this.state.endTime
+            beginDate:startTime,
+            endDate:endTime,
+            officeid:officeId
         })
-        this.setState({ record: JSON.parse(result).data } || []);
+        window.time = this.state.startTime;
+        this.setState({ record: JSON.parse(result).data || [] } );
+
     }
-    async getStatisticalInfo() {     //获取全部员工考勤记录统计
+    async getStatisticalInfo(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
         const result = await XHR.post(API.getStatisticalInfo, {
             companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
-            beginDate: "2017-11-20",
-            endDate: "2017-11-30",
+            beginDate: startTime,
+            endDate: endTime,
+            officeid:officeId
         })
-        const data = JSON.parse(result).data;
+        const data = JSON.parse(result).data || [];
         const list = [];
         data.forEach((ev, index) => {
             list.push({

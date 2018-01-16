@@ -10,6 +10,13 @@
     padding-bottom: 140px;
     background:#fff;
 }
+.header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    background:#fff;
+}
 .information{
     display:flex;
     justify-content:space-between;
@@ -77,7 +84,7 @@
     color:#2295e8;
 }
 .detailsList{
-    padding:0 24px;
+    padding:318px 24px 0;
 }
 .item{
     border-bottom:1px solid #ddd;
@@ -112,7 +119,6 @@
     bottom:0;
     left:0;
     width:100%;
-    height:102px;
     line-height: 102px;
     border-top:3px solid #ddd;
     font-size:32px;

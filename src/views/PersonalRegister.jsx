@@ -10,7 +10,9 @@ class PersonalRegister extends Component {
   constructor() {
     super();
     this.state = {
-        status:true
+        inputText:'',            //输入的手机号
+        inputValue:'',           //输入的验证码
+        code:''                  //获得的验证码
     }
 }
 componentDidMount() {
@@ -22,18 +24,21 @@ getPhone(ev) {
 getCode(ev) {
     this.setState({inputValue:ev.target.value});
 }  
-settime(val) {            //获取验证码
-    var countdown=60;
-    if (countdown === 0) {  
-        val.removeAttribute("disabled");  
-        val.value="获取验证码";  
-        countdown = 60;  
-        return false;  
-    } else {  
-        val.setAttribute("disabled", true);  
-        val.value="重新发送(" + countdown + ")";  
-        countdown--;  
-    }    
+async sendSms() {                  //获取验证码
+    const result = await XHR.post(API.sendSms,{phone:"18617015565"});
+    this.setState({code:JSON.parse(result).data}); 
+
+    // var countdown=60;
+    // if (countdown === 0) {  
+    //     val.removeAttribute("disabled");  
+    //     val.value="获取验证码";  
+    //     countdown = 60;  
+    //     return false;  
+    // } else {  
+    //     val.setAttribute("disabled", true);  
+    //     val.value="重新发送(" + countdown + ")";  
+    //     countdown--;  
+    // }    
 }
 goToNextStep() {          //下一步
     if(this.state.inputValue && this.state.inputText){
@@ -47,7 +52,7 @@ async register() {
         loginName:"ogjb9jic6u1sTAD0cn8DcSUWRCKA",
         phone:this.state.inputText
    })
-   if(JSON.parse(result).success === 'T') {
+   if(JSON.parse(result).success === 'T' && this.state.inputValue === this.state.code) {
        this.props.history.push('./inviteCodeDetail')
    }else{
        alert(JSON.parse(result).msg)
@@ -67,7 +72,7 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputValue}/>
-          <input type="button" className={styles.sendCode} value=" 获取验证码" />
+          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value=" 获取验证码" />
         </div>
 
         <div className={styles.next}>

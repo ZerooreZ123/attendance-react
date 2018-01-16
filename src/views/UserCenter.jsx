@@ -31,6 +31,7 @@ class UserCenter extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '个人中心';
         this.getUser();
+        this.getOfficeList();
     }
     punchClock() {
         this.props.history.push('/punchClock');
@@ -66,6 +67,17 @@ class UserCenter extends Component{
         }else{
           return false
         }
+    }
+    async getOfficeList() {          //部门列表
+        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const sectionList = [];
+        JSON.parse(result).data.forEach((item, index) => {
+            sectionList.push({
+                name: item.name,
+                id: item.id
+            })
+        });
+        window.sessionStorage.setItem("officeList",JSON.stringify(sectionList));
     }
     async unbind() {                //解绑员工   
         const result = await XHR.post(API.unbindUser,{loginName:"18550117460"});

@@ -73,7 +73,7 @@ class RevisionDepartment extends Component{
         });
         this.setState({section:sectionList});   
     }
-    async addOrUpdateOfficce() {                      //修改部门API
+    async addOrUpdateOfficce() {                      //修改部门
         const result = await XHR.post(API.addOrUpdateOfficce,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
             officeName:this.state.departmentName,

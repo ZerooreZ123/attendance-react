@@ -3,8 +3,6 @@ import DayPicker from 'react-day-picker';
 
 import styles from '../styles/ReleaseAnnouncement.css';
 
-// import InfiniteCalendar from 'react-infinite-calendar';
-
 import XHR from '../utils/request';
 import API from '../api/index';
 
@@ -50,7 +48,7 @@ class ReleaseAnnouncement extends Component{
     }
     selectDayClick(day) {
         var myDate = new Date(day);
-        this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+        this.setState({chooseDay:'/' + myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
         this.setState({copyMask:false});
         this.hideMask();
 
@@ -112,7 +110,7 @@ class ReleaseAnnouncement extends Component{
                     <div className={styles.imgBox}>
                         {/* <img className={styles.img} src={photoMin} alt=""/>                    */}
                     </div>
-                    <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span>-<span>{this.state.chooseDay}</span></div>
+                    <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span><span>{this.state.chooseDay}</span></div>
                 </div>
                 <div className={styles.footer}>
                     <div className={styles.case}>

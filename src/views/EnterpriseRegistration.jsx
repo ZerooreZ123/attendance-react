@@ -10,8 +10,9 @@ class EnterpriseRegistration extends Component {
     super();
     this.state = {
         inputNum:'',              //考勤机编号
-        inputCode:'',             //验证码
+        inputCode:'',             //输入验证码
         inputPhone:'',            //手机号
+        code:'',                  //返回验证码
     }
 }
 componentDidMount() {
@@ -26,20 +27,6 @@ getCode(ev) {
 getPhone(ev) {
     this.setState({inputPhone:ev.target.value})
 }
-
-settime(val) {            //获取验证码
-    var countdown=60;
-    if (countdown === 0) {  
-        val.removeAttribute("disabled");  
-        val.value="获取验证码";  
-        countdown = 60;  
-        return false;  
-    } else {  
-        val.setAttribute("disabled", true);  
-        val.value="重新发送(" + countdown + ")";  
-        countdown--;  
-    }    
-}
 goToNextStep() {          //下一步
     if(this.state.inputNum && this.state.inputPhone && this.state.inputCode){
         this.register();
@@ -47,13 +34,29 @@ goToNextStep() {          //下一步
         return null;
     }
 }
-async register() {
+async sendSms() {                  //获取验证码
+   const result = await XHR.post(API.sendSms,{phone:"18617015565"});
+   this.setState({code:JSON.parse(result).data});
+
+    // var countdown=60;
+    // if (countdown === 0) {  
+    //     val.removeAttribute("disabled");  
+    //     val.value="获取验证码";  
+    //     countdown = 60;  
+    //     return false;  
+    // } else {  
+    //     val.setAttribute("disabled", true);  
+    //     val.value="重新发送(" + countdown + ")";  
+    //     countdown--;  
+    // }    
+}
+async register() {                //公司注册
     const result = await XHR.post(API.register,{
         serialNumber:this.state.inputNum,
         loginName:"ogjb9jic6u1sTAD0cn8DcSUWRCKA",
         phone:this.state.inputPhone
     })
-    if(JSON.parse(result).success === "T"){
+    if(JSON.parse(result).success === "T" && this.state.inputCode === this.state.code){
         this.props.history.push('./inviteCodeDetail');
     }else{
         alert(JSON.parse(result).msg)
@@ -74,7 +77,7 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputCode}/>
-          <input type="button" className={styles.sendCode} value=" 获取验证码"/>
+          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value=" 获取验证码"/>
         </div>
 
         <div className={styles.next}>

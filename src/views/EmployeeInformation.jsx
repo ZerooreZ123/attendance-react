@@ -19,7 +19,29 @@ const Direction = (props) => {
       return <img  className={styles.top} src={upBlue} alt=""/>;
     }
 }
-
+const SearchList =({visible,parent,allPerson}) =>{
+    if(visible){
+       return (
+        <div className={styles.content}>
+            <div className={styles.personnel}>
+                {
+                    allPerson.map((item,index) =>
+                    <div onClick={ev =>parent.personalInformation(ev)} className={styles.single} key={index}>
+                        <div className={styles.information}>
+                            <div className={styles.name}>{item.name}</div>
+                            <div className={styles.phone}>{item.phone}</div>
+                        </div>
+                        <img className={styles.forward} src={forward} alt=""/>
+                    </div>
+                )
+                }
+            </div>
+        </div>    
+       )
+    }else{
+        return null
+    }
+}
 class EmployeeInformation extends Component{
     constructor() {
         super();
@@ -33,6 +55,8 @@ class EmployeeInformation extends Component{
             mask:false,                 //默认不显示部门
             exhibition:0,               //展示人员 0全部部门人员  1部门人员
             inputValue:'',              //输入框文字
+            searchState:false,          //搜索状态
+            searchDate:[],              //搜索数据
         }
     }
     componentDidMount() {
@@ -54,9 +78,32 @@ class EmployeeInformation extends Component{
     }
     getInputValue(ev) {
         this.setState({inputValue:ev.target.value});
-        console.log(this.state.inputValue);
+        const list = this.state.departmentStaff;
+        const dataResult = [];
+
+        list.forEach(el=>{
+            el.staff.forEach(item =>{
+                if(ev.target.value && item.name.match(ev.target.value)){
+                    this.setState({searchState:true});
+                    dataResult.push({
+                        name:item.name || ''
+                    })
+                }
+                // else if(ev.target.value && item.phone.match(ev.target.value)){
+                //     dataResult.push({
+                //         phone:item.phone || ''
+                //     })
+                // }else{
+                //     return []
+                // }   
+            })
+            if(!ev.target.value) {
+                this.setState({searchState:false});
+            }
+        })
+        this.setState({searchDate:dataResult});
     }
-    searchPeople() {
+    search() {
         
     }
     clickTerm(i) {                              //设置部门索引、名字、Id  
@@ -86,6 +133,7 @@ class EmployeeInformation extends Component{
            })
         }
         this.setState({departmentStaff:userList});
+        console.log(this.state.departmentStaff);
     }
     async determineDepartment() {             //确认选定部门
         this.hideMask();
@@ -109,7 +157,7 @@ class EmployeeInformation extends Component{
         }
     }
     render() {
-        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue} = this.state;
+        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue,searchState,searchDate} = this.state;
         const Content = props =>{              //展示员工
             if(exhibition === 0) {             //全部
             return (
@@ -192,9 +240,12 @@ class EmployeeInformation extends Component{
                         <input onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
                     </div>
                 </div>
-                <Content></Content>
-                <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={true}/></div>
-                <Mask></Mask>
+                <div className={searchState === false? styles.showContent:styles.hideContent}>
+                    <Content></Content>
+                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={true}/></div>
+                    <Mask></Mask>
+                </div>
+                <SearchList visible={searchState} parent={this} allPerson={searchDate}/>
             </div>
         )
     }

@@ -38,6 +38,9 @@
     height:102px;
     border-bottom:3px solid #ddd;
 }
+.hideInput{
+    display:none;
+}
 .name{
     font-size:26px;
     color:#000;
@@ -51,6 +54,7 @@
 .designation{
     border:none;
     outline:none;
+    width:80%;
     font-size:26px;
     color:#000;
    
@@ -89,6 +93,13 @@
     width:76%;
     text-align: center; 
     color:#389fe9;
+    background: #fff;
+}
+.hideAdd{
+    display:inline-block;
+    width:76%;
+    text-align: center; 
+    color:#b8d6f6;
     background: #fff;
 }
 .addMachine{
@@ -138,4 +149,33 @@
     margin-top:25px;
     font-size:28px;
     color:#797979;
+}
+.deleteImg{
+    width:50px;
+    height:50px;
+}
+.deleteItem{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    height:102px;
+    border-bottom:3px solid #ddd;
+}
+.deleteItem>div{
+    flex: 1;
+    margin-left:24px;
+    font-size: 0.346667rem;
+    color: #000;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */
+　　color:#666;
+}
+input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:#666;
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:#666;
+}
+input::-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:#666;
 }
