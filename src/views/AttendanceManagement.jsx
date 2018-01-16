@@ -49,8 +49,10 @@ class AttendanceManagement extends Component {
     handleValueChange(time, s){
         if (s === 0) {
             this.setState({now: time});
+            console.log(this.state.now)
         } else {
             this.setState({now1: time});
+            console.log(this.state.now1)
         }
     }
     checkBtn(i) {               //勾选或取消
@@ -86,8 +88,8 @@ class AttendanceManagement extends Component {
     async attendanceManagement() {        //公司考勤时间设置
         var d = new Date(this.state.now);       
         var c = new Date(this.state.now1) 
-        var morTime=d.getHours() + ':' + d.getMinutes();
-        var aftTime=c.getHours() + ':' + c.getMinutes();
+        var morTime=d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+        var aftTime=c.getHours() + ':' + c.getMinutes() + ':' + d.getSeconds();
         
         var list = []
         this.state.status.forEach((ev,index) =>{

@@ -35,11 +35,7 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
                             headerFormat: 'MM D',
                             weekdays: ["日", "一", "二", "三", "四", "五", "六"]
                         }}
-                        onSelect={function (date) {
-                            var d = new Date(date);
-                            var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-                            window.time = dateTime;
-                        }}
+                        onSelect={parent.selectDay}
                     />
                 </div>
             )
@@ -87,9 +83,9 @@ class AttendanceData extends Component {
             dataSource: [],               //统计打卡记录
             toggleIndex: '',              //切换选择时间与部门的索引值
             maskToggle: 0,                //默认不展示mask
-            selectDate: '',
+            selectDate: moment().format('YYYY-MM-DD'),   //日历选择
             valueGroups: {                //月组件
-                data: ''
+                data: moment().format('YYYY-MM')
             },
             optionGroups: {
                 data: []
@@ -99,8 +95,9 @@ class AttendanceData extends Component {
     }
     componentDidMount() {
         document.querySelector('title').innerText = '员工考勤记录';
-        this.getRecords(moment().format('YYYY-MM-DD'),moment().format('YYYY-MM-DD'),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
-        this.getOfficeList(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
+        this.getOfficeList();
+        this.getRecords(this.state.startTime,this.state.endTime,JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
+        this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
     }
     getYearMonth() {
         var myDate = new Date();
@@ -142,23 +139,22 @@ class AttendanceData extends Component {
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
         if (i === 0) {
-            this.getRecords();
+            this.getRecords(this.state.startTime,this.state.endTime,JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
         } else if (i === 1) {
-            this.getStatisticalInfo();
+            this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
             this.getYearMonth();
         }else{
-            this.getStatisticalInfo();
+            this.getStatisticalInfo(moment().format("YYYY"),moment().format("YYYY"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
             this.getYearMonth();
         }
     }
     personalInformation() {
         this.props.history.push('/personalInformation');
     }
-    selectDay(date) {
-        console.log(date)
-        // var d = new Date(date);
-        // var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        // window.time = dateTime;
+    selectDay = (date) => {          //日历日期选择
+        var d = new Date(date);
+        var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        this.setState({selectDate:dateTime});
     }
     handleChange = (name, value) => {
         this.setState({ valueGroups: { data: value } });
@@ -209,11 +205,12 @@ class AttendanceData extends Component {
         this.setState({ section: sectionList });
         this.setState({departmentName:sectionList[0].name});
     }
+
     determineDepartment() {    //确认选择
         if(this.state.currentIndex === 0) {
-            this.getRecords(window.time,window.time,this.state.departmentId)
+            this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId)
         }else if(this.state.currentIndex === 1) {
-            this.getStatisticalInfo(this.state.valueGroups.data+'-1',this.state.valueGroups.data + '-28',this.state.departmentId)
+            this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
         }else{
             this.getStatisticalInfo(this.state.valueGroups.data,this.state.valueGroups.data,this.state.departmentId)
         }
@@ -251,7 +248,7 @@ class AttendanceData extends Component {
         this.setState({ dataSource: list });
     }
     render() {
-        const { record, currentIndex, dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime} = this.state;
+        const { record, currentIndex, dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate} = this.state;
         const timeSlot = ['日', '月', '年'];
         const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
@@ -339,7 +336,7 @@ class AttendanceData extends Component {
                 <DateChange></DateChange>
                 <div className={styles.footer}>
                     <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                        <span>{currentIndex === 0 ?window.time:valueGroups.data}</span>/<span>{departmentName}</span>
+                        <span>{currentIndex === 0 ?selectDate:valueGroups.data}</span>/<span>{departmentName}</span>
                         <img className={styles.top} src={top} alt="" />
                     </div>
                     <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>

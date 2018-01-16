@@ -37,7 +37,7 @@ class EnterpriseManager extends Component {
             division: false,             //添加部门输入框状态
             section: [],                 //部门列表
             machineNum: [],              //考勤机列表
-            inputText:0,                 //部门名称
+            inputText:'',                //部门名称
             deleteSection:false          //删除部门状态
         }
     }
@@ -67,7 +67,6 @@ class EnterpriseManager extends Component {
     }
     getInput(ev) {                         //获取输入的部门
         this.setState({inputText:ev.target.value});
-        console.log(this.state.inputText);
     }
     deleteClick(i) {
         var meg = '确认删除'+ this.state.section[i].officeName + '吗？';

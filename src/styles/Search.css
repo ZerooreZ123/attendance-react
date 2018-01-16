@@ -69,3 +69,41 @@ input::-webkit-input-placeholder{
     line-height: 68px;
     border-bottom:2px solid #f5f5f5;
 }
+.showContent{
+    display:block;
+}
+.hideContent{
+    display:none;
+}
+.substance{
+    padding:114px 0 104px;
+}
+.department{
+    width:100%;
+    padding:12px 0;
+    text-align: center;
+    font-size:24px;
+    color:#000;
+    background: #ededed;
+    border-bottom: 1px solid #ddd;
+}
+.personnel{
+    padding:0 48px;
+    background:#fff;
+}
+.single{
+    display:flex;
+    justify-content:flex-start;
+    align-items: center;
+    padding:20px 0;
+    border-bottom: 2px solid #ddd;
+}
+.name{
+    font-size:26px;
+    color:#000;
+    margin-bottom:14px;
+}
+.phone{
+    font-size:18px;
+    color:#666;
+}
