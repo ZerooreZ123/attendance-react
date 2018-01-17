@@ -45,6 +45,7 @@ const SearchList =({visible,parent,allPerson}) =>{
 class EmployeeInformation extends Component{
     constructor() {
         super();
+        window.Person = {};
         this.state={
             departmentStaff:[],         //部门及所属员工列表
             departmentPart:[],          //部门人员列表
@@ -73,7 +74,21 @@ class EmployeeInformation extends Component{
     jumpSearch() {
         this.props.history.push('/search')
     }
-    personalInformation() {
+    personalInformation(id) {
+        this.state.departmentStaff.forEach((ev,n) =>{
+            ev.staff.forEach((e,N) =>{
+               if(e.id === id) {
+                   window.Person = {
+                       name:e.name,
+                       userid:e.id,
+                       section:e.officeName || '其他'
+                   }
+               }
+            })
+        })
+        this.props.history.push('/personalInformation')
+    }
+    goPersonalInformation() {
         this.props.history.push('/personalInformation')
     }
     getInputValue(ev) {
@@ -120,6 +135,10 @@ class EmployeeInformation extends Component{
                 id:item.id
             })
         });
+        sectionList.push({
+            name:'其他',
+            id:'officeid'
+        })
         this.setState({section:sectionList});   
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
@@ -170,7 +189,7 @@ class EmployeeInformation extends Component{
                                 <div className={styles.personnel}>
                                 {
                                     item.staff.map((item,index) =>
-                                    <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
+                                    <div onClick={ev =>this.personalInformation(item.id)} className={styles.single} key={index}>
                                         <div className={styles.information}>
                                             <div className={styles.name}>{item.name}</div>
                                             <div className={styles.phone}>{item.phone}</div>
@@ -193,7 +212,7 @@ class EmployeeInformation extends Component{
                         <div className={styles.personnel}>
                             {
                                 departmentPart.map((item,index) =>
-                                <div onClick={ev =>this.personalInformation(ev)} className={styles.single} key={index}>
+                                <div onClick={ev =>this.goPersonalInformation(index)} className={styles.single} key={index}>
                                     <div className={styles.information}>
                                         <div className={styles.name}>{item.name}</div>
                                         <div className={styles.phone}>{item.phone}</div>

@@ -48,7 +48,7 @@ class ReleaseAnnouncement extends Component{
     }
     selectDayClick(day) {
         var myDate = new Date(day);
-        this.setState({chooseDay:'/' + myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+        this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
         this.setState({copyMask:false});
         this.hideMask();
 
@@ -110,7 +110,7 @@ class ReleaseAnnouncement extends Component{
                     <div className={styles.imgBox}>
                         {/* <img className={styles.img} src={photoMin} alt=""/>                    */}
                     </div>
-                    <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span><span>{this.state.chooseDay}</span></div>
+                    <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span>{this.state.chooseDay?'至':''}<span>{this.state.chooseDay}</span></div>
                 </div>
                 <div className={styles.footer}>
                     <div className={styles.case}>

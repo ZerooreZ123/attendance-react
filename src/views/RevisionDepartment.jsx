@@ -60,7 +60,7 @@ class RevisionDepartment extends Component{
     }
     confirmBtn() {                                     //确认修改
         this.setState({edit:false})
-        this.addOrUpdateOfficce();
+        this.update();
     }
     async getOfficeList() {                           //部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
@@ -73,9 +73,9 @@ class RevisionDepartment extends Component{
         });
         this.setState({section:sectionList});   
     }
-    async addOrUpdateOfficce() {                      //修改部门
-        const result = await XHR.post(API.addOrUpdateOfficce,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+    async update() {                      //修改部门
+        const result = await XHR.post(API.update,{
+            loginName:"18550117460",
             officeName:this.state.departmentName,
             officeid:this.state.departmentId
         })

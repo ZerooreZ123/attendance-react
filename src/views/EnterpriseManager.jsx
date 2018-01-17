@@ -50,15 +50,19 @@ class EnterpriseManager extends Component {
     addAttendanceMachine() {
         this.props.history.push('/addAttendanceMachine')
     }
-    editor() {
+    departmentPerson(i) {
+        window.officeId = this.state.section[i].officeId
+        this.props.history.push('/department')
+    }
+    editor() {                             //删除部门页面显示
         this.setState({deleteSection:true})
     }
-    addDivision() {         //添加部门
+    addDivision() {                        //添加部门
         this.setState({inputText:''})
         this.setState({ division: true });
         this.setState({selectState:false});
     }
-    cancelSelect() {        //取消选择
+    cancelSelect() {                       //取消选择
         this.setState({ division: false });
         this.setState({selectState:true});
     }   
@@ -68,7 +72,7 @@ class EnterpriseManager extends Component {
     getInput(ev) {                         //获取输入的部门
         this.setState({inputText:ev.target.value});
     }
-    deleteClick(i) {
+    deleteClick(i) {                       //删除部门
         var meg = '确认删除'+ this.state.section[i].officeName + '吗？';
         if(window.confirm(meg) === true){
            this.deleteOfficce(i);
@@ -116,6 +120,10 @@ class EnterpriseManager extends Component {
                 officeId:dataSource[index].id
             })
         )
+        officeList.push({
+            officeName:'其他',
+            officeId:'officeid'
+        })
         this.setState({ section: officeList });
 
     }
@@ -143,7 +151,7 @@ class EnterpriseManager extends Component {
                             </div>
                             {
                                 section.map((item, index) =>
-                                    <div className={styles.item} key={index}>
+                                    <div className={styles.item} key={index} onClick={ev =>this.departmentPerson(index)}>
                                         <div className={styles.name}>{item.officeName}</div>
                                         <img className={styles.forward} src={go} alt="" />
                                     </div>

@@ -71,7 +71,8 @@ class PersonalInformation extends Component {
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
             beginDate:startTime,    
             endDate:endTime,
-            userids:"92548d4571604ff2912652ec8e3d44a6"    
+            userids:window.Person.userid
+            // userids:"92548d4571604ff2912652ec8e3d44a6"    
         })
         this.setState({dataSource:JSON.parse(result).data} || []);
 
@@ -156,8 +157,8 @@ class PersonalInformation extends Component {
                 <div className={styles.content}>
                     <div className={styles.header}>
                         <div className={styles.information}>
-                            <div className={styles.phone}>13855667788</div>
-                            <div className={styles.department}>智慧部门</div>
+                            <div className={styles.phone}>{window.Person.name}</div>
+                            <div className={styles.department}>{window.Person.section}</div>
                         </div>
                         <div className={styles.tabBox}>
                             <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>

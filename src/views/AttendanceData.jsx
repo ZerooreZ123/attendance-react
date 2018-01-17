@@ -13,7 +13,7 @@ import top from '../asset/manager/triangle-top.png';
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
-const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, valueGroups, Value, dateIndex}) => {   //部门列表组件
+const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, valueGroups, Value, dateIndex,optionTeams,valueTeams}) => {   //部门列表组件
     if (tabIndex === 1) {
         return (
             <div className={styles.departmentBox}>
@@ -53,9 +53,9 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
             return (
                 <div>
                     <Picker
-                        optionGroups={optionGroups}
-                        valueGroups={valueGroups}
-                        onChange={parent.handleChange}
+                        optionGroups={optionTeams}
+                        valueGroups={valueTeams}
+                        onChange={parent.selectChange}
                     />
                 </div>
             )
@@ -66,11 +66,11 @@ class AttendanceData extends Component {
     constructor() {
         super();
         this.state = {
-            defaultTime:'',
+            defaultTime:'',              //底部日期显示
             Value: '',
             date: new Date(),
             section: [],                 //部门列表
-            departmentName:'',           //默认部门
+            departmentName:'全部',       //默认部门
             departmentIndex: '',         //部门的索引值
             departmentId: '',            //部门Id
             maskDate: false,             //默认不显示日历
@@ -80,7 +80,8 @@ class AttendanceData extends Component {
             startTime: moment().format('YYYY-MM-DD'),     //开始时间(传参)
             endTime: moment().format('YYYY-MM-DD'),       //结束时间(传参)
             record: [],                  //展示打卡记录
-            dataSource: [],               //统计打卡记录
+            dataSource: [],               //月统计打卡记录
+            yearSource: [],               //年统计打卡记录
             toggleIndex: '',              //切换选择时间与部门的索引值
             maskToggle: 0,                //默认不展示mask
             selectDate: moment().format('YYYY-MM-DD'),   //日历选择
@@ -89,6 +90,12 @@ class AttendanceData extends Component {
             },
             optionGroups: {
                 data: []
+            },
+            valueYears:{
+                data:moment().format('YYYY')
+            },
+            optionYears:{
+                data:[]
             }
 
         }
@@ -96,39 +103,43 @@ class AttendanceData extends Component {
     componentDidMount() {
         document.querySelector('title').innerText = '员工考勤记录';
         this.getOfficeList();
-        this.getRecords(this.state.startTime,this.state.endTime,JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
-        this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
+        this.getRecords(this.state.startTime,this.state.endTime);
     }
-    getYearMonth() {
+    getYear() {
         var myDate = new Date();
-        this.setState({defaultTime:myDate.getFullYear() + '.' + (myDate.getMonth() + 1) + '.' + myDate.getDate()})
         var startYear = myDate.getFullYear();//起始年份
         var endYear = myDate.getFullYear() + 10;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
             list.push(i);
         }
-        if(this.state.currentIndex === 1) {
-            this.setState({
-                optionGroups: {
-                    data: list
-                }
-            })
-        }else{
-            var Months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-            var result = [];
-            list.forEach(ev =>
-                Months.forEach(el => {
-                    result.push(ev + '-' + el )
-                })
-            )
-            this.setState({
-                optionGroups: {
-                    data: result
-                }
-            })
+        this.setState({
+            optionYears: {
+                data:list
+            }
+        })
+      
+    }
+    getMonth() {
+        var myDate = new Date();
+        var startYear = myDate.getFullYear();//起始年份
+        var endYear = myDate.getFullYear() + 10;//结束年份
+        var list = []
+        for (var i = startYear; i < endYear; i++) {
+            list.push(i);
         }
-          
+        var Months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var result = [];
+        list.forEach(ev =>
+            Months.forEach(el => {
+                result.push(ev + '-' + el )
+            })
+        )
+        this.setState({
+            optionGroups: {
+                data: result
+            }
+        })
     }
     search() {                     //跳转至搜索页面
         this.props.history.push('/search');
@@ -139,13 +150,16 @@ class AttendanceData extends Component {
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
         if (i === 0) {
-            this.getRecords(this.state.startTime,this.state.endTime,JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
+            this.setState({defaultTime:this.state.selectDate})
+            this.getRecords(this.state.startTime,this.state.endTime);
         } else if (i === 1) {
-            this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
-            this.getYearMonth();
+            this.setState({defaultTime:this.state.valueGroups.data});
+            this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
+            this.getMonth();
         }else{
-            this.getStatisticalInfo(moment().format("YYYY"),moment().format("YYYY"),JSON.parse(window.sessionStorage.getItem("officeList"))[0].id);
-            this.getYearMonth();
+            this.setState({defaultTime:this.state.valueYears.data});
+            this.getYarnInfomation(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+            this.getYear();
         }
     }
     personalInformation() {
@@ -156,8 +170,11 @@ class AttendanceData extends Component {
         var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
         this.setState({selectDate:dateTime});
     }
-    handleChange = (name, value) => {
+    handleChange = (name, value) => { //月日期选择
         this.setState({ valueGroups: { data: value } });
+    }
+    selectChange = (name,value) => {  //年日期选择
+        this.setState({ valueYears: { data: value } });
     }
     showMask() {                     //显示mask  
         this.setState({ maskToggle: 1 })
@@ -202,17 +219,22 @@ class AttendanceData extends Component {
                 id: item.id
             })
         });
+        sectionList.push({
+            name:'其他',
+            id: 'officeid'
+        })
         this.setState({ section: sectionList });
-        this.setState({departmentName:sectionList[0].name});
     }
 
     determineDepartment() {    //确认选择
         if(this.state.currentIndex === 0) {
             this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId)
         }else if(this.state.currentIndex === 1) {
+            this.setState({defaultTime:this.state.valueGroups.data})
             this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
         }else{
-            this.getStatisticalInfo(this.state.valueGroups.data,this.state.valueGroups.data,this.state.departmentId)
+            this.setState({defaultTime:this.state.valueYears.data})
+            this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
         }
         this.hideMask();
     }
@@ -247,8 +269,28 @@ class AttendanceData extends Component {
         })
         this.setState({ dataSource: list });
     }
+    async getYarnInfomation(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
+        const result = await XHR.post(API.getStatisticalInfo, {
+            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate: startTime,
+            endDate: endTime,
+            officeid:officeId
+        })
+        const data = JSON.parse(result).data || [];
+        const list = [];
+        data.forEach((ev, index) => {
+            list.push({
+                name: ev.userName,
+                already: ev.clockIn,
+                total: ev.totalClockIn,
+                normal: ev.normal,
+                abnormal: ev.anomaly
+            })
+        })
+        this.setState({ yearSource: list });
+    }
     render() {
-        const { record, currentIndex, dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate} = this.state;
+        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate,valueYears,optionYears} = this.state;
         const timeSlot = ['日', '月', '年'];
         const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
@@ -298,7 +340,7 @@ class AttendanceData extends Component {
                 return (
                     <div className={styles.detailsList}>
                         {
-                            dataSource.map((item, index) =>
+                            yearSource.map((item, index) =>
                                 <div className={styles.item} key={index}>
                                     <div className={styles.nameBox}>
                                         <div className={styles.personName}>{item.name}</div>
@@ -336,7 +378,7 @@ class AttendanceData extends Component {
                 <DateChange></DateChange>
                 <div className={styles.footer}>
                     <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                        <span>{currentIndex === 0 ?selectDate:valueGroups.data}</span>/<span>{departmentName}</span>
+                        <span>{currentIndex ===0?selectDate: defaultTime}</span>/<span>{departmentName}</span>
                         <img className={styles.top} src={top} alt="" />
                     </div>
                     <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
@@ -362,6 +404,8 @@ class AttendanceData extends Component {
                                 valueGroups={valueGroups}
                                 Value={this.state.date}
                                 dateIndex={currentIndex}
+                                optionTeams={optionYears}
+                                valueTeams={valueYears}
                             />
                         </div>
                     </div>

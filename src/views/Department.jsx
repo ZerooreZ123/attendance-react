@@ -26,16 +26,18 @@ class Department extends Component{
     async getOfficeUserList() {                //获取全部部门及部门人员列表
         const result = await XHR.post(API.getOfficeUserList,{
             companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
-            officeid:this.state.departmentId    
+            officeid:window.officeId
+            // officeid:this.state.departmentId    
         });
         const dataSource = JSON.parse(result).data;
+        console.log(dataSource)
         const userList = [];
-        for(var i in dataSource) {
+        dataSource.forEach((ev,i) =>{
             userList.push({
-                department:i,
-                staff:dataSource[i]
-           })
-        }
+                id:ev.id,
+                name:ev.name
+            })
+        })
         this.setState({departmentStaff:userList});
     }
     render() {

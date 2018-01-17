@@ -2,8 +2,8 @@
 // const admin = 'http://192.168.1.170:18080/AM/f/yk/api/';
 // const admin = 'http://106.14.28.70/'
 // const admin ="http://www.junl.cn/"
-const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
-// const admin = 'http://192.168.1.40:8080/AM/f/yk/api/';
+// const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
+const admin = 'http://192.168.1.40:8080/AM/f/yk/api/';
 const API = {
   register: admin + 'register.do',                                 //登录注册
   update: admin + 'update.do',                                     //更新用户信息和公司信息
