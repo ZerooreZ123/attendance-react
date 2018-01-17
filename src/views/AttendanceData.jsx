@@ -80,6 +80,9 @@ class AttendanceData extends Component {
             startTime: moment().format('YYYY-MM-DD'),     //开始时间(传参)
             endTime: moment().format('YYYY-MM-DD'),       //结束时间(传参)
             record: [],                  //展示打卡记录
+            abnormalRecord:[],           //异常打卡记录
+            personDetail:false,           //个人打卡记录状态
+            personData:[],                //个人打卡数据
             dataSource: [],               //月统计打卡记录
             yearSource: [],               //年统计打卡记录
             toggleIndex: '',              //切换选择时间与部门的索引值
@@ -122,7 +125,7 @@ class AttendanceData extends Component {
     }
     getMonth() {
         var myDate = new Date();
-        var startYear = myDate.getFullYear();//起始年份
+        var startYear = myDate.getFullYear() - 1;//起始年份
         var endYear = myDate.getFullYear() + 10;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
@@ -162,8 +165,10 @@ class AttendanceData extends Component {
             this.getYear();
         }
     }
-    personalInformation() {
-        this.props.history.push('/personalInformation');
+    personalInformation(i) {
+        this.setState({personDetail:true});
+        this.setState({departmentName:this.state.dataSource[i].name});
+        this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid)
     }
     selectDay = (date) => {          //日历日期选择
         var d = new Date(date);
@@ -189,6 +194,7 @@ class AttendanceData extends Component {
     showAbnormal() {                 //展示异常
         this.setState({ showState: 1 });
         this.setState({ tabIndex: 1 });
+        this.Abnormal(this.state.startTime,this.state.endTime);
     }
     // showNotAbsenteeism() {            //展示全勤
     //     this.setState({ showState: 2 });
@@ -227,17 +233,69 @@ class AttendanceData extends Component {
     }
 
     determineDepartment() {    //确认选择
-        if(this.state.currentIndex === 0) {
-            this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId)
-        }else if(this.state.currentIndex === 1) {
+        if(this.state.currentIndex === 0) {      //日子
+            if(this.state.tabIndex === 0){       //全部
+                this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId)
+            }else{                               //异常
+                this.Abnormal(this.state.selectDate,this.state.selectDate,this.state.departmentId)
+            }
+           
+        }else if(this.state.currentIndex === 1) { //月期
             this.setState({defaultTime:this.state.valueGroups.data})
             this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
-        }else{
+        }else{                                    //年份
             this.setState({defaultTime:this.state.valueYears.data})
             this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
         }
         this.hideMask();
     }
+    async getPersonRecords(startTime,endTime,userId) {            //获取个人打卡记录
+        const result = await XHR.post(API.getRecords,{
+            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:startTime,    
+            endDate:endTime,
+            userids:userId    
+        })
+        const dataResult = [];
+        
+        JSON.parse(result).data.forEach((ev,i) =>{
+            dataResult.push({
+                dateDay:ev.date.slice(0,10),
+                week:ev.week,
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+            })
+        })
+        
+        this.setState({personData:dataResult || []});
+        console.log(this.setState.personData)
+
+    }
+    async Abnormal(startTime,endTime,officeId) {            //获取异常全部员工某日考勤记录
+        const result = await XHR.post(API.getRecords, {
+            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            beginDate:startTime,
+            endDate:endTime,
+            officeid:officeId,
+            abnormity:"abnormity"  
+        })
+        window.time = this.state.startTime;
+        const dataResult = [];
+        
+        JSON.parse(result).data.forEach((ev,i) =>{
+            dataResult.push({
+                userName:ev.userName,
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+            })
+        })
+        this.setState({ abnormalRecord: dataResult || [] } );
+    }
+
     async getRecords(startTime,endTime,officeId) {            //获取全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {
             companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
@@ -246,8 +304,18 @@ class AttendanceData extends Component {
             officeid:officeId
         })
         window.time = this.state.startTime;
-        this.setState({ record: JSON.parse(result).data || [] } );
-
+        const dataResult = [];
+        
+        JSON.parse(result).data.forEach((ev,i) =>{
+            dataResult.push({
+                userName:ev.userName,
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+            })
+        })
+        this.setState({ record: dataResult || [] } );
     }
     async getStatisticalInfo(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
         const result = await XHR.post(API.getStatisticalInfo, {
@@ -260,6 +328,7 @@ class AttendanceData extends Component {
         const list = [];
         data.forEach((ev, index) => {
             list.push({
+                userid:ev.userid,
                 name: ev.userName,
                 already: ev.clockIn,
                 total: ev.totalClockIn,
@@ -290,52 +359,99 @@ class AttendanceData extends Component {
         this.setState({ yearSource: list });
     }
     render() {
-        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate,valueYears,optionYears} = this.state;
+        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate,valueYears,optionYears,abnormalRecord,personDetail,personData} = this.state;
         const timeSlot = ['日', '月', '年'];
         const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
-            if (currentIndex === 0) {                //日
-                return (
-                    <div className={styles.detailsList}>
+            if (currentIndex === 0) {              //日
+                if(tabIndex === 0) {               //全部
+                    return (
+                        <div className={styles.detailsList}>
+                            {
+                                record.map((item, index) =>
+                                    <div className={styles.item} key={index}>
+                                        <div className={styles.name}>{item.userName}</div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gotoWork}>上班: <span>{item.goState}</span></div>
+                                            <div className={styles.punchTime}>{item.goTime}</div>
+                                        </div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gooffWork}>下班: <span>{item.backState}</span></div>
+                                            <div className={styles.punchTime}>{item.backTime}</div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    );
+                }else{                           //异常
+                    return (
+                        <div className={styles.detailsList}>
+                            {
+                                abnormalRecord.map((item, index) =>
+                                    <div className={styles.item} key={index}>
+                                        <div className={styles.name}>{item.userName}</div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gotoWork}>上班: <span>{item.goState}</span></div>
+                                            <div className={styles.punchTime}>{item.goTime}</div>
+                                        </div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gooffWork}>下班: <span>{item.backState}</span></div>
+                                            <div className={styles.punchTime}>{item.backTime}</div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    );
+                }
+               
+            } else if (currentIndex === 1) {           //月期显示内容
+                if(personDetail === false) {           //展示统计
+                    return (
+                        <div className={styles.detailsList}>
+                            {
+                                dataSource.map((item, index) =>
+                                    <div className={styles.item} key={index}>
+                                         <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                        <div className={styles.nameBox}>
+                                            <div className={styles.personName}>{item.name}</div>
+                                            <div onClick={ev => this.personalInformation(index)} className={styles.detail}>详情</div>
+                                        </div>
+                                        <div className={styles.totalDay}>
+                                            <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
+                                        </div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>
+                                            <div className={styles.punchTime}>异常：<span>{item.abnormal}</span></div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    )   
+                }else{                                //展示个人
+                    return (
+                        <div className={styles.detailsList}>
                         {
-                            record.map((item, index) =>
+                            personData.map((item,index) =>
                                 <div className={styles.item} key={index}>
-                                    <div className={styles.name}>{item.userName}</div>
+                                    <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
                                     <div className={styles.work}>
-                                        <div className={styles.gotoWork}>上班: <span>{item.gotoWork}</span></div>
-                                        <div className={styles.punchTime}>{item.gotoWork}</div>
+                                        <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
+                                        <div className={styles.punchTime}>{item.goTime}</div>
                                     </div>
                                     <div className={styles.work}>
-                                        <div className={styles.gooffWork}>下班: <span>{item.getoffWork}</span></div>
-                                        <div className={styles.punchTime}>{item.getoffWork}</div>
+                                        <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
+                                        <div className={styles.punchTime}>{item.backTime}</div>
                                     </div>
                                 </div>
                             )
                         }
-                    </div>
-                );
-            } else if (currentIndex === 1) {           //月
-                return (
-                    <div className={styles.detailsList}>
-                        {
-                            dataSource.map((item, index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.nameBox}>
-                                        <div className={styles.personName}>{item.name}</div>
-                                        <div onClick={ev => this.personalInformation(ev)} className={styles.detail}>详情</div>
-                                    </div>
-                                    <div className={styles.totalDay}>
-                                        <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
-                                    </div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>
-                                        <div className={styles.punchTime}>异常：<span>{item.abnormal}</span></div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
-                )
+                    </div>   
+                    )
+                }
+               
             } else {                                   //年
                 return (
                     <div className={styles.detailsList}>

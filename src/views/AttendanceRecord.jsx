@@ -71,7 +71,20 @@ class AttendanceRecord extends Component{
             endDate:endTime,
             userids:"92548d4571604ff2912652ec8e3d44a6"    
         })
-        this.setState({dataSource:JSON.parse(result).data} || []);
+        const dataResult = [];
+        
+        JSON.parse(result).data.forEach((ev,i) =>{
+            dataResult.push({
+                dateDay:ev.date.slice(0,10),
+                week:ev.week,
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+            })
+        })
+        
+        this.setState({dataSource:dataResult || []});
 
     }
     async getAbnormal(i) {            //获取异常打卡记录
@@ -103,7 +116,22 @@ class AttendanceRecord extends Component{
             userids:"92548d4571604ff2912652ec8e3d44a6",
             abnormity:"abnormity"    
         })
-        this.setState({dataAbnormal:JSON.parse(result).data || []});
+        
+        const dataResult = [];
+        
+        JSON.parse(result).data.forEach((ev,i) =>{
+            dataResult.push({
+                dateDay:ev.date.slice(0,10),
+                week:ev.week,
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+            })
+        })
+        
+        this.setState({dataAbnormal:dataResult || []});
+
     }
     render() {
         const {dataSource,dataAbnormal,showState,tabIndex,monthList,monthIndex} = this.state;
@@ -114,14 +142,14 @@ class AttendanceRecord extends Component{
                     {
                         dataSource.map((item,index) =>
                             <div className={styles.item} key={index}>
-                                <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
+                                <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
                                 <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork}</span></div>
-                                    <div className={styles.punchTime}>{item.gotoWork}</div>
+                                    <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
+                                    <div className={styles.punchTime}>{item.goTime}</div>
                                 </div>
                                 <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork}</span></div>
-                                    <div className={styles.punchTime}>{item.getoffWork}</div>
+                                    <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
+                                    <div className={styles.punchTime}>{item.backTime}</div>
                                 </div>
                             </div>
                         )
@@ -134,14 +162,14 @@ class AttendanceRecord extends Component{
                     {
                         dataAbnormal.map((item,index) =>
                             <div className={styles.item} key={index}>
-                                <div className={styles.displayDate}><span>{item.date.slice(0,10)}</span> <span>{item.week}</span></div>
+                                <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
                                 <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.gotoWork}</span></div>
-                                    <div className={styles.punchTime}>{item.gotoWork}</div>
+                                    <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
+                                    <div className={styles.punchTime}>{item.goTime}</div>
                                 </div>
                                 <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.getoffWork}</span></div>
-                                    <div className={styles.punchTime}>{item.getoffWork}</div>
+                                    <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
+                                    <div className={styles.punchTime}>{item.backTime}</div>
                                 </div>
                             </div>
                         )
