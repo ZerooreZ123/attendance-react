@@ -63,7 +63,7 @@ class RevisionDepartment extends Component{
         this.update();
     }
     async getOfficeList() {                           //部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const sectionList = [];
         JSON.parse(result).data.forEach((item,index) =>{
             sectionList.push({
@@ -75,7 +75,7 @@ class RevisionDepartment extends Component{
     }
     async update() {                      //修改部门
         const result = await XHR.post(API.update,{
-            loginName:"18550117460",
+            loginName:window.sessionStorage.getItem('loginName'),
             officeName:this.state.departmentName,
             officeid:this.state.departmentId
         })

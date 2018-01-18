@@ -24,30 +24,33 @@ class UserCenter extends Component{
         super();
         window.temp = {};
         this.state={
-            roleid:'',
+            companyid:'',         //公司Id
+            roleid:'',            //用户权限
             dataSource:{}
         }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人中心';
         this.getUser();
-        this.getOfficeList();
     }
     punchClock() {
-        this.props.history.push('/punchClock');
+        this.props.history.push('/punchClock/'+window.sessionStorage.getItem('loginName'));
     }
     attendanceData() {
         this.props.history.push('/attendanceData')
     }
     moveToUser(i){                   //一般用户选项跳转
+        this.getOfficeList();
         const userUrl = ['/attendanceRecord','/cardReminding','/revisionDepartment'];
         this.props.history.push(userUrl[i]);
     }
     moveToOrdinary(i){               //普通管理员选项跳转
+        this.getOfficeList();
         const ordinaryUrl = ['/attendanceData','/ordinaryEnterorise','/employeeInformation','/releaseAnnouncement']
         this.props.history.push(ordinaryUrl[i]);
     }
     moveToSuper(i) {                 //超级管理员选项跳转
+        this.getOfficeList();
         const superUrl = ['/attendanceData','/enterpriseManager','/employeeInformation','/releaseAnnouncement','/attendanceManagement']
         this.props.history.push(superUrl[i]);
     }
@@ -69,7 +72,7 @@ class UserCenter extends Component{
         }
     }
     async getOfficeList() {          //部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getOfficeList, { companyid: this.state.companyid});
         const sectionList = [];
         JSON.parse(result).data.forEach((item, index) => {
             sectionList.push({
@@ -80,7 +83,7 @@ class UserCenter extends Component{
         window.sessionStorage.setItem("officeList",JSON.stringify(sectionList));
     }
     async unbind() {                //解绑员工   
-        const result = await XHR.post(API.unbindUser,{loginName:"18550117460"});
+        const result = await XHR.post(API.unbindUser,{loginName:this.props.match.params.loginName});
         if(JSON.parse(result).success === 'T') {
             alert('解绑成功');
         }else{
@@ -88,13 +91,17 @@ class UserCenter extends Component{
         }
     }
     async getUser() {              //获取用户信息
-        const result = await XHR.post(API.getUser,{loginName:"18550117460"});
+        const result = await XHR.post(API.getUser,{loginName:this.props.match.params.loginName});
         this.setState({ dataSource: JSON.parse(result).data });
         this.setState({roleid:JSON.parse(result).data.roleid});
+        this.setState({companyid:JSON.parse(result).data.companyid})
         window.temp = {
             name:JSON.parse(result).data.name,
             officeName:JSON.parse(result).data.officeName
         }
+        window.sessionStorage.setItem('loginName',this.props.match.params.loginName);
+        window.sessionStorage.setItem('companyid',JSON.parse(result).data.companyid);
+        window.sessionStorage.setItem('id',JSON.parse(result).data.id);
     }
     render() {
 
@@ -161,11 +168,10 @@ class UserCenter extends Component{
                     <img className={styles.informationPhoto} src={headPortrait} alt=""/>
                     <div className={styles.personalInformation}>
                         <div className={styles.name}>
-                            <span>0001</span>
                             <span>{dataSource.name}</span>
                             <span>({dataSource.roleNames})</span>
                         </div>
-                        <div className={styles.phone}>{dataSource.loginName}</div>
+                        <div className={styles.phone}>{dataSource.phone}</div>
                         <div className={styles.company}>
                             <span>{dataSource.companyName}</span>/
                             <span>{dataSource.officeName}</span>

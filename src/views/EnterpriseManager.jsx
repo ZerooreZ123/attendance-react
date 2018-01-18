@@ -26,7 +26,70 @@ const BottomBar = ({add,parent,deleteState}) => {           //底部选择栏组
         )
     }
 }
+const TabContent = ({currentIndex,deleteSection,division,inputText,section, machineNum,parent}) => {
+    if (currentIndex === 1) {
+         if(deleteSection === false) {
+            return (
+                <div className={styles.content}>
+                    <div className={ division === true ?styles.item:styles.hideInput}>
+                        <input onChange={ev =>parent.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
+                        <img className={styles.forward} src={go} alt="" />
+                    </div>
+                    {
+                        section.map((item, index) =>
+                            <div className={styles.item} key={index} onClick={ev =>parent.departmentPerson(index)}>
+                                <div className={styles.name}>{item.officeName}</div>
+                                <img className={styles.forward} src={go} alt="" />
+                            </div>
+                        )
+                    }
+                    <BottomBar add={parent.state.selectState} parent={parent} deleteState={deleteSection}></BottomBar>
+                </div>
+            );
+         }else{
+            return (
+                <div className={styles.content}>
+                    {
+                        section.map((item, index) =>
+                            <div className={styles.deleteItem} key={index} onClick={ev =>parent.deleteClick(index)}>
+                                <img className={styles.deleteImg} src={deleteImg} alt=''/>
+                                <div className={styles.name}>{item.officeName}</div>
+                                <img className={styles.forward} src={go} alt="" />
+                            </div>
+                        )
+                    }
+                    <BottomBar add={parent.state.selectState} parent={parent} deleteState={deleteSection}></BottomBar>
+                </div>
+            ); 
+         }
+    } else if (currentIndex === 2) {
+        return (
+            <div className={styles.content}>
+                {
+                    machineNum.map((item, index) =>
+                        <div className={styles.item} key={index}>
+                            <div className={styles.name}>考勤机{index + 1}: {item}</div>
+                        </div>
+                    )
+                }
+                <div onClick={ev => parent.addAttendanceMachine(ev)} className={styles.addMachine}>添加考勤机</div>
+            </div>
+        )
+    } else {
+        return (
+            <div className={styles.content}>
+                <div className={styles.codeWrap}>
+                    <div className={styles.code}>
+                        <QRCode value={parent.state.invitationCode} />
+                    </div>
+                    <div className={styles.codetext}>邀请码</div>
+                    <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+                </div>
+            </div>
+        )
 
+    }
+}
 class EnterpriseManager extends Component {
     constructor() {
         super();
@@ -85,7 +148,7 @@ class EnterpriseManager extends Component {
         this.setState({selectState:true});
         this.setState({section:this.state.section});
         const result = await XHR.post(API.addOrUpdateOfficce,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem('companyid'),
             officeName:this.state.inputText,
         })
         if (JSON.parse(result).success === "T") {
@@ -106,12 +169,13 @@ class EnterpriseManager extends Component {
         }
     }
     async getCompany() {                   //获取公司信息
-        const result = await XHR.post(API.getCompany, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
-        this.setState({ invitationCode: JSON.parse(result).data.invitationCode })
+        const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+        const admin = 'http://www.junl.cn/SRM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+        this.setState({invitationCode:admin})
+      }
 
-    }
     async getOfficeList() {                //获取公司部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const officeList = [];
         dataSource.forEach((item, index) =>
@@ -128,7 +192,7 @@ class EnterpriseManager extends Component {
 
     }
     async getAttendanceMachineList() {     //获取考勤机列表
-        const result = await XHR.post(API.getAttendanceMachineList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const machineList = [];
         dataSource.forEach((item, index) =>
@@ -140,70 +204,6 @@ class EnterpriseManager extends Component {
     render() {
         const { section, machineNum, division,currentIndex,inputText,deleteSection} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
-        const TabContent = props => {
-            if (currentIndex === 1) {
-                 if(deleteSection === false) {
-                    return (
-                        <div className={styles.content}>
-                            <div className={ division === true ?styles.item:styles.hideInput}>
-                                <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
-                                <img className={styles.forward} src={go} alt="" />
-                            </div>
-                            {
-                                section.map((item, index) =>
-                                    <div className={styles.item} key={index} onClick={ev =>this.departmentPerson(index)}>
-                                        <div className={styles.name}>{item.officeName}</div>
-                                        <img className={styles.forward} src={go} alt="" />
-                                    </div>
-                                )
-                            }
-                            <BottomBar add={this.state.selectState} parent={this} deleteState={deleteSection}></BottomBar>
-                        </div>
-                    );
-                 }else{
-                    return (
-                        <div className={styles.content}>
-                            {
-                                section.map((item, index) =>
-                                    <div className={styles.deleteItem} key={index} onClick={ev =>this.deleteClick(index)}>
-                                        <img className={styles.deleteImg} src={deleteImg} alt=''/>
-                                        <div className={styles.name}>{item.officeName}</div>
-                                        <img className={styles.forward} src={go} alt="" />
-                                    </div>
-                                )
-                            }
-                            <BottomBar add={this.state.selectState} parent={this} deleteState={deleteSection}></BottomBar>
-                        </div>
-                    ); 
-                 }
-            } else if (currentIndex === 2) {
-                return (
-                    <div className={styles.content}>
-                        {
-                            machineNum.map((item, index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.name}>考勤机{index + 1}: {item}</div>
-                                </div>
-                            )
-                        }
-                        <div onClick={ev => this.addAttendanceMachine(ev)} className={styles.addMachine}>添加考勤机</div>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className={styles.content}>
-                        <div className={styles.codeWrap}>
-                            <div className={styles.code}>
-                                <QRCode value={this.state.invitationCode} />
-                            </div>
-                            <div className={styles.codetext}>邀请码</div>
-                            <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
-                        </div>
-                    </div>
-                )
-
-            }
-        }
         return (
             <div className={styles.container}>
                 <div className={styles.timetable}>
@@ -211,7 +211,15 @@ class EnterpriseManager extends Component {
                         tab.map((item, index) => <div onClick={ev => this.selectTab(index)} className={currentIndex === index ? styles.currentTab : styles.elseTab} key={index}>{item}</div>)
                     }
                 </div>
-                <TabContent></TabContent>
+                <TabContent 
+                currentIndex ={currentIndex}
+                deleteSection = {deleteSection}
+                division = {division}
+                inputText = {inputText}
+                section = {section}
+                machineNum ={machineNum}
+                parent={this}
+                />
             </div>
         )
     }

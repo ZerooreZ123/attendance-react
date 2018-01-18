@@ -39,13 +39,16 @@
     background:#2295e8;
 }
 .month{
+    position:fixed;
+    top:110px;
+    left:0;
     display:flex;
     justify-content: space-around;
     width:100%;
-    padding-top:110px;
     font-size:30px;
     color:#707070;
     border-bottom: 2px solid #ddd;
+    background:#fff;
 }
 .currentMonth{
     height:30px;
@@ -59,6 +62,31 @@
     padding-top:36px;
     padding-bottom:36px;
     border-bottom: 6px solid transparent;
+    color:#000;
+}
+.blankBox{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:900px;
+    padding-top:218px;
+    background:#fff;
+}
+.box{
+   width:282;
+   height:334px;
+}
+.blankImg{
+    width:282px;
+    height:260px;
+}
+.font{
+    width:282px;
+    height:40px;
+    padding-top:30px;
+    font-size:32px;
+    line-height:40px;
+    text-align: center;
     color:#000;
 }
 .item{
@@ -88,4 +116,10 @@
 }
 .punchTime{
     color:#999;
+}
+.fontColor{
+    color:#000;
+}
+.redColor{
+    color:rgb(248, 29, 29);
 }

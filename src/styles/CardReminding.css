@@ -53,10 +53,10 @@
     width: 100%;
 }
 .timeSlot{
-    padding-top:130px;
+    padding-top:68px;
 }
 .timeDuan{
-    padding-top:272px;
+    padding-top:210px;
 }
 .single{
     z-index:6;
@@ -66,6 +66,17 @@
     text-align: center;
     font-size:28px;
     border-bottom:2px solid #ddd;
+}
+.buleSingle{
+    z-index:6;
+    width:706px;
+    height:104px;
+    line-height: 104px;
+    text-align: center;
+    font-size:28px;
+    color:34px;
+    border-bottom:2px solid #ddd;
+
 }
 .current{
     color:#2295e8
@@ -78,6 +89,11 @@
     margin-top:24px;
     font-size:24px;
     color:#a8a8a8;
+}
+.blueRemind{
+    margin-top:24px;
+    font-size:24px;
+    color:#2295e8;
 }
 .icon{
     width:20px;

@@ -60,7 +60,7 @@ class AttendanceManagement extends Component {
         this.setState({status:this.state.status});
     }
     async getAttendanceManagement() {       //公司考勤时间配置及数据渲染
-        const result = await XHR.post(API.getAttendanceManagement, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getAttendanceManagement, { companyid: window.sessionStorage.getItem("companyid")});
         const dataSource = JSON.parse(result).data[0];
         this.setState({ data: dataSource });
         var T1 = JSON.parse(result).data[0].forenoonLatest.split(':');

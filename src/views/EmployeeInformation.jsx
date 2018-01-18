@@ -127,7 +127,7 @@ class EmployeeInformation extends Component{
         this.setState({departmentId:this.state.section[i].id});
     }
     async getOfficeList() {                     //获取部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const sectionList = [];
         JSON.parse(result).data.forEach((item,index) =>{
             sectionList.push({
@@ -142,7 +142,7 @@ class EmployeeInformation extends Component{
         this.setState({section:sectionList});   
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
-        const result = await XHR.post(API.getOfficeUserList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const result = await XHR.post(API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const userList = [];
         for(var i in dataSource) {
@@ -158,7 +158,7 @@ class EmployeeInformation extends Component{
         this.hideMask();
         if(this.state.departmentId){
             const result = await XHR.post(API.getOfficeUserList,{
-                companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+                companyid:window.sessionStorage.getItem('companyid'),
                 officeid:this.state.departmentId    
             });
             const dataSource = JSON.parse(result).data;

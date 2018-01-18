@@ -47,13 +47,13 @@ class OrdinaryEnterorise extends Component {
         this.props.history.push("/department");
     }
     async getCompany() {                   //获取公司信息
-        const result = await XHR.post(API.getCompany, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getCompany, { companyid:window.sessionStorage.getItem('companyid') });
         this.setState({ companyInfo: JSON.parse(result).data })
         this.setState({ invitationCode: JSON.parse(result).data.invitationCode })
 
     }
     async getOfficeList() {                //获取公司部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const officeList = [];
         dataSource.forEach((item, index) =>
@@ -63,7 +63,7 @@ class OrdinaryEnterorise extends Component {
 
     }
     async getAttendanceMachineList() {     //获取考勤机列表
-        const result = await XHR.post(API.getAttendanceMachineList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const machineList = [];
         dataSource.forEach((item, index) =>
@@ -74,18 +74,18 @@ class OrdinaryEnterorise extends Component {
     render() {
         const { section, machineNum, division, companyInfo, currentIndex ,inputText} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
-        const Adddivision = props => {
-            if (division) {
-                return (
-                    <div className={styles.item}>
-                        <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText} />
-                        <img className={styles.forward} src={go} alt="" />
-                    </div>
-                )
-            } else {
-                return false;
-            }
-        }
+        // const Adddivision = props => {
+        //     if (division) {
+        //         return (
+        //             <div className={styles.item}>
+        //                 <input onChange={ev =>this.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText} />
+        //                 <img className={styles.forward} src={go} alt="" />
+        //             </div>
+        //         )
+        //     } else {
+        //         return false;
+        //     }
+        // }
         const TabContent = props => {
             if (this.state.currentIndex === 1) {
                 return (

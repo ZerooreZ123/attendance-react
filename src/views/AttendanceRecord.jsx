@@ -6,6 +6,8 @@ import styles from '../styles/AttendanceRecord.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
+import data from '../asset/statePrompt/data.png';
+
 class AttendanceRecord extends Component{
     constructor() {
         super();
@@ -66,10 +68,10 @@ class AttendanceRecord extends Component{
                 endTime = moment().endOf('month').format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem('companyid'),
             beginDate:startTime,    
             endDate:endTime,
-            userids:"92548d4571604ff2912652ec8e3d44a6"    
+            userids: window.sessionStorage.getItem('id')    
         })
         const dataResult = [];
         
@@ -77,15 +79,14 @@ class AttendanceRecord extends Component{
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
         
         this.setState({dataSource:dataResult || []});
-
     }
     async getAbnormal(i) {            //获取异常打卡记录
         this.setState({monthIndex:i});
@@ -110,10 +111,10 @@ class AttendanceRecord extends Component{
                      
         }
         const result = await XHR.post(API.getRecords,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem('companyid'),
             beginDate:startTime, 
             endDate:endTime,
-            userids:"92548d4571604ff2912652ec8e3d44a6",
+            userids:window.sessionStorage.getItem('id'),
             abnormity:"abnormity"    
         })
         
@@ -123,10 +124,10 @@ class AttendanceRecord extends Component{
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
         
@@ -137,45 +138,68 @@ class AttendanceRecord extends Component{
         const {dataSource,dataAbnormal,showState,tabIndex,monthList,monthIndex} = this.state;
         const Show = props =>{
             if(showState === true) {
-                return (
-                    <div className={styles.detailsList}>
-                    {
-                        dataSource.map((item,index) =>
-                            <div className={styles.item} key={index}>
-                                <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
-                                <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
-                                    <div className={styles.punchTime}>{item.goTime}</div>
+                if(dataSource.length >0){
+                    return (
+                        <div className={styles.detailsList}>
+                        {
+                            dataSource.map((item,index) =>
+                                <div className={styles.item} key={index}>
+                                    <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gotoWork}>上班:<span className={item.goState === '正常' ? styles.fontColor: styles.redColor}>{item.goState}</span></div>
+                                        <div className={styles.punchTime}>{item.goTime}</div>
+                                    </div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gooffWork}>下班:<span className={ item.backState === '正常' ? styles.fontColor: styles.redColor}>{item.backState}</span></div>
+                                        <div className={styles.punchTime}>{item.backTime}</div>
+                                    </div>
                                 </div>
-                                <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
-                                    <div className={styles.punchTime}>{item.backTime}</div>
-                                </div>
-                            </div>
-                        )
-                    }
-                </div>   
-                )
+                            )
+                        }
+                    </div>   
+                    )
+                }else{
+                    return (
+                        <div className={styles.blankBox}>
+                             <div className={styles.box}>
+                                <img className={styles.blankImg} src={data} alt='' />
+                                <div className={styles.font}>暂无考勤记录</div>
+                             </div>
+                        </div>
+                    )
+                }
             }else{
-                return (
-                    <div className={styles.detailsList}>
-                    {
-                        dataAbnormal.map((item,index) =>
-                            <div className={styles.item} key={index}>
-                                <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
-                                <div className={styles.work}>
-                                    <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
-                                    <div className={styles.punchTime}>{item.goTime}</div>
+                if(dataAbnormal.length>0) {
+                    return (
+                        <div className={styles.detailsList}>
+                        {
+                            dataAbnormal.map((item,index) =>
+                                <div className={styles.item} key={index}>
+                                    <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gotoWork}>上班:<span className={item.goState === '正常' ? styles.fontColor: styles.redColor}>{item.goState}</span></div>
+                                        <div className={styles.punchTime}>{item.goTime}</div>
+                                    </div>
+                                    <div className={styles.work}>
+                                        <div className={styles.gooffWork}>下班:<span className={ item.backState === '正常' ? styles.fontColor: styles.redColor}>{item.backState}</span></div>
+                                        <div className={styles.punchTime}>{item.backTime}</div>
+                                    </div>
                                 </div>
-                                <div className={styles.work}>
-                                    <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
-                                    <div className={styles.punchTime}>{item.backTime}</div>
-                                </div>
-                            </div>
-                        )
-                    }
-                </div>   
-                )
+                            )
+                        }
+                        </div>   
+                    )
+                }else{
+                    return (
+                        <div className={styles.blankBox}>
+                             <div className={styles.box}>
+                                <img className={styles.blankImg} src={data} alt='' />
+                                <div className={styles.font}>暂无考勤记录</div>
+                             </div>
+                        </div>
+                    )
+                }
+               
             }
         }
         return(

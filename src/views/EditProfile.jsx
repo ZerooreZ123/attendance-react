@@ -27,7 +27,7 @@ class EditProfile extends Component{
             departmentIndex:'',         //部门的索引值
             departmentId:'',            //部门Id
             mask:false,                 //默认不显示部门
-            valueName:'叶湘伦'                //用户姓名
+            valueName:'叶湘伦'           //用户姓名
         }
     }
     componentDidMount() {
@@ -52,7 +52,7 @@ class EditProfile extends Component{
         this.setState({departmentId:this.state.section[i].id});
     }
     async getOfficeList() {                     //获取部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const sectionList = [];
         JSON.parse(result).data.forEach((item,index) =>{
             sectionList.push({
@@ -65,7 +65,7 @@ class EditProfile extends Component{
     async determineDepartment() {             //更新用户资料
         if(this.state.departmentId){
             const result = await XHR.post(API.update,{
-                loginName:'18550117460',
+                loginName:window.sessionStorage.getItem('loginName'),
                 officeid:this.state.departmentId,
                 userName:this.state.valueName
             });

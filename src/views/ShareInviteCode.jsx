@@ -20,9 +20,10 @@ class ShareInviteCode extends Component {
     this.props.history.push('/attendanceManagement');
   }
   async getCompany() {                   //获取公司信息
-    const admin = 'http://www.junl.cn/SRM/f/yk/api/oauthLogin.do?targetUrl=http%3A%2F%2Fwww.junl.cn%2FAttendanceFront%2Findex.html%23%2Fhome%2F'
-    const result = await XHR.post(API.getCompany,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
-    this.setState({invitationCode:admin + JSON.parse(result).data.id})
+    const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+    const admin = 'http://www.junl.cn/SRM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+    this.setState({invitationCode:admin})
+    alert(this.state.invitationCode);
   }
   render() {
     return (

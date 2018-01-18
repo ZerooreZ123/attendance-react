@@ -73,8 +73,24 @@ determineDepartment(){
   this.hideMask();
   this.setState({InputValue:this.state.departmentName});
 }
+async register() {
+  if(this.state.inputValue && this.state.inputText){
+    const result = await XHR.post(API.register,{
+      loginName:window.sessionStorage.getItem('ID'),
+      phone:window.sessionStorage.getItem("phone")
+    });
+    if(JSON.parse(result).data.roleid ===2 || JSON.parse(result).data.roleid ===3) {
+      this.props.history.push('./userCenter');
+    }else{
+      this.props.history.push('./punchClock');
+    }       
+  }else{
+      return null;
+  }
+}
+
 async getOfficeList() {                     //获取部门列表
-  const result = await XHR.post(API.getOfficeList,{companyid:"4a44b823fa0b4fb2aa299e55584bca6d"});
+  const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('comID')});
   const sectionList = [];
   JSON.parse(result).data.forEach((item,index) =>{
       sectionList.push({
@@ -82,7 +98,7 @@ async getOfficeList() {                     //获取部门列表
           id:item.id
       })
   });
-  this.setState({section:sectionList});   
+  this.setState({section:sectionList || []});   
 }
 render() {
     const {status,mask,section,departmentIndex,InputValue,InputText} = this.state;
@@ -103,7 +119,7 @@ render() {
         </div>
 
         <div className={styles.next}>
-          <div className = {(InputText && InputValue) ? styles.nextCan:styles.nextStep}>完成</div>
+          <div onClick={ev =>this.register(ev)} className = {(InputText && InputValue) ? styles.nextCan:styles.nextStep}>完成</div>
         </div>
         <Mask visible={mask} parent={this} List={section} Index={departmentIndex} />
       </div>
@@ -111,4 +127,3 @@ render() {
   }
 }
 export default InviteCodeDetail;
-

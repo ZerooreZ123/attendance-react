@@ -2,6 +2,9 @@ import React,{Component} from 'react';
 
 import styles from '../styles/WriteInformation.css';
 
+import XHR from '../utils/request';
+import API from '../api/index';
+
 class WriteInformation extends Component {
   constructor() {
     super();
@@ -13,12 +16,17 @@ class WriteInformation extends Component {
 componentDidMount() {
     document.querySelector('title').innerText = '填写资料'; 
 }
-ShareInviteCode() {
-  if(this.state.inputValue && this.state.inputText) {
-    this.props.history.push('./shareInviteCode');
-  }else{
-    return null
-  }
+async ShareInviteCode() {                //公司注册
+    const result = await XHR.post(API.register,{
+        serialNumber:window.sessionStorage.getItem('serialNumber'),
+        loginName:window.sessionStorage.getItem('LoginName'),
+        phone:window.sessionStorage.getItem("Phone")
+    });
+    if(JSON.parse(result).success === 'T') {
+      this.props.history.push('./shareInviteCode');
+    }else{
+      alert(JSON.parse(result).msg);
+    }  
 }
 getCompany(ev) {
     this.setState({inputText:ev.target.value});

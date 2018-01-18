@@ -16,7 +16,10 @@ class PersonalRegister extends Component {
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '注册'; 
+    document.querySelector('title').innerText = '注册';
+    console.log(this.props.match.params.companyid)
+    window.sessionStorage.setItem('comID',this.props.match.params.companyid);
+    window.sessionStorage.setItem('ID',this.props.match.params.loginName);
 }
 getPhone(ev) {
     this.setState({inputText:ev.target.value});
@@ -25,8 +28,9 @@ getCode(ev) {
     this.setState({inputValue:ev.target.value});
 }  
 async sendSms() {                  //获取验证码
-    const result = await XHR.post(API.sendSms,{phone:"18617015565"});
-    this.setState({code:JSON.parse(result).data}); 
+    const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
+    this.setState({code:JSON.parse(result).data});
+    window.sessionStorage.setItem("phone",this.state.inputText); 
 
     // var countdown=60;
     // if (countdown === 0) {  
@@ -40,22 +44,11 @@ async sendSms() {                  //获取验证码
     //     countdown--;  
     // }    
 }
-goToNextStep() {          //下一步
-    if(this.state.inputValue && this.state.inputText){
-        this.register();
-    }else{
-        return null;
-    }
-}
-async register() {
-   const result = await XHR.post(API.register,{
-        loginName:"ogjb9jic6u1sTAD0cn8DcSUWRCKA",
-        phone:this.state.inputText
-   })
-   if(JSON.parse(result).success === 'T' && this.state.inputValue === this.state.code) {
-       this.props.history.push('./inviteCodeDetail')
+goToNextStep() {
+   if(this.state.inputValue === this.state.code) {
+       this.props.history.push('/inviteCodeDetail')
    }else{
-       alert(JSON.parse(result).msg)
+       alert("请输入正确的验证码")
    }
 }
 render() {

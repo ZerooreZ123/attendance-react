@@ -76,7 +76,7 @@ class PunchClock extends Component {
         this.showTime();
     }
     userCenter() {                    //切换至个人中心
-      this.props.history.push('/userCenter');
+      this.props.history.push('/userCenter/' +this.props.match.params.loginName);
     }
     AnnouncementDetails(ev) {         //切换至公告详情
       ev.stopPropagation();
@@ -130,7 +130,7 @@ class PunchClock extends Component {
       
     }
     async clockIn() {                //员工打卡
-      const result = await XHR.post(API.clockIn,{loginName:"123456789"});
+      const result = await XHR.post(API.clockIn,{loginName:this.props.match.params.loginName});
       if(JSON.parse(result).success === "T") {
         this.setState({prompt:3})
       }else{

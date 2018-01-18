@@ -25,7 +25,7 @@ class Department extends Component{
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
         const result = await XHR.post(API.getOfficeUserList,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem('companyid'),
             officeid:window.officeId
             // officeid:this.state.departmentId    
         });

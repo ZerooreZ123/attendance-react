@@ -217,7 +217,7 @@ class AttendanceData extends Component {
         this.setState({ departmentId: this.state.section[i].id });
     }
     async getOfficeList() {          //部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid: "4a44b823fa0b4fb2aa299e55584bca6d" });
+        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem("companyid") });
         const sectionList = [];
         JSON.parse(result).data.forEach((item, index) => {
             sectionList.push({
@@ -251,7 +251,7 @@ class AttendanceData extends Component {
     }
     async getPersonRecords(startTime,endTime,userId) {            //获取个人打卡记录
         const result = await XHR.post(API.getRecords,{
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,    
             endDate:endTime,
             userids:userId    
@@ -275,7 +275,7 @@ class AttendanceData extends Component {
     }
     async Abnormal(startTime,endTime,officeId) {            //获取异常全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {
-            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,
             endDate:endTime,
             officeid:officeId,
@@ -298,7 +298,7 @@ class AttendanceData extends Component {
 
     async getRecords(startTime,endTime,officeId) {            //获取全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {
-            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,
             endDate:endTime,
             officeid:officeId
@@ -319,7 +319,7 @@ class AttendanceData extends Component {
     }
     async getStatisticalInfo(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
         const result = await XHR.post(API.getStatisticalInfo, {
-            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem("companyid"),
             beginDate: startTime,
             endDate: endTime,
             officeid:officeId
@@ -340,7 +340,7 @@ class AttendanceData extends Component {
     }
     async getYarnInfomation(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
         const result = await XHR.post(API.getStatisticalInfo, {
-            companyid: "4a44b823fa0b4fb2aa299e55584bca6d",
+            companyid:window.sessionStorage.getItem("companyid"),
             beginDate: startTime,
             endDate: endTime,
             officeid:officeId

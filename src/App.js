@@ -29,6 +29,7 @@ import Backstagelogon from './views/Backstagelogon';
 import PersonalRegister from './views/PersonalRegister';
 import EnterpriseRegistration from './views/EnterpriseRegistration';
 import WriteInformation from './views/WriteInformation';
+import Prompt from './views/Prompt';
 
 
 
@@ -53,8 +54,8 @@ class App extends Component {
                 transitionLeaveTimeout={leaveTime}
               >
                 <div key={props.location.pathname}>
-                  <Route location={props.location} exact path="/punchClock" component={PunchClock} />
-                  <Route location={props.location} exact path="/userCenter" component={UserCenter}/>
+                  <Route location={props.location} exact path="/punchClock/:loginName" component={PunchClock} />
+                  <Route location={props.location} exact path="/userCenter/:loginName" component={UserCenter}/>
                   <Route location={props.location} exact path="/revisionDepartment" component={RevisionDepartment}/>
                   <Route location={props.location} exact path="/cardReminding" component={CardReminding}/>
                   <Route location={props.location} exact path="/attendanceRecord" component={AttendanceRecord}/>
@@ -76,10 +77,10 @@ class App extends Component {
                   <Route location={props.location} exact path="/attendanceManagement" component={AttendanceManagement}/>
                   <Route location={props.location} exact path="/ordinaryEnterorise" component={OrdinaryEnterorise}/>
                   <Route location={props.location} exact path="/backstagelogon" component={Backstagelogon}/>
-                  <Route location={props.location} exact path="/personalRegister" component={PersonalRegister}/>
-                  <Route location={props.location} exact path="/enterpriseRegistration" component={EnterpriseRegistration}/>
+                  <Route location={props.location} exact path="/personalRegister/:companyid/:loginName" component={PersonalRegister}/>
+                  <Route location={props.location} exact path="/enterpriseRegistration/:serialNumber/:loginName" component={EnterpriseRegistration}/>
                   <Route location={props.location} exact path="/writeInformation" component={WriteInformation}/>
-                  
+                  <Route location={props.location} exact path="/prompt/:msg" component={Prompt}/>   
                 </div>
               </CSSTransitionGroup>
             )

@@ -80,8 +80,8 @@ class ReleaseAnnouncement extends Component{
     }
     async announce() {                         //发布公告
         const result = await XHR.post(API.announce,{
-            userid:"e7c800b0d173438292dab8cd23be8ba5",
-            companyid:"4a44b823fa0b4fb2aa299e55584bca6d",
+            userid:window.sessionStorage.getItem('id'),
+            companyid:window.sessionStorage.getItem('companyid'),
             title:this.state.announcementTitle,
             content:this.state.announcementContent,
             startDate:this.state.selectedDay + " 00:00:00",

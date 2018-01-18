@@ -16,7 +16,8 @@ class EnterpriseRegistration extends Component {
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '企业注册'; 
+    document.querySelector('title').innerText = '企业注册';
+    console.log(this.props.match.params.serialNumber)
 }
 getNum(ev) {
     this.setState({inputNum:ev.target.value})
@@ -50,16 +51,14 @@ async sendSms() {                  //获取验证码
     //     countdown--;  
     // }    
 }
-async register() {                //公司注册
-    const result = await XHR.post(API.register,{
-        serialNumber:this.state.inputNum,
-        loginName:"ogjb9jic6u1sTAD0cn8DcSUWRCKA",
-        phone:this.state.inputPhone
-    })
-    if(JSON.parse(result).success === "T" && this.state.inputCode === this.state.code){
-        this.props.history.push('./inviteCodeDetail');
-    }else{
-        alert(JSON.parse(result).msg)
+
+next() {
+    if(this.state.inputCode === this.state.code) {
+        this.props.history.push('/writeInformation');
+        window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
+        window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
+        window.sessionStorage.setItem("Phone",this.state.inputPhone); 
+
     }
 }
 render() {
@@ -68,7 +67,7 @@ render() {
       <div className = {styles.container}>
         <div className = {styles.headImage}>
             <div className={styles.Num}>考勤机编号</div>
-            <input onChange={ev =>this.getNum(ev)} className={styles.inputNum} type="text" placeholder = "考勤机编号" value={inputNum}/>
+            <div className={styles.inputNum}>{this.props.match.params.serialNumber}</div>
         </div>
 
         <div className = {styles.invite}>
@@ -81,7 +80,7 @@ render() {
         </div>
 
         <div className={styles.next}>
-          <div className = {(inputNum && inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.goToNextStep(ev)}>下一步</div>
+          <div className = {(inputNum && inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.next(ev)}>下一步</div>
         </div>
       </div>
     );
