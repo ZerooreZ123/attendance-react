@@ -5,8 +5,9 @@ import styles from '../styles/ReleaseAnnouncement.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+import {server} from '../api/index';
 
-import photoMin from '../asset/photo-min.jpg';
+import X from '../asset/ico/ClearButton.png';
 import addphoto from '../asset/ico/photo.png';
 import top from '../asset/manager/triangle-top.png';
 
@@ -17,10 +18,12 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
-            copyMask:false,
-            chooseDay:'',
-            selectedDay:'',
-            mask:false,
+            copyMask:false,           //日历结束遮罩
+            chooseDay:'',             //结束选择时间
+            selectedDay:'',           //开始选择时间
+            mask:false,               //日历开始遮罩
+            imgBox:[],                //图片盒子
+            imgSrcConcat:[],          //拼接字符串
             announcementTitle:window.localStorage.getItem('title') || '',
             announcementContent:window.localStorage.getItem('content') || ''
         };
@@ -69,8 +72,28 @@ class ReleaseAnnouncement extends Component{
     hideMask() {
         this.setState({mask:false})
     }
-    selectImg() {                              //调用相册
-        var objUrl = window.ajaxFileUpload(this.files[0]);
+    delete(i) {
+        var msg = '确定删除吗？';
+        if(window.confirm(msg) === true) {
+            this.state.imgBox.splice(i,1);
+            this.setState({imgBox:this.state.imgBox});
+        }else{
+            return false
+        }
+    }
+    getBase64(callback) {            //获取图片
+        var file = this.refs.files.files[0];
+        if (window.FileReader) {
+            var fr = new FileReader();
+            fr.onloadend = function(e) {
+                var result = e.target.result.split(",");
+                callback(result[1])
+            }
+          
+            fr.readAsDataURL(file);            
+        } else {
+            alert("NO FileReader!");
+        }
     }
     getTitle(ev) {                             //获取标题
         this.setState({announcementTitle: ev.target.value});
@@ -78,24 +101,54 @@ class ReleaseAnnouncement extends Component{
     getContent(ev) {                           //获取内容
         this.setState({announcementContent: ev.target.value});
     }
-    async announce() {                         //发布公告
-        const result = await XHR.post(API.announce,{
-            userid:window.sessionStorage.getItem('id'),
-            companyid:window.sessionStorage.getItem('companyid'),
-            title:this.state.announcementTitle,
-            content:this.state.announcementContent,
-            startDate:this.state.selectedDay + " 00:00:00",
-	        endDate: this.state.chooseDay+  " 00:00:00"    
-        })
-        if(JSON.parse(result).success === 'T'){
-            alert("发布成功");
-            window.history.go(-1);
+    async upload(stringBase64) {  
+        const result = await XHR.post(API.upload,{imgStr:stringBase64});
+        if(JSON.parse(result).success === 'T') {
+            const imgSrc = server + JSON.parse(result).data.slice(1);
+            this.state.imgSrcConcat.push(JSON.parse(result).data)
+            this.state.imgBox.push(imgSrc)
+            this.setState({imgBox:this.state.imgBox});
+            this.setState({imgSrcConcat:this.state.imgSrcConcat});
         }else{
             alert(JSON.parse(result).msg)
         }
     }
+    async announce() {                         //发布公告
+        if(this.state.imgBox.length>0) {
+            const result = await XHR.post(API.announce,{
+                userid:window.sessionStorage.getItem('id'),
+                companyid:window.sessionStorage.getItem('companyid'),
+                title:this.state.announcementTitle,
+                content:this.state.announcementContent,
+                image:this.state.imgSrcConcat.join(''),
+                startDate:this.state.selectedDay + " 00:00:00",
+                endDate: this.state.chooseDay+  " 00:00:00"    
+            })
+            if(JSON.parse(result).success === 'T'){
+                alert("发布成功");
+                window.history.go(-1);
+            }else{
+                alert(JSON.parse(result).msg)
+            }
+        }else{
+            const result = await XHR.post(API.announce,{
+                userid:window.sessionStorage.getItem('id'),
+                companyid:window.sessionStorage.getItem('companyid'),
+                title:this.state.announcementTitle,
+                content:this.state.announcementContent,
+                startDate:this.state.selectedDay + " 00:00:00",
+                endDate: this.state.chooseDay+  " 00:00:00"    
+            })
+            if(JSON.parse(result).success === 'T'){
+                alert("发布成功");
+                window.history.go(-1);
+            }else{
+                alert(JSON.parse(result).msg)
+            }
+        }
+    }
     render() {
-        const {mask,copyMask} = this.state;
+        const {mask,copyMask,imgBox} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -108,7 +161,15 @@ class ReleaseAnnouncement extends Component{
                     </div>
                     <textarea className={styles.inputBlock} placeholder="公告内容" onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>
-                        {/* <img className={styles.img} src={photoMin} alt=""/>                    */}
+                        {
+                            imgBox.map((item,index) => (
+                                <div className={styles.singleImg} key={index}>
+                                    <img  className={styles.img} src={item} alt=""/>
+                                    <img onClick={ev =>this.delete(index)}  className={styles.x} src={X} alt=""/>
+                                </div>
+                          
+                            ))
+                        }                   
                     </div>
                     <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span>{this.state.chooseDay?'至':''}<span>{this.state.chooseDay}</span></div>
                 </div>
@@ -116,8 +177,8 @@ class ReleaseAnnouncement extends Component{
                     <div className={styles.case}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
                         <div className={styles.photoBox}>
-                           <img onClick={ev =>this.selectImg(ev)} className={styles.addphoto} src={addphoto} alt=""/>
-                           <input type="file" className={styles.photoBtn} multiple="multiple"/>
+                           <img className={styles.addphoto} src={addphoto} alt=""/>
+                           <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     </div>
                     <div onClick={ev =>this.showMask(ev)} className={styles.selectDate}>选择起止日期<img src={top} alt=""/></div>

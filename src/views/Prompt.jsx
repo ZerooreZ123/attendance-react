@@ -12,7 +12,7 @@ class Prompt extends Component {
     this.prompt();
   }
   prompt(){
-    alert(this.props.match.params)
+    alert(this.props.match.params.msg);
   }
   render() {
     return (

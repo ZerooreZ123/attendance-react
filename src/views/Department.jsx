@@ -20,7 +20,11 @@ class Department extends Component{
         document.querySelector('title').innerText = '部门';
         this.getOfficeUserList();
     }
-    personalInformation() {
+    personalInformation(i) {
+        window.Person={};
+        window.Person.name = this.state.departmentStaff[i].name;
+        window.Person.section = this.state.departmentStaff[i].officeName;
+        
         this.props.history.push('/personalInformation');
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
@@ -35,7 +39,9 @@ class Department extends Component{
         dataSource.forEach((ev,i) =>{
             userList.push({
                 id:ev.id,
-                name:ev.name
+                name:ev.name,
+                officeName:ev.officeName
+
             })
         })
         this.setState({departmentStaff:userList});
@@ -47,7 +53,7 @@ class Department extends Component{
                 <div className={styles.content}>
                     {
                         departmentStaff.map((item,index) =>
-                            <div onClick={ev =>this.personalInformation(ev)} className={styles.item} key={index}>
+                            <div onClick={ev =>this.personalInformation(index)} className={styles.item} key={index}>
                                 <div className={styles.name}>{item.name}</div>
                                 <img className={styles.forward} src={go} alt=""/>
                             </div> 

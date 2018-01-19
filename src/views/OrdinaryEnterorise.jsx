@@ -47,11 +47,10 @@ class OrdinaryEnterorise extends Component {
         this.props.history.push("/department");
     }
     async getCompany() {                   //获取公司信息
-        const result = await XHR.post(API.getCompany, { companyid:window.sessionStorage.getItem('companyid') });
-        this.setState({ companyInfo: JSON.parse(result).data })
-        this.setState({ invitationCode: JSON.parse(result).data.invitationCode })
-
-    }
+        const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+        const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+        this.setState({invitationCode:admin})
+      }
     async getOfficeList() {                //获取公司部门列表
         const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;

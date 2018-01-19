@@ -9,6 +9,7 @@ import styles from '../styles/AttendanceData.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
+import data from '../asset/statePrompt/data.png';
 import top from '../asset/manager/triangle-top.png';
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
@@ -66,11 +67,10 @@ class AttendanceData extends Component {
     constructor() {
         super();
         this.state = {
-            defaultTime:'',              //底部日期显示
             Value: '',
             date: new Date(),
             section: [],                 //部门列表
-            departmentName:'全部',       //默认部门
+            departmentName:'全部',      //默认部门
             departmentIndex: '',         //部门的索引值
             departmentId: '',            //部门Id
             maskDate: false,             //默认不显示日历
@@ -88,13 +88,15 @@ class AttendanceData extends Component {
             toggleIndex: '',              //切换选择时间与部门的索引值
             maskToggle: 0,                //默认不展示mask
             selectDate: moment().format('YYYY-MM-DD'),   //日历选择
+            selectMonth:'',                //月份选择
+            selectYear:'',                 //年份选择
             valueGroups: {                //月组件
                 data: moment().format('YYYY-MM')
             },
             optionGroups: {
                 data: []
             },
-            valueYears:{
+            valueYears:{                 //年组件
                 data:moment().format('YYYY')
             },
             optionYears:{
@@ -108,7 +110,7 @@ class AttendanceData extends Component {
         this.getOfficeList();
         this.getRecords(this.state.startTime,this.state.endTime);
     }
-    getYear() {
+    getYear() {                           //获取年份
         var myDate = new Date();
         var startYear = myDate.getFullYear();//起始年份
         var endYear = myDate.getFullYear() + 10;//结束年份
@@ -123,7 +125,7 @@ class AttendanceData extends Component {
         })
       
     }
-    getMonth() {
+    getMonth() {                          //获取年+月份
         var myDate = new Date();
         var startYear = myDate.getFullYear() - 1;//起始年份
         var endYear = myDate.getFullYear() + 10;//结束年份
@@ -148,24 +150,46 @@ class AttendanceData extends Component {
         this.props.history.push('/search');
     }
     export() {                       //跳转至导出页面
-        this.props.history.push('/exportData');
+        if(this.state.currentIndex === 0) {
+            window.Data = {
+                time:this.state.selectDate,
+                section:this.state.departmentName
+            }
+            this.props.history.push('/exportData');
+        }else if(this.state.currentIndex === 1) {
+            window.Data = {
+                time:this.state.selectMonth,
+                section:this.state.departmentName
+            }
+            this.props.history.push('/exportData'); 
+        }else{
+            window.Data = {
+                time:this.state.selectYear,
+                section:this.state.departmentName
+            }
+            this.props.history.push('/exportData'); 
+        }
+
     }
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
         if (i === 0) {
-            this.setState({defaultTime:this.state.selectDate})
+            // this.setState({defaultTime:this.state.selectDate})
+            this.setState({departmentName:'全部'})
             this.getRecords(this.state.startTime,this.state.endTime);
         } else if (i === 1) {
-            this.setState({defaultTime:this.state.valueGroups.data});
+            this.setState({departmentName:'全部'});
+            this.setState({selectMonth:moment().format("YYYY-MM")});
             this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
             this.getMonth();
         }else{
-            this.setState({defaultTime:this.state.valueYears.data});
+            this.setState({departmentName:'全部'});
+            this.setState({selectYear:moment().format("YYYY")});
             this.getYarnInfomation(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
             this.getYear();
         }
     }
-    personalInformation(i) {
+    personalInformation(i) {            //个人打卡记录
         this.setState({personDetail:true});
         this.setState({departmentName:this.state.dataSource[i].name});
         this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid)
@@ -241,10 +265,10 @@ class AttendanceData extends Component {
             }
            
         }else if(this.state.currentIndex === 1) { //月期
-            this.setState({defaultTime:this.state.valueGroups.data})
+            this.setState({selectMonth:this.state.valueGroups.data})
             this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
         }else{                                    //年份
-            this.setState({defaultTime:this.state.valueYears.data})
+            this.setState({selectYear:this.state.valueYears.data})
             this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
         }
         this.hideMask();
@@ -262,10 +286,10 @@ class AttendanceData extends Component {
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
         
@@ -287,10 +311,10 @@ class AttendanceData extends Component {
         JSON.parse(result).data.forEach((ev,i) =>{
             dataResult.push({
                 userName:ev.userName,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
         this.setState({ abnormalRecord: dataResult || [] } );
@@ -309,10 +333,10 @@ class AttendanceData extends Component {
         JSON.parse(result).data.forEach((ev,i) =>{
             dataResult.push({
                 userName:ev.userName,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1]
+                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
+                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
+                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
+                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
         this.setState({ record: dataResult || [] } );
@@ -359,121 +383,249 @@ class AttendanceData extends Component {
         this.setState({ yearSource: list });
     }
     render() {
-        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,defaultTime,selectDate,valueYears,optionYears,abnormalRecord,personDetail,personData} = this.state;
+        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,selectYear,selectDate,valueYears,optionYears,abnormalRecord,personDetail,personData,selectMonth} = this.state;
         const timeSlot = ['日', '月', '年'];
         const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
             if (currentIndex === 0) {              //日
-                if(tabIndex === 0) {               //全部
-                    return (
-                        <div className={styles.detailsList}>
-                            {
-                                record.map((item, index) =>
-                                    <div className={styles.item} key={index}>
-                                        <div className={styles.name}>{item.userName}</div>
-                                        <div className={styles.work}>
-                                            <div className={styles.gotoWork}>上班: <span>{item.goState}</span></div>
-                                            <div className={styles.punchTime}>{item.goTime}</div>
+                if(tabIndex === 0) {              //全部
+                    if(record.length>0) {          //有数据
+                        return (
+                            <div className={styles.detailsList}>
+                                {
+                                    record.map((item, index) =>
+                                        <div className={styles.item} key={index}>
+                                            <div className={styles.name}>{item.userName}</div>
+                                            <div className={styles.work}>
+                                                <div className={styles.gotoWork}>上班: <span className={item.goState === '正常' ? styles.fontColor: styles.redColor}>{item.goState}</span></div>
+                                                <div className={styles.punchTime}>{item.goTime}</div>
+                                            </div>
+                                            <div className={styles.work}>
+                                                <div className={styles.gooffWork}>下班: <span className={ item.backState === '正常' ? styles.fontColor: styles.redColor}>{item.backState}</span></div>
+                                                <div className={styles.punchTime}>{item.backTime}</div>
+                                            </div>
                                         </div>
-                                        <div className={styles.work}>
-                                            <div className={styles.gooffWork}>下班: <span>{item.backState}</span></div>
-                                            <div className={styles.punchTime}>{item.backTime}</div>
-                                        </div>
+                                    )
+                                }
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectDate}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
                                     </div>
-                                )
-                            }
-                        </div>
-                    );
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                </div>
+                            </div>
+                        );
+                    }else{
+                        return (
+                            <div className={styles.blankBox}>
+                                 <div className={styles.box}>
+                                    <img className={styles.blankImg} src={data} alt='' />
+                                    <div className={styles.font}>暂无考勤记录</div>
+                                 </div>
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectDate}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
+                                    </div>
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                </div>
+                            </div>
+                        )
+                    }
+                    
                 }else{                           //异常
-                    return (
-                        <div className={styles.detailsList}>
-                            {
-                                abnormalRecord.map((item, index) =>
-                                    <div className={styles.item} key={index}>
-                                        <div className={styles.name}>{item.userName}</div>
-                                        <div className={styles.work}>
-                                            <div className={styles.gotoWork}>上班: <span>{item.goState}</span></div>
-                                            <div className={styles.punchTime}>{item.goTime}</div>
+                    if(abnormalRecord.length>0) {
+                        return (
+                            <div className={styles.detailsList}>
+                                {
+                                    abnormalRecord.map((item, index) =>
+                                        <div className={styles.item} key={index}>
+                                            <div className={styles.name}>{item.userName}</div>
+                                            <div className={styles.work}>
+                                                <div className={styles.gotoWork}>上班: <span className={item.goState === '正常' ? styles.fontColor: styles.redColor}>{item.goState}</span></div>
+                                                <div className={styles.punchTime}>{item.goTime}</div>
+                                            </div>
+                                            <div className={styles.work}>
+                                                <div className={styles.gooffWork}>下班: <span className={ item.backState === '正常' ? styles.fontColor: styles.redColor}>{item.backState}</span></div>
+                                                <div className={styles.punchTime}>{item.backTime}</div>
+                                            </div>
                                         </div>
-                                        <div className={styles.work}>
-                                            <div className={styles.gooffWork}>下班: <span>{item.backState}</span></div>
-                                            <div className={styles.punchTime}>{item.backTime}</div>
-                                        </div>
+                                    )
+                                }
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectDate}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
                                     </div>
-                                )
-                            }
-                        </div>
-                    );
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                </div>
+                            </div>
+                        );
+                    }else{
+                        return (
+                            <div className={styles.blankBox}>
+                                 <div className={styles.box}>
+                                    <img className={styles.blankImg} src={data} alt='' />
+                                    <div className={styles.font}>暂无考勤记录</div>
+                                 </div>
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectDate}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
+                                    </div>
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                 </div>
+                            </div>
+                        )
+                    }
+                    
                 }
                
             } else if (currentIndex === 1) {           //月期显示内容
                 if(personDetail === false) {           //展示统计
+                    if(dataSource.length>0) {
+                        return (
+                            <div className={styles.detailsList}>
+                                {
+                                    dataSource.map((item, index) =>
+                                        <div className={styles.item} key={index}>
+                                             <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                            <div className={styles.nameBox}>
+                                                <div className={styles.personName}>{item.name}</div>
+                                                <div onClick={ev => this.personalInformation(index)} className={styles.detail}>详情</div>
+                                            </div>
+                                            <div className={styles.totalDay}>
+                                                <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
+                                            </div>
+                                            <div className={styles.work}>
+                                                <div className={styles.gooffWork}>正常: <span className={styles.fontColor}>{item.normal}天</span></div>
+                                                <div className={styles.punchTime}>异常：<span className={styles.redColor}>{item.abnormal}天</span></div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
+                                    </div>
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                </div>
+                            </div>
+                        )   
+                    }else{
+                        return (
+                            <div className={styles.blankBox}>
+                                 <div className={styles.box}>
+                                    <img className={styles.blankImg} src={data} alt='' />
+                                    <div className={styles.font}>暂无考勤记录</div>
+                                 </div>
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
+                                    </div>
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                 </div>
+                            </div>
+                        )
+                    }    
+                }else{                                //展示个人
+                    if(personData.length>0) {
+                        return (
+                            <div className={styles.detailsList}>
+                            {
+                                personData.map((item,index) =>
+                                    <div className={styles.item} key={index}>
+                                        <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gotoWork}>上班:<span className={item.goState === '正常' ? styles.fontColor: styles.redColor}>{item.goState}</span></div>
+                                            <div className={styles.punchTime}>{item.goTime}</div>
+                                        </div>
+                                        <div className={styles.work}>
+                                            <div className={styles.gooffWork}>下班:<span className={ item.backState === '正常' ? styles.fontColor: styles.redColor}>{item.backState}</span></div>
+                                            <div className={styles.punchTime}>{item.backTime}</div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                             <div className={styles.footer}>
+                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                    <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                    <img className={styles.top} src={top} alt="" />
+                                </div>
+                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                            </div>
+                        </div>   
+                        )
+                    }else{
+                        return (
+                            <div className={styles.blankBox}>
+                                 <div className={styles.box}>
+                                    <img className={styles.blankImg} src={data} alt='' />
+                                    <div className={styles.font}>暂无考勤记录</div>
+                                 </div>
+                                 <div className={styles.footer}>
+                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                        <img className={styles.top} src={top} alt="" />
+                                    </div>
+                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                </div>
+                            </div>
+                        )
+                    }
+                }
+               
+            } else {                                   //年
+                if(yearSource.length>0) {
                     return (
                         <div className={styles.detailsList}>
                             {
-                                dataSource.map((item, index) =>
+                                yearSource.map((item, index) =>
                                     <div className={styles.item} key={index}>
-                                         <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
                                         <div className={styles.nameBox}>
                                             <div className={styles.personName}>{item.name}</div>
-                                            <div onClick={ev => this.personalInformation(index)} className={styles.detail}>详情</div>
+                                            <div onClick={ev => this.personalInformation(ev)} className={styles.detail}></div>
                                         </div>
                                         <div className={styles.totalDay}>
                                             <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
                                         </div>
                                         <div className={styles.work}>
-                                            <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>
-                                            <div className={styles.punchTime}>异常：<span>{item.abnormal}</span></div>
+                                            <div className={styles.gooffWork}>正常: <span className={styles.fontColor}>{item.normal}天</span></div>
+                                            <div className={styles.punchTime}>异常：<span className={styles.redColor}>{item.abnormal}天</span></div>
                                         </div>
                                     </div>
                                 )
                             }
-                        </div>
-                    )   
-                }else{                                //展示个人
-                    return (
-                        <div className={styles.detailsList}>
-                        {
-                            personData.map((item,index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gotoWork}>上班:<span>{item.goState}</span></div>
-                                        <div className={styles.punchTime}>{item.goTime}</div>
-                                    </div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gooffWork}>下班:<span>{item.backState}</span></div>
-                                        <div className={styles.punchTime}>{item.backTime}</div>
-                                    </div>
+                             <div className={styles.footer}>
+                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                    <span>{selectYear}</span>/<span>{departmentName}</span>
+                                    <img className={styles.top} src={top} alt="" />
                                 </div>
-                            )
-                        }
-                    </div>   
+                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                            </div>
+                        </div>
+                    );
+                }else{
+                    return (
+                        <div className={styles.blankBox}>
+                             <div className={styles.box}>
+                                <img className={styles.blankImg} src={data} alt='' />
+                                <div className={styles.font}>暂无考勤记录</div>
+                             </div>
+                             <div className={styles.footer}>
+                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                    <span>{selectYear}</span>/<span>{departmentName}</span>
+                                    <img className={styles.top} src={top} alt="" />
+                                </div>
+                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                            </div>
+                        </div>
                     )
                 }
                
-            } else {                                   //年
-                return (
-                    <div className={styles.detailsList}>
-                        {
-                            yearSource.map((item, index) =>
-                                <div className={styles.item} key={index}>
-                                    <div className={styles.nameBox}>
-                                        <div className={styles.personName}>{item.name}</div>
-                                        <div onClick={ev => this.personalInformation(ev)} className={styles.detail}>详情</div>
-                                    </div>
-                                    <div className={styles.totalDay}>
-                                        <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
-                                    </div>
-                                    <div className={styles.work}>
-                                        <div className={styles.gooffWork}>正常: <span>{item.normal}</span></div>
-                                        <div className={styles.punchTime}>异常：<span>{item.abnormal}</span></div>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    </div>
-                );
             }
         }
         return (
@@ -492,13 +644,13 @@ class AttendanceData extends Component {
                     }
                 </div>
                 <DateChange></DateChange>
-                <div className={styles.footer}>
+                {/* <div className={styles.footer}>
                     <div className={styles.brief} onClick={ev => this.showMask(ev)}>
                         <span>{currentIndex ===0?selectDate: defaultTime}</span>/<span>{departmentName}</span>
                         <img className={styles.top} src={top} alt="" />
                     </div>
                     <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                </div>
+                </div> */}
                 <div className={maskToggle === 0 ? styles.hideMask : styles.mask}>
                     <div className={styles.maskBox}>
                         <div className={styles.operation}>

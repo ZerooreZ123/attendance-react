@@ -16,6 +16,7 @@
     border-bottom:2px solid #ddd;
 }
 .inputBox{
+    outline:none;
     border:0;
     width:80%;
 }
