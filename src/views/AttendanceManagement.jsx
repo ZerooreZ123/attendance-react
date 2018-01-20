@@ -34,6 +34,8 @@ class AttendanceManagement extends Component {
         super();
         window.temp = {};
         this.state = {
+            iconState1:false,      //上小三角状态
+            iconState2:false,      //下小三角状态
             value: moment(),
             status: [],            //勾选状态
             data: [],              //初始数据
@@ -46,13 +48,22 @@ class AttendanceManagement extends Component {
         document.querySelector('title').innerText = '考勤管理';
         this.getAttendanceManagement();
     }
+    addZero(s) {                     //时间格式转化
+        return s < 10 ? '0' + s: s;
+    }
+    clickUp() {
+        this.setState({iconState1:true})
+    }
+    clickDown() {
+        this.setState({iconState2:true})
+    }
     handleValueChange(time, s){
         if (s === 0) {
             this.setState({now: time});
-            console.log(this.state.now)
+            this.setState({iconState1:false})
         } else {
             this.setState({now1: time});
-            console.log(this.state.now1)
+            this.setState({iconState2:false})
         }
     }
     checkBtn(i) {               //勾选或取消
@@ -88,8 +99,8 @@ class AttendanceManagement extends Component {
     async attendanceManagement() {        //公司考勤时间设置
         var d = new Date(this.state.now);       
         var c = new Date(this.state.now1) 
-        var morTime=d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
-        var aftTime=c.getHours() + ':' + c.getMinutes() + ':' + d.getSeconds();
+        var morTime=this.addZero(d.getHours()) + ':' + this.addZero(d.getMinutes()) + ':' + this.addZero(d.getSeconds());
+        var aftTime=this.addZero(c.getHours()) + ':' + this.addZero(c.getMinutes()) + ':' + this.addZero(d.getSeconds());
         
         var list = []
         this.state.status.forEach((ev,index) =>{
@@ -112,7 +123,7 @@ class AttendanceManagement extends Component {
         }
     }
     render() {
-        const { status } = this.state;
+        const { status,iconState1,iconState2} = this.state;
         const format = 'H:mm';
 
         const week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
@@ -123,7 +134,7 @@ class AttendanceManagement extends Component {
                         <div className={styles.clock}>打卡时间</div>
                         <div className={styles.time}>
                             <div>上午</div>
-                            <div>
+                            <div onClick={ev => this.clickUp(ev)}>
                                 <TimePicker
                                     showSecond={false}
                                     value={this.state.now}
@@ -131,13 +142,13 @@ class AttendanceManagement extends Component {
                                     format={format}
                                     use24Hours
                                 />
-                                <Icon checked={false} />
+                                <Icon checked={iconState1} />
                             </div>
 
                         </div>
                         <div className={styles.time}>
                             <div>下午</div>
-                            <div>
+                            <div onClick={ev => this.clickDown(ev)}>
                                 <TimePicker
                                     showSecond={false}
                                     value={this.state.now1}
@@ -145,7 +156,7 @@ class AttendanceManagement extends Component {
                                     format={format}
                                     use24Hours
                                 />
-                                <Icon checked={false} />
+                                <Icon checked={iconState2} />
                             </div>
                         </div>
                     </div>

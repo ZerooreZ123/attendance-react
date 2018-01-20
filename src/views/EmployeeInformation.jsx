@@ -58,6 +58,8 @@ class EmployeeInformation extends Component{
             inputValue:'',              //输入框文字
             searchState:false,          //搜索状态
             searchDate:[],              //搜索数据
+            iconState1:false,           //图标状态
+            iconState2:false             //图标状态
         }
     }
     componentDidMount() {
@@ -70,6 +72,7 @@ class EmployeeInformation extends Component{
     }
     showMask() {
         this.setState({ mask: true });
+        this.setState({iconState1:true});
     }
     jumpSearch() {
         this.props.history.push('/search')
@@ -98,19 +101,13 @@ class EmployeeInformation extends Component{
 
         list.forEach(el=>{
             el.staff.forEach(item =>{
-                if(ev.target.value && item.name.match(ev.target.value)){
+                if(ev.target.value && (item.name.match(ev.target.value)) || ev.target.value && item.phone.match(ev.target.value)){
                     this.setState({searchState:true});
                     dataResult.push({
-                        name:item.name || ''
+                        name:item.name || '',
+                        phone:item.phone || ''
                     })
                 }
-                // else if(ev.target.value && item.phone.match(ev.target.value)){
-                //     dataResult.push({
-                //         phone:item.phone || ''
-                //     })
-                // }else{
-                //     return []
-                // }   
             })
             if(!ev.target.value) {
                 this.setState({searchState:false});
@@ -169,6 +166,7 @@ class EmployeeInformation extends Component{
                     loginName:item.loginName
                 })
             )
+            this.setState({iconState1:false});
             this.setState({departmentPart:userList});
             this.setState({exhibition:1});
         }else{
@@ -176,7 +174,7 @@ class EmployeeInformation extends Component{
         }
     }
     render() {
-        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue,searchState,searchDate} = this.state;
+        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue,searchState,searchDate,iconState1,iconState2} = this.state;
         const Content = props =>{              //展示员工
             if(exhibition === 0) {             //全部
             return (
@@ -261,7 +259,7 @@ class EmployeeInformation extends Component{
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <Content></Content>
-                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={true}/></div>
+                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={iconState1}/></div>
                     <Mask></Mask>
                 </div>
                 <SearchList visible={searchState} parent={this} allPerson={searchDate}/>

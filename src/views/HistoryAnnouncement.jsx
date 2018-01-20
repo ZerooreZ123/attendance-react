@@ -9,40 +9,22 @@ import dataImg from '../asset/statePrompt/data.png';
 
 const Module =({imgHave,data,parent}) =>{
     if(data.length>0) {
-        if(imgHave){
-            return(
-                <div className={styles.content}>
-                    {
-                        data.map((ev,index) =>
-                            <div className={styles.item} key={index} onClick={ev =>parent.announcementDetail(index)}>
-                                <div className={styles.itemText}>
-                                    <div className={styles.caption}>{ev.title}</div>
-                                    <div className={styles.itemContent}>{ev.content}</div>
-                                    <div className={styles.itemDate}>{ev.createDate}</div>
-                                </div>
-                                <img className={styles.itemImg}src={ev.image} alt=""/>
+        return(
+            <div className={styles.content}>
+                {
+                    data.map((ev,index) =>
+                        <div className={styles.item} key={index} onClick={ev =>parent.announcementDetail(index)}>
+                            <div className={styles.itemText}>
+                                <div className={styles.caption}>{ev.title}</div>
+                                <div className={styles.itemContent}>{ev.content}</div>
+                                <div className={styles.itemDate}>{ev.createDate}</div>
                             </div>
-                        )
-                    }
-                </div>
-            )   
-        }else{
-            return(
-                <div className={styles.content}>
-                    {
-                        data.map((ev,index) =>
-                            <div className={styles.item} key={index}  onClick={ev =>parent.announcementDetail()}>
-                                <div>
-                                    <div className={styles.caption}>{ev.title}</div>
-                                    <div className={styles.itemContent}>{ev.content}</div>
-                                    <div className={styles.itemDate}>{ev.createDate}</div>
-                                </div>
-                            </div>
-                        )
-                    }
-                </div>
-            )   
-        }
+                            <img className={ ev.hasOwnProperty('image')?styles.itemImg:styles.hideImg}src={ev.image} alt=""/>
+                        </div>
+                    )
+                }
+            </div>
+        )   
     }else{
         return (
             <div className={styles.blankBox}>

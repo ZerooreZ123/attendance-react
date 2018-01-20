@@ -63,26 +63,19 @@ class Search extends Component {
 
         list.forEach(el=>{
             el.staff.forEach(item =>{
-                if(ev.target.value && item.name.match(ev.target.value)){
+                if(ev.target.value && (item.name.match(ev.target.value)) || ev.target.value && item.phone.match(ev.target.value)){
                     this.setState({searchState:true});
                     dataResult.push({
-                        name:item.name || ''
+                        name:item.name || '',
+                        phone:item.phone || ''
                     })
                 }
-                // else if(ev.target.value && item.phone.match(ev.target.value)){
-                //     dataResult.push({
-                //         phone:item.phone || ''
-                //     })
-                // }else{
-                //     return []
-                // }   
             })
             if(!ev.target.value) {
                 this.setState({searchState:false});
             }
         })
         this.setState({searchDate:dataResult || []});
-        console.log(this.state.searchDate);
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
         const result = await XHR.post(API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});

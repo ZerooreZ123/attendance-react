@@ -10,6 +10,7 @@ class PersonalRegister extends Component {
   constructor() {
     super();
     this.state = {
+        sendState:'发送验证码',   //发送状态
         inputText:'',            //输入的手机号
         inputValue:'',           //输入的验证码
         code:''                  //获得的验证码
@@ -28,31 +29,40 @@ getCode(ev) {
     this.setState({inputValue:ev.target.value});
 }  
 async sendSms() {                  //获取验证码
-    const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
-    this.setState({code:JSON.parse(result).data});
-    window.sessionStorage.setItem("phone",this.state.inputText); 
-
-    // var countdown=60;
-    // if (countdown === 0) {  
-    //     val.removeAttribute("disabled");  
-    //     val.value="获取验证码";  
-    //     countdown = 60;  
-    //     return false;  
-    // } else {  
-    //     val.setAttribute("disabled", true);  
-    //     val.value="重新发送(" + countdown + ")";  
-    //     countdown--;  
-    // }    
+    if(!(/^1[34578]\d{9}$/.test(this.state.inputText))){
+        alert("手机号码格式不正确!");
+    }else{
+        const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
+        if(JSON.parse(result).success === 'T') {
+            var countdown = 60;
+            this.setState({code:JSON.parse(result).data});
+           
+            var timeShow = setInterval(() => {
+                countdown--;
+                if( countdown<1){
+                    this.setState({sendState:'重新发送'})
+                    clearInterval(timeShow);
+                }else{
+                    this.setState({sendState:countdown + 's'});
+                }
+            },1000)
+        }
+        window.sessionStorage.setItem("phone",this.state.inputText); 
+    }
 }
 goToNextStep() {
-   if(this.state.inputValue === this.state.code) {
-       this.props.history.push('/inviteCodeDetail')
+   if((this.state.inputText !== '') && (this.state.inputValue !== '')) {
+        if(this.state.inputValue === this.state.code) {
+            this.props.history.push('/inviteCodeDetail')
+        }else{
+            alert("请输入正确的验证码")
+        }
    }else{
-       alert("请输入正确的验证码")
+       alert("请检查手机号或者验证码是否输入")
    }
 }
 render() {
-    const {inputValue,inputText} = this.state;
+    const {inputValue,inputText,sendState} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -65,7 +75,7 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputValue}/>
-          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value=" 获取验证码" />
+          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value={sendState} />
         </div>
 
         <div className={styles.next}>

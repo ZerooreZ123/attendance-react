@@ -24,8 +24,8 @@ class ReleaseAnnouncement extends Component{
             mask:false,               //日历开始遮罩
             imgBox:[],                //图片盒子
             imgSrcConcat:[],          //拼接字符串
-            announcementTitle:window.localStorage.getItem('title') || '',
-            announcementContent:window.localStorage.getItem('content') || ''
+            announcementTitle:window.sessionStorage.getItem('title') || '',
+            announcementContent:window.sessionStorage.getItem('content') || ''
         };
     }
     componentDidMount() {
@@ -37,8 +37,8 @@ class ReleaseAnnouncement extends Component{
     cancelRelease() {
         let mes = "是否保存草稿";
         if(window.confirm(mes) === true) {
-            window.localStorage.setItem('title',this.state.announcementTitle);
-            window.localStorage.setItem('content',this.state.announcementContent);
+            window.sessionStorage.setItem('title',this.state.announcementTitle);
+            window.sessionStorage.setItem('content',this.state.announcementContent);
            window.history.go(-1);
         }else{
             window.history.go(-1);
@@ -77,6 +77,7 @@ class ReleaseAnnouncement extends Component{
         if(window.confirm(msg) === true) {
             this.state.imgBox.splice(i,1);
             this.setState({imgBox:this.state.imgBox});
+            console.log(this.state.imgBox);
         }else{
             return false
         }
@@ -101,7 +102,7 @@ class ReleaseAnnouncement extends Component{
     getContent(ev) {                           //获取内容
         this.setState({announcementContent: ev.target.value});
     }
-    async upload(stringBase64) {  
+    async upload(stringBase64) {               //选择图片
         const result = await XHR.post(API.upload,{imgStr:stringBase64});
         if(JSON.parse(result).success === 'T') {
             const imgSrc = server + JSON.parse(result).data.slice(1);

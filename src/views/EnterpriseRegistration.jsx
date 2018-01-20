@@ -9,10 +9,12 @@ class EnterpriseRegistration extends Component {
   constructor() {
     super();
     this.state = {
+        sendState:'发送验证码',   //发送状态
         inputNum:'',              //考勤机编号
         inputCode:'',             //输入验证码
         inputPhone:'',            //手机号
         code:'',                  //返回验证码
+
     }
 }
 componentDidMount() {
@@ -36,20 +38,25 @@ goToNextStep() {          //下一步
     }
 }
 async sendSms() {                  //获取验证码
-   const result = await XHR.post(API.sendSms,{phone:"18617015565"});
-   this.setState({code:JSON.parse(result).data});
-
-    // var countdown=60;
-    // if (countdown === 0) {  
-    //     val.removeAttribute("disabled");  
-    //     val.value="获取验证码";  
-    //     countdown = 60;  
-    //     return false;  
-    // } else {  
-    //     val.setAttribute("disabled", true);  
-    //     val.value="重新发送(" + countdown + ")";  
-    //     countdown--;  
-    // }    
+    if(!(/^1[34578]\d{9}$/.test(this.state.inputPhone))){
+        alert("手机号码格式不正确!");
+    }else{
+        const result = await XHR.post(API.sendSms,{phone:this.state.inputPhone});
+        if(JSON.parse(result).success === 'T') {
+            var countdown = 60;
+            this.setState({code:JSON.parse(result).data});
+           
+            var timeShow = setInterval(() => {
+                countdown--;
+                if( countdown<1){
+                    this.setState({sendState:'重新发送'})
+                    clearInterval(timeShow);
+                }else{
+                    this.setState({sendState:countdown + 's'});
+                }
+            },1000)
+        }
+    }
 }
 
 next() {
@@ -62,7 +69,7 @@ next() {
     }
 }
 render() {
-    const {inputNum,inputCode,inputPhone} = this.state;
+    const {inputNum,inputCode,inputPhone,sendState} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -76,11 +83,11 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputCode}/>
-          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value=" 获取验证码"/>
+          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value={sendState}/>
         </div>
 
         <div className={styles.next}>
-          <div className = {(inputNum && inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.next(ev)}>下一步</div>
+          <div className = {(inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.next(ev)}>下一步</div>
         </div>
       </div>
     );
