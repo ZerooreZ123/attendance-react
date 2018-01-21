@@ -26,7 +26,7 @@ const SearchList =({visible,parent,allPerson}) =>{
             <div className={styles.personnel}>
                 {
                     allPerson.map((item,index) =>
-                    <div onClick={ev =>parent.personalInformation(ev)} className={styles.single} key={index}>
+                    <div onClick={ev =>parent.searchPersonalInformation(index)} className={styles.single} key={index}>
                         <div className={styles.information}>
                             <div className={styles.name}>{item.name}</div>
                             <div className={styles.phone}>{item.phone}</div>
@@ -91,7 +91,22 @@ class EmployeeInformation extends Component{
         })
         this.props.history.push('/personalInformation')
     }
-    goPersonalInformation() {
+    searchPersonalInformation(i) {
+        window.Person = {
+            userid:this.state.searchDate[i].userid,
+            phone:this.state.searchDate[i].phone,
+            name:this.state.searchDate[i].name,
+            section:this.state.searchDate[i].officeName
+        }
+        this.props.history.push('/personalInformation')
+    }
+    goPersonalInformation(i) {
+        window.Person = {
+            userid:this.state.departmentPart[i].userid,
+            phone:this.state.departmentPart[i].phone,
+            name:this.state.departmentPart[i].name,
+            section:this.state.departmentPart[i].officeName
+        }
         this.props.history.push('/personalInformation')
     }
     getInputValue(ev) {
@@ -105,7 +120,9 @@ class EmployeeInformation extends Component{
                     this.setState({searchState:true});
                     dataResult.push({
                         name:item.name || '',
-                        phone:item.phone || ''
+                        phone:item.phone || '',
+                        officeName:item.officeName || '',
+                        userid:item.id || ''
                     })
                 }
             })
@@ -162,8 +179,10 @@ class EmployeeInformation extends Component{
             const userList = [];
             dataSource.map((item,index) =>
                 userList.push({
-                    name:item.name,
-                    loginName:item.loginName
+                    name:item.name || '',
+                    phone:item.phone || '',
+                    officeName:item.officeName || '',
+                    userid:item.id || ''
                 })
             )
             this.setState({iconState1:false});

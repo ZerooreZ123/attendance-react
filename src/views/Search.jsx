@@ -15,7 +15,7 @@ const SearchList =({visible,parent,allPerson}) =>{
             <div className={styles.personnel}>
                 {
                     allPerson.map((item,index) =>
-                    <div  onClick={ev =>parent.personalInformation(ev)} className={styles.single} key={index}>
+                    <div  onClick={ev =>parent.personalInformation(index)} className={styles.single} key={index}>
                         <div className={styles.information}>
                             <div className={styles.name}>{item.name}</div>
                             <div className={styles.phone}>{item.phone}</div>
@@ -31,6 +31,15 @@ const SearchList =({visible,parent,allPerson}) =>{
     }
 }
 
+const DeleteImg =({visible,parent}) =>{
+    if(visible) {
+        return (
+            <img onClick={ev =>parent.delete(ev)} className={styles.cleanButton}src={cleanButton} alt=""/> 
+        )
+    }else{
+        return null
+    }
+}
 class Search extends Component {
     constructor() {
         super();
@@ -39,7 +48,7 @@ class Search extends Component {
             searchState:false,           //搜索状态
             inputValue:'',               //搜索关键字
             departmentStaff:[],          //部门及对应部门人员
-            searchHistory:[]
+            searchHistory:[]             //搜索历史
         }
     }
     componentDidMount() {
@@ -50,24 +59,37 @@ class Search extends Component {
     empty() {
         this.setState({searchHistory:[]});
     }
-    personalInformation() {
+    delete() {
+        this.setState({inputValue:''});
+        this.setState({searchState:false});
+    }
+    personalInformation(i) {
+        window.localStorage.setItem('searchName',this.state.inputValue);
+        window.Person = {
+            userid:this.state.searchDate[i].userid,
+            phone:this.state.searchDate[i].phone,
+            name:this.state.searchDate[i].name,
+            section:this.state.searchDate[i].officeName
+        }
+
+        this.state.searchHistory.push(this.state.inputValue);
+        this.setState({searchHistory:this.state.searchHistory})
+        
         this.props.history.push('/personalInformation')
     }
     getInputValue(ev) {
         this.setState({inputValue:ev.target.value});
         const list = this.state.departmentStaff;
         const dataResult = [];
-        const historyList = [];
-        historyList.push(ev.target.value)
-        this.setState({searchHistory:historyList})
-
         list.forEach(el=>{
             el.staff.forEach(item =>{
                 if(ev.target.value && (item.name.match(ev.target.value)) || ev.target.value && item.phone.match(ev.target.value)){
                     this.setState({searchState:true});
                     dataResult.push({
                         name:item.name || '',
-                        phone:item.phone || ''
+                        phone:item.phone || '',
+                        officeName:item.officeName || '',
+                        userid:item.id || ''
                     })
                 }
             })
@@ -96,7 +118,8 @@ class Search extends Component {
                 <div className={styles.header}>
                     <div className={styles.searchBox}>
                         <input onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
-                        <img className={styles.cleanButton}src={cleanButton} alt=""/>
+                        {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
+                        <DeleteImg visible={inputValue} parent={this}/>
                     </div>
                     <div className={styles.cancel}>取消</div>
                 </div>

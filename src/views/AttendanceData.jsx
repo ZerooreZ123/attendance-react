@@ -14,6 +14,26 @@ import top from '../asset/manager/triangle-top.png';
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
+
+const NoData =({parent,selectDate,departmentName}) =>{
+    return (
+        <div className={styles.blankBox}>
+             <div className={styles.box}>
+                <img className={styles.blankImg} src={data} alt='' />
+                <div className={styles.font}>暂无考勤记录</div>
+             </div>
+             <div className={styles.footer}>
+                <div className={styles.brief} onClick={ev => parent.showMask(ev)}>
+                    <span>{selectDate}</span>/<span>{departmentName}</span>
+                    <img className={styles.top} src={top} alt="" />
+                </div>
+                <div onClick={ev => parent.export(ev)} className={styles.exportData}>导出数据</div>
+             </div>
+        </div>
+    )
+}
+
+
 const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, valueGroups, Value, dateIndex,optionTeams,valueTeams}) => {   //部门列表组件
     if (tabIndex === 1) {
         return (
@@ -174,19 +194,34 @@ class AttendanceData extends Component {
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
         if (i === 0) {
-            // this.setState({defaultTime:this.state.selectDate})
+            this.setState({selectDate:this.state.startTime})
             this.setState({departmentName:'全部'})
-            this.getRecords(this.state.startTime,this.state.endTime);
+            if(this.state.tabIndex === 0) {
+                this.getRecords(this.state.startTime,this.state.endTime);
+            }else{
+                this.Abnormal(this.state.startTime,this.state.endTime);
+            }
         } else if (i === 1) {
             this.setState({departmentName:'全部'});
             this.setState({selectMonth:moment().format("YYYY-MM")});
-            this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
-            this.getMonth();
+            if(this.state.tabIndex === 0) {
+                this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
+                this.getMonth();
+            }else{
+                this.Abnormal(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
+                this.getMonth();
+            }     
         }else{
             this.setState({departmentName:'全部'});
             this.setState({selectYear:moment().format("YYYY")});
-            this.getYarnInfomation(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
-            this.getYear();
+            if(this.state.tabIndex === 0){
+                this.getYarnInfomation(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+                this.getYear();
+            }else{
+                this.Abnormal(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+                this.getYear(); 
+            }
+            
         }
     }
     personalInformation(i) {            //个人打卡记录
@@ -214,11 +249,25 @@ class AttendanceData extends Component {
     showAll() {                      //展示所有
         this.setState({ showState: 0 });
         this.setState({ tabIndex: 0 });
+        if(this.state.currentIndex === 0){
+            this.getRecords(this.state.selectDate,this.state.selectDate);
+        }else if(this.state.currentIndex === 1) {
+            this.getRecords(moment().startOf('month').format("YYYY-MM"),moment().endOf('month').format("YYYY-MM"));
+        }else{
+            this.getRecords(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+        }
     }
     showAbnormal() {                 //展示异常
         this.setState({ showState: 1 });
         this.setState({ tabIndex: 1 });
-        this.Abnormal(this.state.startTime,this.state.endTime);
+        if(this.state.currentIndex === 0) {
+            this.Abnormal(this.state.selectDate,this.state.selectDate);
+        }else if(this.state.currentIndex === 1){
+            this.getRecords(moment().startOf('month').format("YYYY-MM"),moment().endOf('month').format("YYYY-MM"));
+        }else{
+            this.getRecords(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+        }
+        
     }
     // showNotAbsenteeism() {            //展示全勤
     //     this.setState({ showState: 2 });
@@ -362,7 +411,7 @@ class AttendanceData extends Component {
         })
         this.setState({ dataSource: list });
     }
-    async getYarnInfomation(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
+    async getYarnInfomation(startTime,endTime,officeId) {     //获取某年全部员工考勤记录统计
         const result = await XHR.post(API.getStatisticalInfo, {
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate: startTime,
@@ -417,20 +466,8 @@ class AttendanceData extends Component {
                             </div>
                         );
                     }else{
-                        return (
-                            <div className={styles.blankBox}>
-                                 <div className={styles.box}>
-                                    <img className={styles.blankImg} src={data} alt='' />
-                                    <div className={styles.font}>暂无考勤记录</div>
-                                 </div>
-                                 <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectDate}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={top} alt="" />
-                                    </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                                </div>
-                            </div>
+                        return(
+                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName}/>
                         )
                     }
                     
@@ -463,20 +500,8 @@ class AttendanceData extends Component {
                             </div>
                         );
                     }else{
-                        return (
-                            <div className={styles.blankBox}>
-                                 <div className={styles.box}>
-                                    <img className={styles.blankImg} src={data} alt='' />
-                                    <div className={styles.font}>暂无考勤记录</div>
-                                 </div>
-                                 <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectDate}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={top} alt="" />
-                                    </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                                 </div>
-                            </div>
+                        return(
+                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName}/>
                         )
                     }
                     
@@ -515,20 +540,8 @@ class AttendanceData extends Component {
                             </div>
                         )   
                     }else{
-                        return (
-                            <div className={styles.blankBox}>
-                                 <div className={styles.box}>
-                                    <img className={styles.blankImg} src={data} alt='' />
-                                    <div className={styles.font}>暂无考勤记录</div>
-                                 </div>
-                                 <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={top} alt="" />
-                                    </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                                 </div>
-                            </div>
+                        return(
+                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
                         )
                     }    
                 }else{                                //展示个人
@@ -560,20 +573,8 @@ class AttendanceData extends Component {
                         </div>   
                         )
                     }else{
-                        return (
-                            <div className={styles.blankBox}>
-                                 <div className={styles.box}>
-                                    <img className={styles.blankImg} src={data} alt='' />
-                                    <div className={styles.font}>暂无考勤记录</div>
-                                 </div>
-                                 <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={top} alt="" />
-                                    </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                                </div>
-                            </div>
+                        return(
+                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
                         )
                     }
                 }
@@ -609,20 +610,8 @@ class AttendanceData extends Component {
                         </div>
                     );
                 }else{
-                    return (
-                        <div className={styles.blankBox}>
-                             <div className={styles.box}>
-                                <img className={styles.blankImg} src={data} alt='' />
-                                <div className={styles.font}>暂无考勤记录</div>
-                             </div>
-                             <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                    <span>{selectYear}</span>/<span>{departmentName}</span>
-                                    <img className={styles.top} src={top} alt="" />
-                                </div>
-                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                            </div>
-                        </div>
+                    return(
+                        <NoData parent={this} selectDate={selectYear} departmentName={departmentName}/>
                     )
                 }
                

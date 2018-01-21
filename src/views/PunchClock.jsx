@@ -59,10 +59,7 @@ class PunchClock extends Component {
           h:'',                    //时
           m:'',                    //分
           s:'',                    //秒
-          month:'',                //月
-          day:'',                  //日
-          weekday:'',              //周几
-          prompt:1,                //考勤机状态
+          prompt:0,                //考勤机状态
           noticeState:true,        //通知显示
           // mask:false,              //排行榜遮罩
           // dataList:[],             //排行榜数据
@@ -103,31 +100,21 @@ class PunchClock extends Component {
       this.setState({h:data.getHours()<10?'0'+data.getHours():data.getHours()});
       this.setState({m:data.getMinutes()<10?'0'+data.getMinutes():data.getMinutes()});
       this.setState({s:data.getSeconds()<10?'0'+data.getSeconds():data.getSeconds()});
-      this.setState({month:data.getMonth()+1});
-      this.setState({day:data.getDate()});
-      switch(data.getDay()) {
-        case 0:
-            this.setState({weekday:'日'});
-            break;
-        case 1:
-            this.setState({weekday:'一'});
-            break;
-        case 2:
-            this.setState({weekday:'二'});
-            break;
-        case 3:
-            this.setState({weekday:'三'});
-            break;
-        case 4:
-            this.setState({weekday:'四'});
-            break;
-        case 5:
-            this.setState({weekday:'五'});
-            break;
-        default:
-            this.setState({week:'六'});
-      }
-      
+    }
+    getIbeacon() {                   //查找周围的ibeacon设备
+      window.wx.startSearchBeacons({
+        ticket:"",  //摇周边的业务ticket, 系统自动添加在摇出来的页面链接后面
+        complete:function(argv){
+        //开启查找完成后的回调函数
+        }
+        });
+    }
+    getNetwork() {                  //获取网络状态
+      window.wx.getNetworkType({
+        success: function (res) {
+        var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+        }
+        });
     }
     async clockIn() {                //员工打卡
       const result = await XHR.post(API.clockIn,{loginName:this.props.match.params.loginName});
@@ -147,7 +134,7 @@ class PunchClock extends Component {
     //   this.setState({normalDay:JSON.parse(result).data});
     // }
     render() {
-      const {prompt,h,m,s,noticeState,normalDay} = this.state;
+      const {prompt,h,m,s,noticeState} = this.state;
       const Notice = props => {
         if(noticeState){
           return(
