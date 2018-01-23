@@ -1,11 +1,12 @@
 
-// const server = 'http://192.168.1.40:8080';
-const server = 'http://192.168.31.108:8080';
+// const server = 'http://192.168.1.40:8080';                      //company 
+// const server = 'http://192.168.31.108:8080';                 //home
+const server = 'http://www.junl.cn';                            //server
 
 
-// const admin ="http://www.junl.cn/AM/f/yk/api/"
-const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';
-// const admin = 'http://192.168.1.40:8080/AM/f/yk/api/';
+const admin ="http://www.junl.cn/AM/f/yk/api/"                  //serve   
+// const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';     //home
+// const admin = 'http://192.168.1.40:8080/AM/f/yk/api/';          //company
 const API = {
   register: admin + 'register.do',                                 //登录注册
   update: admin + 'update.do',                                     //更新用户信息和公司信息
@@ -31,7 +32,8 @@ const API = {
   getOfficeUserList: admin + 'getOfficeUserList.do',               //公司每个部门员工
   sendSms: admin + 'sendSms.do',                                   //发送验证码
   rankingList: admin + 'rankingList.do',                           //排行榜
-  getTime: admin + 'getTime.do'                                    //连续正常打卡天数
+  getTime: admin + 'getTime.do',                                   //连续正常打卡天数
+  getSignature: admin + 'getSignature.do'
 };
   
 export { admin ,server

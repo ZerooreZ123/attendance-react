@@ -43,7 +43,7 @@ class RevisionDepartment extends Component{
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '修改部门';
+        // document.querySelector('title').innerText = '修改部门';
         this.getOfficeList();
        
     }
@@ -57,9 +57,12 @@ class RevisionDepartment extends Component{
     }
     cancelBtn(){                                       //取消修改
         this.setState({edit:false});
+        this.setState({departmentIndex:''})
+        this.setState({departmentName:window.temp.officeName});
     }
     confirmBtn() {                                     //确认修改
         this.setState({edit:false})
+        this.setState({departmentIndex:''})
         this.update();
     }
     async getOfficeList() {                           //部门列表
@@ -91,7 +94,7 @@ class RevisionDepartment extends Component{
             <div className={styles.container}>
                 <div className={styles.information}>
                     <div className={styles.name}>{window.temp.name}</div>
-                    <div className={styles.department}>{departmentName}</div>
+                    <div className={ this.state.departmentIndex === ''?styles.department :styles.departmentSlect}>{departmentName}</div>
                 </div>
                 <Revision visible={edit} section={section} departmentIndex={departmentIndex} parent={this}></Revision>
             </div>

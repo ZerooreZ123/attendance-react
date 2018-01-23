@@ -71,7 +71,7 @@ class CardReminding extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '打卡提醒';
+        // document.querySelector('title').innerText = '打卡提醒';
         this.getUserRemind();
     }
     showTimeList() {                       //显示1
@@ -130,7 +130,7 @@ class CardReminding extends Component {
         setTimeout(()=>this.clockInRemind(), 0);
     }
     async clockInRemind() {              //设置提醒设置
-        console.log(this.state.upTime,this.state.upSwitch,this.state.downTime,this.state.downSwitch)
+        // console.log(this.state.upTime,this.state.upSwitch,this.state.downTime,this.state.downSwitch)
         const result = await XHR.post(API.clockInRemind,{
             loginName:window.sessionStorage.getItem('loginName'),
             upTime:this.state.upTime,
@@ -139,6 +139,12 @@ class CardReminding extends Component {
             downSwitch:this.state.downSwitch,
             id:this.state.dataSource.id
         });
+        if(JSON.parse(result).success === 'T') {
+            alert("修改成功")
+        }else{
+            alert(JSON.parse(result).msg);
+        }
+        
     }
     render() {
         const {upTime,upSwitch,downTime,downSwitch,timeList,timeSlot,iconDown,iconTop} = this.state;

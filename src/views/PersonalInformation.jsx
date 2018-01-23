@@ -21,9 +21,10 @@ class PersonalInformation extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '个人考勤记录';
+        // document.querySelector('title').innerText = '个人考勤记录';
         this.showAll();
         this.getTime();
+        console.log(window.sessionStorage.getItem('loginN'));
     }
     editData() {                     //跳转至修改资料
         this.props.history.push('/editProfile');

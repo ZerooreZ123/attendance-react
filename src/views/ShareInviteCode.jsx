@@ -13,7 +13,7 @@ class ShareInviteCode extends Component {
     }
   } 
   componentDidMount() {
-    document.querySelector('title').innerText = '分享邀请码';
+    // document.querySelector('title').innerText = '分享邀请码';
     this.getCompany();
   }
   goToManagement() {

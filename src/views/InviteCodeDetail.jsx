@@ -45,11 +45,10 @@ class InviteCodeDetail extends Component {
         departmentIndex:'',         //部门的索引值
         mask:false,                 //遮罩层
         section:[],                 //部门列表
-        status:true
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '填写资料';
+    // document.querySelector('title').innerText = '填写资料';
     this.getOfficeList();
 }
 hideMask() {
@@ -101,7 +100,7 @@ async getOfficeList() {                     //获取部门列表
   this.setState({section:sectionList || []});   
 }
 render() {
-    const {status,mask,section,departmentIndex,InputValue,InputText} = this.state;
+    const {mask,section,departmentIndex,InputValue,InputText} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>

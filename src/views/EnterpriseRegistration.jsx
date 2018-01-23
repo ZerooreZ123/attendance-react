@@ -18,7 +18,7 @@ class EnterpriseRegistration extends Component {
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '企业注册';
+    // document.querySelector('title').innerText = '企业注册';
     console.log(this.props.match.params.serialNumber)
 }
 getNum(ev) {

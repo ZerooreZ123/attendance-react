@@ -17,7 +17,7 @@ class PersonalRegister extends Component {
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '注册';
+    // document.querySelector('title').innerText = '注册';
     console.log(this.props.match.params.companyid)
     window.sessionStorage.setItem('comID',this.props.match.params.companyid);
     window.sessionStorage.setItem('ID',this.props.match.params.loginName);

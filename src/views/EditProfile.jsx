@@ -23,15 +23,15 @@ class EditProfile extends Component{
         super();
         this.state={
             section:[],                 //部门列表
-            departmentName:'智慧园区',   //默认部门
+            departmentName:window.Person.section,   //默认部门
             departmentIndex:'',         //部门的索引值
             departmentId:'',            //部门Id
             mask:false,                 //默认不显示部门
-            valueName:'叶湘伦'           //用户姓名
+            valueName:window.Person.name           //用户姓名
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '修改资料';
+        // document.querySelector('title').innerText = '修改资料';
         this.getOfficeList();
     }
     showDepartment() {
@@ -39,9 +39,6 @@ class EditProfile extends Component{
     }
     hideDepartment() {
         this.setState({mask:false});
-    }
-    backMove() {
-        this.props.history.push('/employeeInformation');
     }
     editName(ev) {
         this.setState({valueName: ev.target.value});
@@ -65,7 +62,7 @@ class EditProfile extends Component{
     async determineDepartment() {             //更新用户资料
         if(this.state.departmentId){
             const result = await XHR.post(API.update,{
-                loginName:window.sessionStorage.getItem('loginName'),
+                loginName:window.Person.loginN,
                 officeid:this.state.departmentId,
                 userName:this.state.valueName
             });

@@ -17,7 +17,7 @@ class Department extends Component{
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '部门';
+        // document.querySelector('title').innerText = '部门';
         this.getOfficeUserList();
     }
     personalInformation(i) {

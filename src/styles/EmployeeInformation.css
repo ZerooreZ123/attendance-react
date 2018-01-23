@@ -129,8 +129,8 @@ input::-webkit-input-placeholder{
     position: absolute;
     top:28px;
     right:30px;
-    width:60px;
-    height:30px;
+    /* width:78px;
+    height:30px; */
     font-size:28px;
     color:#2295e8;
 }

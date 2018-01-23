@@ -29,7 +29,7 @@ class ReleaseAnnouncement extends Component{
         };
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '发布公告';
+        // document.querySelector('title').innerText = '发布公告';
     }
     historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
@@ -76,8 +76,9 @@ class ReleaseAnnouncement extends Component{
         var msg = '确定删除吗？';
         if(window.confirm(msg) === true) {
             this.state.imgBox.splice(i,1);
+            this.state.imgSrcConcat.splice(i,1);
             this.setState({imgBox:this.state.imgBox});
-            console.log(this.state.imgBox);
+            this.setState({imgSrcConcat:this.state.imgSrcConcat});
         }else{
             return false
         }

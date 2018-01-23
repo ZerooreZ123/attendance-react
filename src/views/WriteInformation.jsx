@@ -14,7 +14,7 @@ class WriteInformation extends Component {
     }
 }
 componentDidMount() {
-    document.querySelector('title').innerText = '填写资料'; 
+    // document.querySelector('title').innerText = '填写资料'; 
 }
 async ShareInviteCode() {                //公司注册
     const result = await XHR.post(API.register,{

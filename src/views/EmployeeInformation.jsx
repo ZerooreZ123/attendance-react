@@ -63,7 +63,7 @@ class EmployeeInformation extends Component{
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '员工资料';
+        // document.querySelector('title').innerText = '员工资料';
         this.getOfficeList();
         this.getOfficeUserList();
     }
@@ -84,7 +84,8 @@ class EmployeeInformation extends Component{
                    window.Person = {
                        name:e.name,
                        userid:e.id,
-                       section:e.officeName || '其他'
+                       section:e.officeName || '其他',
+                       loginN:e.loginName
                    }
                }
             })
@@ -96,7 +97,8 @@ class EmployeeInformation extends Component{
             userid:this.state.searchDate[i].userid,
             phone:this.state.searchDate[i].phone,
             name:this.state.searchDate[i].name,
-            section:this.state.searchDate[i].officeName
+            section:this.state.searchDate[i].officeName,
+            loginN:this.state.searchDate[i].loginName
         }
         this.props.history.push('/personalInformation')
     }
@@ -105,7 +107,8 @@ class EmployeeInformation extends Component{
             userid:this.state.departmentPart[i].userid,
             phone:this.state.departmentPart[i].phone,
             name:this.state.departmentPart[i].name,
-            section:this.state.departmentPart[i].officeName
+            section:this.state.departmentPart[i].officeName,
+            loginN:this.state.departmentPart[i].loginName,
         }
         this.props.history.push('/personalInformation')
     }
@@ -122,7 +125,8 @@ class EmployeeInformation extends Component{
                         name:item.name || '',
                         phone:item.phone || '',
                         officeName:item.officeName || '',
-                        userid:item.id || ''
+                        userid:item.id || '',
+                        loginName:item.loginName || ''
                     })
                 }
             })
@@ -182,7 +186,8 @@ class EmployeeInformation extends Component{
                     name:item.name || '',
                     phone:item.phone || '',
                     officeName:item.officeName || '',
-                    userid:item.id || ''
+                    userid:item.id || '',
+                    loginName:item.loginName || ''
                 })
             )
             this.setState({iconState1:false});

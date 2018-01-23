@@ -14,7 +14,7 @@ class AnnouncementDetails extends Component{
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '公告详情';
+        // document.querySelector('title').innerText = '公告详情';
         this.noticeDetails();
     }
     async noticeDetails() {

@@ -47,7 +47,7 @@ class HistoryAnnouncement extends Component{
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '历史公告';
+        // document.querySelector('title').innerText = '历史公告';
         this.noticeList();
     }
     announcementDetail(i) {

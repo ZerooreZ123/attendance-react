@@ -8,7 +8,7 @@ class Prompt extends Component {
     }
   } 
   componentDidMount() {
-    document.querySelector('title').innerText = '提示信息';
+    // document.querySelector('title').innerText = '提示信息';
     this.prompt();
   }
   prompt(){

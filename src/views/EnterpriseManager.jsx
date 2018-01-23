@@ -105,7 +105,7 @@ class EnterpriseManager extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '企业管理';
+        // document.querySelector('title').innerText = '企业管理';
         this.getCompany();
         this.getOfficeList();
         this.getAttendanceMachineList();

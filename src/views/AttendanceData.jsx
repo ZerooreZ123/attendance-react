@@ -90,9 +90,10 @@ class AttendanceData extends Component {
             Value: '',
             date: new Date(),
             section: [],                 //部门列表
-            departmentName:'全部',      //默认部门
+            departmentName:'全部',       //默认部门
             departmentIndex: '',         //部门的索引值
             departmentId: '',            //部门Id
+            nameId:'',                   //用户Id
             maskDate: false,             //默认不显示日历
             currentIndex: 0,             //日月年展示模块索引
             showState: 0,                //默认展示全部
@@ -126,7 +127,7 @@ class AttendanceData extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '员工考勤记录';
+        // document.querySelector('title').innerText = '员工考勤记录';
         this.getOfficeList();
         this.getRecords(this.state.startTime,this.state.endTime);
     }
@@ -136,7 +137,7 @@ class AttendanceData extends Component {
         var endYear = myDate.getFullYear() + 10;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
-            list.push(i);
+            list.push(i.toString());
         }
         this.setState({
             optionYears: {
@@ -151,9 +152,9 @@ class AttendanceData extends Component {
         var endYear = myDate.getFullYear() + 10;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
-            list.push(i);
+            list.push(i.toString());
         }
-        var Months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        var Months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
         var result = [];
         list.forEach(ev =>
             Months.forEach(el => {
@@ -173,19 +174,22 @@ class AttendanceData extends Component {
         if(this.state.currentIndex === 0) {
             window.Data = {
                 time:this.state.selectDate,
-                section:this.state.departmentName
+                section:this.state.departmentName,
+                departmentId:this.state.departmentId
             }
             this.props.history.push('/exportData');
         }else if(this.state.currentIndex === 1) {
             window.Data = {
                 time:this.state.selectMonth,
-                section:this.state.departmentName
+                section:this.state.departmentName,
+                departmentId:this.state.departmentId,
             }
             this.props.history.push('/exportData'); 
         }else{
             window.Data = {
                 time:this.state.selectYear,
-                section:this.state.departmentName
+                section:this.state.departmentName,
+                departmentId:this.state.departmentId
             }
             this.props.history.push('/exportData'); 
         }
@@ -207,9 +211,11 @@ class AttendanceData extends Component {
             if(this.state.tabIndex === 0) {
                 this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
                 this.getMonth();
+                this.setState({personDetail:false});
             }else{
                 this.Abnormal(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
                 this.getMonth();
+                this.setState({personDetail:false});
             }     
         }else{
             this.setState({departmentName:'全部'});
@@ -227,18 +233,29 @@ class AttendanceData extends Component {
     personalInformation(i) {            //个人打卡记录
         this.setState({personDetail:true});
         this.setState({departmentName:this.state.dataSource[i].name});
+        this.setState({nameId:this.state.dataSource[i].userid})
         this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid)
+    }
+    personAbnormal(i) {
+        this.setState({personDetail:true});
+        this.setState({departmentName:this.state.dataSource[i].name});
+        this.setState({nameId:this.state.dataSource[i].userid});
+        this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid,"abnormity")
     }
     selectDay = (date) => {          //日历日期选择
         var d = new Date(date);
-        var dateTime = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
         this.setState({selectDate:dateTime});
+
     }
     handleChange = (name, value) => { //月日期选择
         this.setState({ valueGroups: { data: value } });
     }
     selectChange = (name,value) => {  //年日期选择
         this.setState({ valueYears: { data: value } });
+    }
+    addZero(s) {                     //时间格式转化
+        return s < 10 ? '0' + s: s;
     }
     showMask() {                     //显示mask  
         this.setState({ maskToggle: 1 })
@@ -249,23 +266,25 @@ class AttendanceData extends Component {
     showAll() {                      //展示所有
         this.setState({ showState: 0 });
         this.setState({ tabIndex: 0 });
-        if(this.state.currentIndex === 0){
-            this.getRecords(this.state.selectDate,this.state.selectDate);
-        }else if(this.state.currentIndex === 1) {
-            this.getRecords(moment().startOf('month').format("YYYY-MM"),moment().endOf('month').format("YYYY-MM"));
-        }else{
-            this.getRecords(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+        if(this.state.currentIndex === 0){                  //日
+            this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId);
+        }else if(this.state.currentIndex === 1) {           //月
+            this.setState({personDetail:false});
+            this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
+        }else{                                              //年
+            this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
         }
     }
     showAbnormal() {                 //展示异常
         this.setState({ showState: 1 });
         this.setState({ tabIndex: 1 });
-        if(this.state.currentIndex === 0) {
-            this.Abnormal(this.state.selectDate,this.state.selectDate);
-        }else if(this.state.currentIndex === 1){
-            this.getRecords(moment().startOf('month').format("YYYY-MM"),moment().endOf('month').format("YYYY-MM"));
-        }else{
-            this.getRecords(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+        if(this.state.currentIndex === 0) {                 //日
+            this.Abnormal(this.state.selectDate,this.state.selectDate,this.state.departmentId);
+        }else if(this.state.currentIndex === 1){            //月
+            this.setState({personDetail:false});
+            this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
+        }else{                                              //年
+            this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
         }
         
     }
@@ -322,12 +341,14 @@ class AttendanceData extends Component {
         }
         this.hideMask();
     }
-    async getPersonRecords(startTime,endTime,userId) {            //获取个人打卡记录
+    async getPersonRecords(startTime,endTime,userId,abnormity) {            //获取个人打卡记录
         const result = await XHR.post(API.getRecords,{
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,    
             endDate:endTime,
-            userids:userId    
+            userids:userId,
+            abnormity:abnormity
+            
         })
         const dataResult = [];
         
@@ -343,8 +364,6 @@ class AttendanceData extends Component {
         })
         
         this.setState({personData:dataResult || []});
-        console.log(this.setState.personData)
-
     }
     async Abnormal(startTime,endTime,officeId) {            //获取异常全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {
@@ -509,41 +528,79 @@ class AttendanceData extends Component {
                
             } else if (currentIndex === 1) {           //月期显示内容
                 if(personDetail === false) {           //展示统计
-                    if(dataSource.length>0) {
-                        return (
-                            <div className={styles.detailsList}>
-                                {
-                                    dataSource.map((item, index) =>
-                                        <div className={styles.item} key={index}>
-                                             <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
-                                            <div className={styles.nameBox}>
-                                                <div className={styles.personName}>{item.name}</div>
-                                                <div onClick={ev => this.personalInformation(index)} className={styles.detail}>详情</div>
+                    if(tabIndex === 0) {               //全部
+                        if(dataSource.length>0) {
+                            return (
+                                <div className={styles.detailsList}>
+                                    {
+                                        dataSource.map((item, index) =>
+                                            <div className={styles.item} key={index}>
+                                                 <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                                <div className={styles.nameBox}>
+                                                    <div className={styles.personName}>{item.name}</div>
+                                                    <div onClick={ev => this.personalInformation(index)} className={styles.detail}>详情</div>
+                                                </div>
+                                                <div className={styles.totalDay}>
+                                                    <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
+                                                </div>
+                                                <div className={styles.work}>
+                                                    <div className={styles.gooffWork}>正常: <span className={styles.fontColor}>{item.normal}天</span></div>
+                                                    <div className={styles.punchTime}>异常：<span className={styles.redColor}>{item.abnormal}天</span></div>
+                                                </div>
                                             </div>
-                                            <div className={styles.totalDay}>
-                                                <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
-                                            </div>
-                                            <div className={styles.work}>
-                                                <div className={styles.gooffWork}>正常: <span className={styles.fontColor}>{item.normal}天</span></div>
-                                                <div className={styles.punchTime}>异常：<span className={styles.redColor}>{item.abnormal}天</span></div>
-                                            </div>
+                                        )
+                                    }
+                                     <div className={styles.footer}>
+                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                            <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                            <img className={styles.top} src={top} alt="" />
                                         </div>
-                                    )
-                                }
-                                 <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={top} alt="" />
+                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
                                     </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
                                 </div>
-                            </div>
-                        )   
-                    }else{
-                        return(
-                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
-                        )
-                    }    
+                            )   
+                        }else{
+                            return(
+                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
+                            )
+                        } 
+                    }else{                               //异常
+                        if(dataSource.length>0) {
+                            return (
+                                <div className={styles.detailsList}>
+                                    {
+                                        dataSource.map((item, index) =>
+                                            <div className={styles.item} key={index}>
+                                                 <div className={styles.displayDate}><span>{item.dateDay}</span> <span>{item.week}</span></div>
+                                                <div className={styles.nameBox}>
+                                                    <div className={styles.personName}>{item.name}</div>
+                                                    <div onClick={ev => this.personAbnormal(index)} className={styles.detail}>详情</div>
+                                                </div>
+                                                <div className={styles.totalDay}>
+                                                    <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>
+                                                </div>
+                                                <div className={styles.work}>
+                                                    <div className={styles.gooffWork}>异常:<span className={styles.redColor}>{item.abnormal}天</span></div>
+                                                    {/* <div className={styles.punchTime}>异常:<span className={styles.redColor}>{item.abnormal}天</span></div> */}
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                     <div className={styles.footer}>
+                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                            <span>{selectMonth}</span>/<span>{departmentName}</span>
+                                            <img className={styles.top} src={top} alt="" />
+                                        </div>
+                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                    </div>
+                                </div>
+                            )   
+                        }else{
+                            return(
+                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
+                            )
+                        } 
+                    }       
                 }else{                                //展示个人
                     if(personData.length>0) {
                         return (
@@ -588,7 +645,7 @@ class AttendanceData extends Component {
                                     <div className={styles.item} key={index}>
                                         <div className={styles.nameBox}>
                                             <div className={styles.personName}>{item.name}</div>
-                                            <div onClick={ev => this.personalInformation(ev)} className={styles.detail}></div>
+                                            {/* <div onClick={ev => this.personalInformation(ev)} className={styles.detail}></div> */}
                                         </div>
                                         <div className={styles.totalDay}>
                                             <div className={styles.totalDay}>已打卡: <span>{item.already}</span> (共需{item.total}天)</div>

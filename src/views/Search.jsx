@@ -52,7 +52,7 @@ class Search extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '搜索';
+        // document.querySelector('title').innerText = '搜索';
         this.getOfficeUserList();
 
     }
@@ -73,8 +73,7 @@ class Search extends Component {
         }
 
         this.state.searchHistory.push(this.state.inputValue);
-        this.setState({searchHistory:this.state.searchHistory})
-        
+        this.setState({searchHistory:this.state.searchHistory});
         this.props.history.push('/personalInformation')
     }
     getInputValue(ev) {
