@@ -120,11 +120,19 @@ class CardReminding extends Component {
     }
     async getUserRemind() {              //初始化提醒设置
         const result = await XHR.post(API.getUserRemind,{loginName:window.sessionStorage.getItem('loginName')});
-        this.setState({upTime:JSON.parse(result).data.upTime});
-        this.setState({downTime:JSON.parse(result).data.downTime});
-        this.setState({upSwitch:JSON.parse(result).data.upSwitch});
-        this.setState({downSwitch:JSON.parse(result).data.downSwitch});
-        this.setState({dataSource:JSON.parse(result).data});
+        if(JSON.parse(result).data) {
+            this.setState({upTime:JSON.parse(result).data.upTime});
+            this.setState({downTime:JSON.parse(result).data.downTime});
+            this.setState({upSwitch:JSON.parse(result).data.upSwitch});
+            this.setState({downSwitch:JSON.parse(result).data.downSwitch});
+            this.setState({dataSource:JSON.parse(result).data}); 
+        }else{
+            this.setState({upTime:'几'});
+            this.setState({downTime:'几'});
+            this.setState({upSwitch:'1'});
+            this.setState({downSwitch:'1'});
+            this.setState({dataSource:{}});
+        }
     }
     preClockInRemind() {
         setTimeout(()=>this.clockInRemind(), 0);

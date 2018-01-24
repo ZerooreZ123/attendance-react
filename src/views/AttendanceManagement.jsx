@@ -72,27 +72,31 @@ class AttendanceManagement extends Component {
     }
     async getAttendanceManagement() {       //公司考勤时间配置及数据渲染
         const result = await XHR.post(API.getAttendanceManagement, { companyid: window.sessionStorage.getItem("companyid")});
-        const dataSource = JSON.parse(result).data[0];
-        this.setState({ data: dataSource });
-        var T1 = JSON.parse(result).data[0].forenoonLatest.split(':');
-        var T2 = JSON.parse(result).data[0].afternoonFirst.split(':');
-        const now = moment().hour(T1[0]).minute(T1[1]);
-        const now1 = moment().hour(T2[0]).minute(T2[1]);
-        this.setState({
-            now,
-            now1
-        })
-        const Num = [1, 2, 3, 4, 5, 6, 7];                                         //一周时间
-        const weekDay = JSON.parse(result).data[0].workingTime.split(',');   //初始勾选日期
-        const weekDayNum = [];                                     //初始勾选日期类型转换
-        const weekSelect = [];                                    //勾选日期state
-        weekDay.forEach(ev => weekDayNum.push(parseInt(ev)));
-        weekDayNum.forEach((ev, index) => {
-            if (Num.indexOf(ev) > -1) {
-                weekSelect[Num.indexOf(ev)] = true;
-                this.setState({ status: weekSelect });
-            }
-        })
+        if(JSON.parse(result).data.length>0) {
+            const dataSource = JSON.parse(result).data[0];
+            this.setState({ data: dataSource });
+            var T1 = JSON.parse(result).data[0].forenoonLatest.split(':');
+            var T2 = JSON.parse(result).data[0].afternoonFirst.split(':');
+            const now = moment().hour(T1[0]).minute(T1[1]);
+            const now1 = moment().hour(T2[0]).minute(T2[1]);
+            this.setState({
+                now,
+                now1
+            })
+            const Num = [1, 2, 3, 4, 5, 6, 7];                                         //一周时间
+            const weekDay = JSON.parse(result).data[0].workingTime.split(',');   //初始勾选日期
+            const weekDayNum = [];                                     //初始勾选日期类型转换
+            const weekSelect = [];                                    //勾选日期state
+            weekDay.forEach(ev => weekDayNum.push(parseInt(ev)));
+            weekDayNum.forEach((ev, index) => {
+                if (Num.indexOf(ev) > -1) {
+                    weekSelect[Num.indexOf(ev)] = true;
+                    this.setState({ status: weekSelect });
+                }
+            })
+        }else{
+            this.setState({status: [true,true,true,true,true] });
+        }
 
 
     }
@@ -110,7 +114,7 @@ class AttendanceManagement extends Component {
         })
 
         const result = await XHR.post(API.attendanceManagement, {
-            companyid: this.state.data.companyid,
+            companyid:window.sessionStorage.getItem("companyid"),
             forenoonLatest:morTime,
             afternoonFirst:aftTime,
             workingTime: list.toString(),

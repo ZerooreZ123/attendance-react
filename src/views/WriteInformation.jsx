@@ -20,10 +20,15 @@ async ShareInviteCode() {                //公司注册
     const result = await XHR.post(API.register,{
         serialNumber:window.sessionStorage.getItem('serialNumber'),
         loginName:window.sessionStorage.getItem('LoginName'),
-        phone:window.sessionStorage.getItem("Phone")
+        phone:window.sessionStorage.getItem("Phone"),
+        companyName:this.state.inputText,
+        userName:this.state.inputValue
     });
     if(JSON.parse(result).success === 'T') {
       this.props.history.push('./shareInviteCode');
+      window.sessionStorage.setItem("companyid",JSON.parse(result).data.companyid)
+      window.sessionStorage.setItem("id",JSON.parse(result).data.id)
+
     }else{
       alert(JSON.parse(result).msg);
     }  

@@ -121,6 +121,11 @@
 .clearBoth{
   clear: both;
 }
+.informationPhoto{
+  display:inline-block;
+  width:140px;
+  height:140px;
+}
 input::-webkit-input-placeholder { /* WebKit browsers */
   　　color:#fff;
 }

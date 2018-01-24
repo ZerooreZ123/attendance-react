@@ -84,6 +84,11 @@
     color: #147dd9;
     font-size:28px;  
   }
+  .informationPhoto{
+    display:inline-block;
+    width:140px;
+    height:140px;
+}
   input::-webkit-input-placeholder { /* WebKit browsers */
     　　color:#fff;
   }

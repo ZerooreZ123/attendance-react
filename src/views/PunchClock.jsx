@@ -50,7 +50,19 @@ import success from '../asset/punchClock/success.png';
 //     return null;
 //   }
 // }
-
+const Notice =({noticeState,parent,title})=> {
+  if (noticeState) {
+    return (
+      <div className={styles.noticeBoard}>
+        <img className={styles.noticeImg} src={notice} alt="" />
+        <span onClick={ev => parent.AnnouncementDetails(ev)} className={styles.noticeText}>{title}</span>
+        <img onClick={ev => parent.noteceDelete(ev)} className={styles.noteceDelete} src={delete_1} alt="" />
+      </div>
+    )
+  } else {
+    return null
+  }
+}
 
 class PunchClock extends Component {
   constructor() {
@@ -59,8 +71,10 @@ class PunchClock extends Component {
       h: '',                    //时
       m: '',                    //分
       s: '',                    //秒
+      result:{},
       prompt: 0,                //考勤机状态
       noticeState: true,        //通知显示
+      noticeTitle:'',           //公告标题
       // mask:false,              //排行榜遮罩
       // dataList:[],             //排行榜数据
       normalDay: ''
@@ -71,13 +85,15 @@ class PunchClock extends Component {
     // document.querySelector('title').innerText = '考勤打卡';
     // this.getNormalDays();
     this.showTime();
+    this.noticeList();
+    // this.searchIbeacons();
   }
   userCenter() {                    //切换至个人中心
     this.props.history.push('/userCenter/' + this.props.match.params.loginName);
   }
   AnnouncementDetails(ev) {         //切换至公告详情
     ev.stopPropagation();
-    this.props.history.push('/announcementDetails');
+    this.props.history.push('/HistoryAnnouncement');
   }
   showTime() {                      //刷新当前时间/1秒
     setInterval(ev => this.getTime(ev), 1000)
@@ -101,21 +117,51 @@ class PunchClock extends Component {
     this.setState({ m: data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes() });
     this.setState({ s: data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds() });
   }
-  // wx.startSearchBeacons({
-  //   ticket: "",
-  //   complete: function (argv) {
-  //       console.log(argv)
-  //         //开启查找完成后的回调函数
-  //       }
+  async searchIbeacons() {
+    const result = await XHR.post(API.getSignature);
+    if(JSON.parse(result).success === 'T') {
+      this.setState({
+         result:{
+            timestamp:JSON.parse(result).data.timestamp,
+            nonceStr:JSON.parse(result).data.noncestr,
+            signature:JSON.parse(result).data.signature
+         }  
+      })
+    }
+    window.wx.config({
+      debug:true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+      timestamp:this.state.result.timestamp, // 必填，生成签名的时间戳
+      nonceStr:this.state.result.nonceStr, // 必填，生成签名的随机串
+      signature:this.state.result.signature,// 必填，签名
+      jsApiList: ['startMonitoringBeacons'] // 必填，需要使用的JS接口列表
+    });
+    window.wx.onSearchBeacons({
+      complete:function(argv){
+      //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+         if(argv.length>0) {
+             alert("hahah")
+         }else{
+           alert('eeeee')
+         }
+      }
+    });
+    // window.wx.startSearchBeacons({
+    //   ticket: "",
+    //   complete: function (argv) {
+    //         //开启查找完成后的回调函数
 
-  //       // 监听iBeacon信号
-  //       wx.onSearchBeacons({
-  //         complete:function(argv){
-  //         //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-  //         }
-  //         });
-  //   }
-  // });
+    //         console.log(argv)
+    //         // 监听iBeacon信号
+    //         window.wx.onSearchBeacons({
+    //           complete:function(argv){
+    //           //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+    //           }
+    //         });
+
+    //   }
+    // });
+  }
 
   // // 超时停止扫描
   // setTimeout(function () {
@@ -125,16 +171,15 @@ class PunchClock extends Component {
   //     }
   //   }), 5000);
 
+  async noticeList() {
+    const result = await XHR.post(API.noticeList,{companyid:window.sessionStorage.getItem('companyid')});
+    if(JSON.parse(result).data.length>0) {
+      this.setState({noticeTitle:JSON.parse(result).data[0].title});
+    }else{
+      this.setState({noticeState:false})
+    }
 
-
-  getNetwork() {                  //获取网络状态
-    window.wx.getNetworkType({
-      success: function (res) {
-        var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
-        console.log(networkType);
-      }
-    });
-  }
+}
   async clockIn() {                //员工打卡
     const result = await XHR.post(API.clockIn, { loginName: this.props.match.params.loginName });
     if (JSON.parse(result).success === "T") {
@@ -153,20 +198,7 @@ class PunchClock extends Component {
   //   this.setState({normalDay:JSON.parse(result).data});
   // }
   render() {
-    const { prompt, h, m, s, noticeState } = this.state;
-    const Notice = props => {
-      if (noticeState) {
-        return (
-          <div className={styles.noticeBoard}>
-            <img className={styles.noticeImg} src={notice} alt="" />
-            <span onClick={ev => this.AnnouncementDetails(ev)} className={styles.noticeText}>元旦放假通知,放假具体时间为30、31、1号</span>
-            <img onClick={ev => this.noteceDelete(ev)} className={styles.noteceDelete} src={delete_1} alt="" />
-          </div>
-        )
-      } else {
-        return null
-      }
-    }
+    const { prompt, h, m, s, noticeState,noticeTitle} = this.state
     const ClockPage = props => {
       if (prompt === 0) {            //搜索中
         return (
@@ -241,7 +273,7 @@ class PunchClock extends Component {
               <div className={styles.time}><span>连续正常打卡{normalDay}天</span></div>
               <div onClick={ev =>this.showMask(ev)} className={styles.rankingList}><img className={styles.rankingListImg} src={rankingListIco} alt=""/><span className={styles.rankingListText}>排行榜</span></div>
           </div> */}
-        <Notice></Notice>
+        <Notice noticeState={noticeState} parent={this} title={noticeTitle}></Notice>
         <ClockPage></ClockPage>
         <div className={styles.tabBox}>
           <div className={styles.tab}>

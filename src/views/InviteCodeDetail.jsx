@@ -8,7 +8,7 @@ import API from '../api/index';
 import down from '../asset/userCenter/down_arrow.png';
 import spread from '../asset/manager/spread.png';
 
-
+import headPortrait from '../asset/userCenter/headPortrait.png';
 
 const Mask = ({visible,parent,List,Index}) => {               //部门列表
   if (visible) {
@@ -57,9 +57,9 @@ hideMask() {
 showMask() {
   this.setState({ mask: true });
 }
-getValue(ev) {          //获取部门的输入值
-  this.setState({InputValue:ev.target.value})
-}
+// getValue(ev) {          //获取部门的输入值
+//   this.setState({InputValue:ev.target.value})
+// }
 getName(ev) {           //获取输入的姓名
   this.setState({InputText:ev.target.value})
 }
@@ -73,15 +73,18 @@ determineDepartment(){
   this.setState({InputValue:this.state.departmentName});
 }
 async register() {
-  if(this.state.inputValue && this.state.inputText){
-    const result = await XHR.post(API.register,{
+  if(this.state.InputText){
+    const result = await XHR.post(API.update,{
       loginName:window.sessionStorage.getItem('ID'),
-      phone:window.sessionStorage.getItem("phone")
+      companyid:window.sessionStorage.getItem('comID'),
+      phone:window.sessionStorage.getItem("phone"),
+      officeid:this.state.departmentId,
+      userName:this.state.InputText
     });
     if(JSON.parse(result).data.roleid ===2 || JSON.parse(result).data.roleid ===3) {
-      this.props.history.push('./userCenter');
+      this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID'));
     }else{
-      this.props.history.push('./punchClock');
+      this.props.history.push('./punchClock/'+ window.sessionStorage.getItem('ID'));
     }       
   }else{
       return null;
@@ -104,7 +107,7 @@ render() {
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
-           <div style={{width:70,height:70,borderRadius: 35,background:'lightgray'}}></div>
+            <img className={styles.informationPhoto} src={headPortrait} alt=""/>
         </div>
 
         <div className = {styles.getCode}>
@@ -113,12 +116,12 @@ render() {
         </div>
 
         <div className = {styles.getCode}>
-          <input onChange={ev =>this.getValue(ev)} type="text" placeholder = "部门" value={InputValue}/>
+          <div>{InputValue}</div>
           <img onClick={ev =>this.showMask(ev)} src={down} className={styles.down} alt=''/>
         </div>
 
         <div className={styles.next}>
-          <div onClick={ev =>this.register(ev)} className = {(InputText && InputValue) ? styles.nextCan:styles.nextStep}>完成</div>
+          <div onClick={ev =>this.register(ev)} className = { InputText ? styles.nextCan:styles.nextStep}>完成</div>
         </div>
         <Mask visible={mask} parent={this} List={section} Index={departmentIndex} />
       </div>

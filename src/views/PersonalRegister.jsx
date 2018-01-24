@@ -5,11 +5,14 @@ import styles from '../styles/PersonalRegister.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
+import headPortrait from '../asset/userCenter/headPortrait.png';
+
 
 class PersonalRegister extends Component {
   constructor() {
     super();
     this.state = {
+        canState:true,            //可点击
         sendState:'发送验证码',   //发送状态
         inputText:'',            //输入的手机号
         inputValue:'',           //输入的验证码
@@ -32,20 +35,26 @@ async sendSms() {                  //获取验证码
     if(!(/^1[34578]\d{9}$/.test(this.state.inputText))){
         alert("手机号码格式不正确!");
     }else{
-        const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
-        if(JSON.parse(result).success === 'T') {
-            var countdown = 60;
-            this.setState({code:JSON.parse(result).data});
-           
-            var timeShow = setInterval(() => {
-                countdown--;
-                if( countdown<1){
-                    this.setState({sendState:'重新发送'})
-                    clearInterval(timeShow);
-                }else{
-                    this.setState({sendState:countdown + 's'});
-                }
-            },1000)
+        if(this.state.canState) {
+            const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
+            if(JSON.parse(result).success === 'T') {
+                var countdown = 60;
+                this.setState({code:JSON.parse(result).data});
+            
+                var timeShow = setInterval(() => {
+                    countdown--;
+                    if( countdown<1){
+                        this.setState({sendState:'重新发送'})
+                        clearInterval(timeShow);
+                        this.setState({canState:true})
+                    }else{
+                        this.setState({sendState:countdown + 's'});
+                        this.setState({canState:false})
+                    }
+                },1000)
+            }
+        }else{
+            return false
         }
         window.sessionStorage.setItem("phone",this.state.inputText); 
     }
@@ -66,7 +75,7 @@ render() {
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
-           <div style={{width:70,height:70,borderRadius: 35,background:'lightgray'}}></div>
+           <img className={styles.informationPhoto} src={headPortrait} alt=""/>
         </div>
 
         <div className = {styles.invite}>
