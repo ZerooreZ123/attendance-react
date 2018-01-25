@@ -47,7 +47,6 @@ async sendSms() {                  //获取验证码
             if(JSON.parse(result).success === 'T') {
                 var countdown = 60;
                 this.setState({code:JSON.parse(result).data});
-            
                 var timeShow = setInterval(() => {
                     countdown--;
                     if( countdown<1){
@@ -76,7 +75,7 @@ next() {
     }
 }
 render() {
-    const {inputNum,inputCode,inputPhone,sendState} = this.state;
+    const {inputNum,inputCode,inputPhone,sendState,canState} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -90,7 +89,7 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputCode}/>
-          <input onClick={ev =>this.sendSms(ev)} type="button" className={styles.sendCode} value={sendState}/>
+          <input onClick={ev =>this.sendSms(ev)} type="button" className={canState === false?styles.noSendCode:styles.sendCode} value={sendState}/>
         </div>
 
         <div className={styles.next}>

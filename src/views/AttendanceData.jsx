@@ -51,7 +51,7 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
             return (
                 <div>
                     <InfiniteCalendar
-                        width={320} height={170}
+                        width={'100%'} height={170}
                         locale={{
                             headerFormat: 'MM D',
                             weekdays: ["日", "一", "二", "三", "四", "五", "六"]

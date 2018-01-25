@@ -117,59 +117,59 @@ class PunchClock extends Component {
     this.setState({ m: data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes() });
     this.setState({ s: data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds() });
   }
-  async searchIbeacons() {
-    const result = await XHR.post(API.getSignature);
-    if(JSON.parse(result).success === 'T') {
-      this.setState({
-         result:{
-            timestamp:JSON.parse(result).data.timestamp,
-            nonceStr:JSON.parse(result).data.noncestr,
-            signature:JSON.parse(result).data.signature
-         }  
-      })
-    }
-    window.wx.config({
-      debug:true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-      appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
-      timestamp:this.state.result.timestamp, // 必填，生成签名的时间戳
-      nonceStr:this.state.result.nonceStr, // 必填，生成签名的随机串
-      signature:this.state.result.signature,// 必填，签名
-      jsApiList: ['startMonitoringBeacons'] // 必填，需要使用的JS接口列表
-    });
-    window.wx.onSearchBeacons({
-      complete:function(argv){
-      //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-         if(argv.length>0) {
-             alert("hahah")
-         }else{
-           alert('eeeee')
-         }
-      }
-    });
-    // window.wx.startSearchBeacons({
-    //   ticket: "",
-    //   complete: function (argv) {
-    //         //开启查找完成后的回调函数
-
-    //         console.log(argv)
-    //         // 监听iBeacon信号
-    //         window.wx.onSearchBeacons({
-    //           complete:function(argv){
-    //           //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-    //           }
-    //         });
-
-    //   }
-    // });
-  }
-
-  // // 超时停止扫描
-  // setTimeout(function () {
-  //   wx.stopSearchBeacons({
-  //     complete:function(res){
-  //     //关闭查找完成后的回调函数
+  // async searchIbeacons() {
+  //   const result = await XHR.post(API.getSignature);
+  //   if(JSON.parse(result).success === 'T') {
+  //     this.setState({
+  //        result:{
+  //           timestamp:JSON.parse(result).data.timestamp,
+  //           nonceStr:JSON.parse(result).data.noncestr,
+  //           signature:JSON.parse(result).data.signature
+  //        }  
+  //     })
+  //   }
+  //   window.wx.config({
+  //     debug:true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+  //     appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+  //     timestamp:this.state.result.timestamp, // 必填，生成签名的时间戳
+  //     nonceStr:this.state.result.nonceStr, // 必填，生成签名的随机串
+  //     signature:this.state.result.signature,// 必填，签名
+  //     jsApiList: ['startMonitoringBeacons'] // 必填，需要使用的JS接口列表
+  //   });
+  //   window.wx.onSearchBeacons({
+  //     complete:function(argv){
+  //     //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+  //        if(argv.length>0) {
+  //            alert("hahah")
+  //        }else{
+  //          alert('eeeee')
+  //        }
   //     }
-  //   }), 5000);
+  //   });
+  //   window.wx.startSearchBeacons({
+  //     ticket: "",
+  //     complete: function (argv) {
+  //           //开启查找完成后的回调函数
+
+  //           console.log(argv)
+  //           // 监听iBeacon信号
+  //           window.wx.onSearchBeacons({
+  //             complete:function(argv){
+  //             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+  //             }
+  //           });
+
+  //     }
+  //   });
+  // }
+
+//   // // 超时停止扫描
+//   // setTimeout(function () {
+//   //   wx.stopSearchBeacons({
+//   //     complete:function(res){
+//   //     //关闭查找完成后的回调函数
+//   //     }
+//   //   }), 5000);
 
   async noticeList() {
     const result = await XHR.post(API.noticeList,{companyid:window.sessionStorage.getItem('companyid')});
@@ -179,7 +179,7 @@ class PunchClock extends Component {
       this.setState({noticeState:false})
     }
 
-}
+  }
   async clockIn() {                //员工打卡
     const result = await XHR.post(API.clockIn, { loginName: this.props.match.params.loginName });
     if (JSON.parse(result).success === "T") {

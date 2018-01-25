@@ -24,6 +24,7 @@ class Department extends Component{
         window.Person={};
         window.Person.name = this.state.departmentStaff[i].name;
         window.Person.section = this.state.departmentStaff[i].officeName;
+        // window.Person.section = this.state.departmentStaff[i].loginName
         
         this.props.history.push('/personalInformation');
     }

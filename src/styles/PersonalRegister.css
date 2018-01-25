@@ -51,6 +51,24 @@
       background: transparent;
       outline:medium;
   }
+  .noSendCode{
+    display:inline-block;
+      height:54px;
+      width:184px;
+      padding:0;
+      border:2px solid #fff;
+      border-radius:3px;
+      line-height:54px;
+      text-align: center;
+      font-size:28px;
+      color:#fff;
+      background: transparent;
+      outline:medium;
+      pointer-events: none;
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity:0.5;
+  }
   .invite input {
     background: transparent;
     border:none;

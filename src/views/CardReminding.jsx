@@ -20,7 +20,7 @@ const TimeList =({parent,visible})  => {
     const list = [3,5,10,20,30];
     if (visible) {
         return (
-            <div className={styles.mask}>
+            <div className={styles.mask} onClick={ev =>parent.hideTimeList(ev)}>
                 <div className={styles.maskBox}>
                     <div className={styles.timeSlot}>
                     {
@@ -39,7 +39,7 @@ const TimeSlot = ({parent,visible})  => {
     const list = [3,5,10,20,30];
     if (visible) {
         return (
-            <div className={styles.maskCopy}>
+            <div className={styles.maskCopy} onClick={ev =>parent.hideTimeSlot(ev)}>
                 <div className={styles.maskBox}>
                     <div className={styles.timeDuan}>
                     {

@@ -81,11 +81,7 @@ async register() {
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
-    if(JSON.parse(result).data.roleid ===2 || JSON.parse(result).data.roleid ===3) {
-      this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID'));
-    }else{
-      this.props.history.push('./punchClock/'+ window.sessionStorage.getItem('ID'));
-    }       
+    this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID'));   
   }else{
       return null;
   }
