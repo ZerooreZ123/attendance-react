@@ -50,16 +50,16 @@
 }
 .tabBox{
     width:700px;
-    height:54px;
     margin:45px auto 8px;
     border:2px solid #2295e8;
     border-radius:8px;
 }
 .currentTab,.tab{
     display:inline-block;
+    height:54px;
     width:50%;
     text-align: center;
-    line-height: 54px;
+    line-height: 56px;
     font-size:26px;
 }
 .currentTab{

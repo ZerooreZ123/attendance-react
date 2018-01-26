@@ -11,7 +11,6 @@ class EnterpriseRegistration extends Component {
     this.state = {
         canState:true,            //可点击
         sendState:'发送验证码',   //发送状态
-        inputNum:'',              //考勤机编号
         inputCode:'',             //输入验证码
         inputPhone:'',            //手机号
         code:'',                  //返回验证码
@@ -22,20 +21,29 @@ componentDidMount() {
     // document.querySelector('title').innerText = '企业注册';
     console.log(this.props.match.params.serialNumber)
 }
-getNum(ev) {
-    this.setState({inputNum:ev.target.value})
-}
 getCode(ev) {
     this.setState({inputCode:ev.target.value})
 }
 getPhone(ev) {
     this.setState({inputPhone:ev.target.value})
 }
-goToNextStep() {          //下一步
-    if(this.state.inputNum && this.state.inputPhone && this.state.inputCode){
-        this.register();
+async goToNextStep() {          //下一步
+    if((this.state.inputPhone !== '') && (this.state.inputCode !== '')) {     
+            if(this.state.code === this.state.inputCode){
+                const result = await XHR.post(API.judge,{serialNumber:this.props.match.params.serialNumber});
+                if(JSON.parse(result).data === true ) {   
+                    this.props.history.push('/writeInformation');
+                    window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
+                    window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
+                    window.sessionStorage.setItem("Phone",this.state.inputPhone);
+                }else{
+                    alert("该考勤机已经被绑定")
+                }
+            }else{
+                alert("请输入正确的验证码")
+            }
     }else{
-        return null;
+        alert("请检查手机号或者验证码是否输入")
     }
 }
 async sendSms() {                  //获取验证码
@@ -65,17 +73,17 @@ async sendSms() {                  //获取验证码
     }
 }
 
-next() {
-    if(this.state.inputCode === this.state.code) {
-        this.props.history.push('/writeInformation');
-        window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
-        window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
-        window.sessionStorage.setItem("Phone",this.state.inputPhone); 
+// next() {
+//     if(this.state.inputCode === this.state.code) {
+//         this.props.history.push('/writeInformation');
+//         window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
+//         window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
+//         window.sessionStorage.setItem("Phone",this.state.inputPhone); 
 
-    }
-}
+//     }
+// }
 render() {
-    const {inputNum,inputCode,inputPhone,sendState,canState} = this.state;
+    const {inputCode,inputPhone,sendState,canState} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -93,7 +101,7 @@ render() {
         </div>
 
         <div className={styles.next}>
-          <div className = {(inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.next(ev)}>下一步</div>
+          <div className = {(inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.goToNextStep(ev)}>下一步</div>
         </div>
       </div>
     );

@@ -171,7 +171,7 @@ class CardReminding extends Component {
                     <div className={styles.itemOne}>
                         <div>
                             <div className={styles.work}>下班打卡提醒</div>
-                            <div onClick={ev =>this.showTimeSlot(ev)} className={ iconDown === true ? styles.blueRemind:styles.workRemind}>下班后{downTime}分钟未打卡提醒
+                            <div onClick={ev =>this.showTimeSlot(ev)} className={ iconDown === true ? styles.blueRemind:styles.workRemind}>下班前{downTime}分钟未打卡提醒
                                <Icon direction={iconDown}></Icon>
                             </div>
                         </div>

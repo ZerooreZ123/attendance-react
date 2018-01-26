@@ -111,9 +111,9 @@
     left:0;
     bottom:0;
     width:100%;
-    height:98px;
-    font-size:20px;
-    padding:12px 0 6px;
+    /* height:98px; */
+    /* font-size:20px; */
+    /* padding:12px 0 6px; */
     border-top:1px solid #ededed;
     background: #fff;
 }
@@ -121,13 +121,12 @@
     display:inline-block;
     text-align: center;
     width:50%;
-    height:100%;
 }
 .tabImg{
     display:inline-block;
-    width:44px;
-    height:48px;
-    margin-bottom:12px;
+    /* width:44px;
+    height:44px;
+    margin-bottom:10px; */
 }
 /* .tabText{
     padding-top:8px;

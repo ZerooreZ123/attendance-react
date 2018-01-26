@@ -10,7 +10,15 @@ import {server} from '../api/index';
 import X from '../asset/ico/ClearButton.png';
 import addphoto from '../asset/ico/photo.png';
 import top from '../asset/manager/triangle-top.png';
+import down from '../asset/manager/downBlue.png';
 
+const Icon = ({direction})  => {
+    if (direction === true) {
+      return <img className={styles.icon} src={top} alt=""/>;
+    } else {
+      return <img className={styles.icon} src={down} alt=""/>;
+    }
+}
 
 
 class ReleaseAnnouncement extends Component{
@@ -18,6 +26,7 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
+            iconState:true,           //图标状态
             copyMask:false,           //日历结束遮罩
             chooseDay:'',             //结束选择时间
             selectedDay:'',           //开始选择时间
@@ -68,9 +77,11 @@ class ReleaseAnnouncement extends Component{
             this.setState({copyMask:true})
         }
         this.setState({mask:true})
+        this.setState({iconState:false});
     }
     hideMask() {
-        this.setState({mask:false})
+        this.setState({mask:false});
+        this.setState({iconState:true});
     }
     delete(i) {
         var msg = '确定删除吗？';
@@ -150,7 +161,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox} = this.state;
+        const {mask,copyMask,imgBox,iconState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -183,7 +194,7 @@ class ReleaseAnnouncement extends Component{
                            <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     </div>
-                    <div onClick={ev =>this.showMask(ev)} className={styles.selectDate}>选择起止日期<img src={top} alt=""/></div>
+                    <div onClick={ev =>this.showMask(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div>
                 </div>
                 <div className={mask === false? styles.hideMask:styles.showMask}>
                    <div className={styles.maskBox}>

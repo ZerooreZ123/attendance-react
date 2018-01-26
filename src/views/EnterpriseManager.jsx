@@ -72,7 +72,7 @@ const TabContent = ({currentIndex,deleteSection,division,inputText,section, mach
                         </div>
                     )
                 }
-                <div onClick={ev => parent.addAttendanceMachine(ev)} className={styles.addMachine}>添加考勤机</div>
+                <div onClick={ev => parent.scan(ev)} className={styles.addMachine}>添加考勤机</div>
             </div>
         )
     } else {
@@ -106,13 +106,14 @@ class EnterpriseManager extends Component {
     }
     componentDidMount() {
         // document.querySelector('title').innerText = '企业管理';
+        this.getWX();
         this.getCompany();
         this.getOfficeList();
         this.getAttendanceMachineList();
     }
-    addAttendanceMachine() {
-        this.props.history.push('/addAttendanceMachine')
-    }
+    // addAttendanceMachine() {          //添加考勤机
+    //     this.props.history.push('/addAttendanceMachine')
+    // }
     departmentPerson(i) {
         window.officeId = this.state.section[i].officeId
         this.props.history.push('/department')
@@ -141,6 +142,37 @@ class EnterpriseManager extends Component {
            this.deleteOfficce(i);
         }else{
             return null
+        }
+    }
+    scan() {                         //扫一扫
+        window.wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+            timestamp: this.state.result.timestamp, // 必填，生成签名的时间戳
+            nonceStr: this.state.result.nonceStr, // 必填，生成签名的随机串
+            signature: this.state.result.signature,// 必填，签名
+            jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
+        });
+        window.wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
+                // window.sessionStorage.setItem("result", result);
+                // window.location.href = 'http://www.junl.cn/AttendanceFront/index.html#/backstagelogon';
+            }
+        });
+    }
+    async getWX() {                   //获取微信签名等信息
+        const result = await XHR.post(API.getSignature);
+        if (JSON.parse(result).success === 'T') {
+            this.setState({
+                result: {
+                    timestamp: JSON.parse(result).data.timestamp,
+                    nonceStr: JSON.parse(result).data.noncestr,
+                    signature: JSON.parse(result).data.signature
+                }
+            })
         }
     }
     async addOrUpdateOfficce() {            //增加部门

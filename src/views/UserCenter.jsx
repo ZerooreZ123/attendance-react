@@ -166,8 +166,8 @@ class UserCenter extends Component {
         super();
         window.temp = {};
         this.state = {
-            showUserCenter:false,   //展示模块1
-            showPunchClock:true,  //展示模块1
+            showUserCenter:true,   //展示模块1
+            showPunchClock:false,  //展示模块2
             companyid: '',         //公司Id
             roleid: '',            //用户权限
             dataSource: {},        //用户信息
@@ -184,11 +184,11 @@ class UserCenter extends Component {
         this.getWX();
         // this.searchIbeacons();
         this.showTime();
-        this.noticeList();
+        // this.getNewNotice();
     }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
-        this.props.history.push('/HistoryAnnouncement');
+        this.props.history.push('/AnnouncementDetails');
     }
     showTime() {                      //刷新当前时间/1秒
         setInterval(ev => this.getTime(ev), 1000)
@@ -212,12 +212,14 @@ class UserCenter extends Component {
         this.setState({ m: data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes() });
         this.setState({ s: data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds() });
     }
-    async noticeList() {
-        const result = await XHR.post(API.noticeList, { companyid: window.sessionStorage.getItem('companyid') });
-        if (JSON.parse(result).data.length > 0) {
-            this.setState({ noticeTitle: JSON.parse(result).data[0].title });
+    async getNewNotice() {
+        const result = await XHR.post(API.getNewNotice, { companyid: window.sessionStorage.getItem('companyid') });
+        if (JSON.parse(result).data) {
+            this.setState({ noticeTitle: JSON.parse(result).data.title });
+            window.sessionStorage.setItem('listId',JSON.parse(result).data.id)
         } else {
             this.setState({ noticeState: false })
+            return false;
         }
 
     }
@@ -412,14 +414,14 @@ class UserCenter extends Component {
                         <ClockPage prompt={prompt} parent={this} h={h} m ={m}s ={s}></ClockPage>
                     </div>
                 </div>
-                <div className={styles.tabBox}>
-                    <div  className={styles.tab} onClick={ev => this.punchClock(ev)}>
-                        <img className={styles.tabImg} src={ showPunchClock === true ? clock2 :clock} alt="" />
-                        <div className={styles.tabText}>考勤打卡</div>
+                <div style={{'height':40,'paddingTop':6,'paddingBottom':4}} className={styles.tabBox}>
+                    <div style={{'height':40}}  className={styles.tab} onClick={ev => this.punchClock(ev)}>
+                        <img style={{'height':22,'width':22}} className={styles.tabImg} src={ showPunchClock === true ? clock2 :clock} alt="" />
+                        <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>考勤打卡</div>
                     </div>
-                    <div className={styles.tab} onClick={ev =>this.personCenter(ev)}>
-                        <img className={styles.tabImg} src={ showUserCenter === true? person:person1} alt="" />
-                        <div className={styles.tabText}>个人中心</div>
+                    <div style={{'height':40}} className={styles.tab} onClick={ev =>this.personCenter(ev)}>
+                        <img style={{'height':22,'width':22}} className={styles.tabImg} src={ showUserCenter === true? person:person1} alt="" />
+                        <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>个人中心</div>
                     </div>
                 </div>
             </div>
