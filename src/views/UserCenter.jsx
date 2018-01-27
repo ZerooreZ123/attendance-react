@@ -178,13 +178,16 @@ class UserCenter extends Component {
             normalDay: ''
         }
     }
+    componentWillUnmount() {
+       
+    }
     componentDidMount() {
         // document.querySelector('title').innerText = '个人中心';
         this.getUser();
         this.getWX();
         // this.searchIbeacons();
         this.showTime();
-        // this.getNewNotice();
+        this.getNewNotice();
     }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
@@ -251,11 +254,13 @@ class UserCenter extends Component {
     }
     moveToOrdinary(i) {               //普通管理员选项跳转
         this.getOfficeList();
+        window.sessionStorage.removeItem('test');
         const ordinaryUrl = ['/attendanceData', '/ordinaryEnterorise', '/employeeInformation', '/releaseAnnouncement']
         this.props.history.push(ordinaryUrl[i]);
     }
     moveToSuper(i) {                 //超级管理员选项跳转
         this.getOfficeList();
+        window.sessionStorage.removeItem('test');
         const superUrl = ['/attendanceData', '/enterpriseManager', '/employeeInformation', '/releaseAnnouncement', '/attendanceManagement']
         this.props.history.push(superUrl[i]);
     }

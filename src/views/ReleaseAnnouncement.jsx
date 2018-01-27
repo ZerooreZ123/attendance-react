@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import DayPicker from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import styles from '../styles/ReleaseAnnouncement.css';
 
@@ -27,18 +28,19 @@ class ReleaseAnnouncement extends Component{
         window.temp = {};               
         this.state = {
             iconState:true,           //图标状态
-            copyMask:false,           //日历结束遮罩
             chooseDay:'',             //结束选择时间
             selectedDay:'',           //开始选择时间
             mask:false,               //日历开始遮罩
+            copyMask:false,
             imgBox:[],                //图片盒子
             imgSrcConcat:[],          //拼接字符串
-            announcementTitle:window.sessionStorage.getItem('title') || '',
-            announcementContent:window.sessionStorage.getItem('content') || ''
+            announcementTitle:window.localStorage.getItem('title') || '',
+            announcementContent:window.localStorage.getItem('content') || ''
         };
     }
     componentDidMount() {
         // document.querySelector('title').innerText = '发布公告';
+        this.startDate();
     }
     historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
@@ -46,23 +48,28 @@ class ReleaseAnnouncement extends Component{
     cancelRelease() {
         let mes = "是否保存草稿";
         if(window.confirm(mes) === true) {
-            window.sessionStorage.setItem('title',this.state.announcementTitle);
-            window.sessionStorage.setItem('content',this.state.announcementContent);
+            window.localStorage.setItem('title',this.state.announcementTitle);
+            window.localStorage.setItem('content',this.state.announcementContent);
            window.history.go(-1);
         }else{
             window.history.go(-1);
         }
     }
+    startDate() {
+        var date = new Date();
+        this.setState({selectedDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
+        this.setState({chooseDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
+    }
     handleDayClick(day) {
         var myDate = new Date(day);
         this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
-        this.hideMask()
+        this.hideMask1()
     }
     selectDayClick(day) {
         var myDate = new Date(day);
         this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
         this.setState({copyMask:false});
-        this.hideMask();
+        this.hideMask2();
 
     }
     preClockInRemind(day) {
@@ -71,16 +78,20 @@ class ReleaseAnnouncement extends Component{
     selectTime(day) {
         setTimeout(()=>this.selectDayClick(day), 0);
     }
-    showMask() {
-        if(this.state.selectedDay){
-            this.setState({mask:false})
-            this.setState({copyMask:true})
-        }
+    showMask1() {
         this.setState({mask:true})
         this.setState({iconState:false});
     }
-    hideMask() {
+    hideMask1() {
         this.setState({mask:false});
+        this.setState({iconState:true});
+    }
+    showMask2() {
+        this.setState({copyMask:true})
+        this.setState({iconState:false});
+    }
+    hideMask2() {
+        this.setState({copyMask:false});
         this.setState({iconState:true});
     }
     delete(i) {
@@ -127,6 +138,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     async announce() {                         //发布公告
+        localStorage.clear();
         if(this.state.imgBox.length>0) {
             const result = await XHR.post(API.announce,{
                 userid:window.sessionStorage.getItem('id'),
@@ -170,7 +182,7 @@ class ReleaseAnnouncement extends Component{
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                       <input type="text" className={styles.inputBox} placeholder="公告标题" onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
+                       <input type="text" className={styles.inputBox} placeholder='公告标题' onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
                     </div>
                     <textarea className={styles.inputBlock} placeholder="公告内容" onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>
@@ -184,7 +196,7 @@ class ReleaseAnnouncement extends Component{
                             ))
                         }                   
                     </div>
-                    <div className={styles.releaseTime}>公告将发布于:<span>{this.state.selectedDay}</span>{this.state.chooseDay?'至':''}<span>{this.state.chooseDay}</span></div>
+                    <div className={styles.releaseTime}>公告将发布:从<button onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</button>至<button onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect}>{this.state.chooseDay}</button></div>
                 </div>
                 <div className={styles.footer}>
                     <div className={styles.case}>
@@ -194,7 +206,7 @@ class ReleaseAnnouncement extends Component{
                            <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     </div>
-                    <div onClick={ev =>this.showMask(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div>
+                    <div onClick={ev =>this.showMask2(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div>
                 </div>
                 <div className={mask === false? styles.hideMask:styles.showMask}>
                    <div className={styles.maskBox}>

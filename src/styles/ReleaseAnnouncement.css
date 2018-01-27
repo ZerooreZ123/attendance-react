@@ -50,7 +50,7 @@ textarea{
 }
 .inputBlock{
     width:704px;
-    min-height: 138px;
+    min-height: 200px;
     margin-top:30px;
     border-bottom:2px solid #ddd; 
 }
@@ -161,4 +161,15 @@ textarea{
     left:0;
     bottom:0;
     background:#fff;
+}
+.buttonSlect{
+    width:220px;
+    height:60px;
+    margin:0 8px;
+    border:1px solid #2295e8;
+    vertical-align:middle;
+    outline:none;
+    font-size:28px;
+    text-align: center;
+    background: #fff;
 }

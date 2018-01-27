@@ -107,9 +107,21 @@ class EnterpriseManager extends Component {
     componentDidMount() {
         // document.querySelector('title').innerText = '企业管理';
         this.getWX();
+        this.selectIndex();
         this.getCompany();
         this.getOfficeList();
         this.getAttendanceMachineList();
+    }
+    componentWillUnmount(){
+        window.sessionStorage.setItem('test',this.state.currentIndex);
+    }
+    selectIndex() {
+        var test=window.sessionStorage.getItem('test');
+        if(test){
+            this.setState({currentIndex:+test})
+        }else{
+            this.setState({currentIndex:0})
+        }
     }
     // addAttendanceMachine() {          //添加考勤机
     //     this.props.history.push('/addAttendanceMachine')

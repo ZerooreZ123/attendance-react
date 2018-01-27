@@ -131,6 +131,21 @@ class AttendanceData extends Component {
         this.getOfficeList();
         this.getRecords(this.state.startTime,this.state.endTime);
     }
+    componentWillUnmount(){
+        var Result = {
+            currentIndex:this.state.currentIndex,
+            departmentName:this.state.departmentName
+        };
+        window.sessionStorage.setItem('dataResult',JSON.stringify(Result));
+    }
+    selectState() {
+        var test=JSON.parse(window.sessionStorage.getItem('dataResult'));
+        if(test){
+            this.setState({currentIndex:+test})
+        }else{
+            this.setState({currentIndex:0})
+        }
+    }
     getYear() {                           //获取年份
         var myDate = new Date();
         var startYear = myDate.getFullYear();//起始年份

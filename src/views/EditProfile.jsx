@@ -5,7 +5,6 @@ import styles from '../styles/EditProfile.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import back from '../asset/ico/back.png';
 import upBlue from '../asset/manager/triangle-top.png';
 import downBlue from '../asset/manager/downBlue.png';
 
@@ -66,6 +65,11 @@ class EditProfile extends Component{
                 officeid:this.state.departmentId,
                 userName:this.state.valueName
             });
+            if(JSON.parse(result).success === 'T') {
+                alert('修改资料成功')
+            }else{
+                alert(JSON.parse(result).msg);
+            }
         }else{
             return null;
         }

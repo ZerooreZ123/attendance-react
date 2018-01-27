@@ -170,7 +170,6 @@ class EmployeeInformation extends Component{
            })
         }
         this.setState({departmentStaff:userList});
-        console.log(this.state.departmentStaff);
     }
     async determineDepartment() {             //确认选定部门
         this.hideMask();

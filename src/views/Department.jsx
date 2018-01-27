@@ -24,8 +24,8 @@ class Department extends Component{
         window.Person={};
         window.Person.name = this.state.departmentStaff[i].name;
         window.Person.section = this.state.departmentStaff[i].officeName;
-        // window.Person.section = this.state.departmentStaff[i].loginName
-        
+        window.Person.userid = this.state.departmentStaff[i].id;
+        window.Person.loginN = this.state.departmentStaff[i].loginN;
         this.props.history.push('/personalInformation');
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
@@ -34,14 +34,14 @@ class Department extends Component{
             officeid:window.officeId
             // officeid:this.state.departmentId    
         });
-        const dataSource = JSON.parse(result).data;
-        console.log(dataSource)
+        const dataSource = JSON.parse(result).data || [];
         const userList = [];
         dataSource.forEach((ev,i) =>{
             userList.push({
                 id:ev.id,
                 name:ev.name,
-                officeName:ev.officeName
+                officeName:ev.officeName,
+                loginN:ev.loginName
 
             })
         })
