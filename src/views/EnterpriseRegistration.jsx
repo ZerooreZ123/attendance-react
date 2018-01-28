@@ -50,22 +50,22 @@ async sendSms() {                  //获取验证码
     if(!(/^1[34578]\d{9}$/.test(this.state.inputPhone))){
         alert("手机号码格式不正确!");
     }else{
+        var countdown = 60;
+        var timeShow = setInterval(() => {
+            countdown--;
+            if( countdown<1){
+                this.setState({sendState:'重新发送'})
+                clearInterval(timeShow);
+                this.setState({canState:true})
+            }else{
+                this.setState({sendState:countdown + 's'});
+                this.setState({canState:false})
+            }
+        },1000)
         if(this.state.canState) {
             const result = await XHR.post(API.sendSms,{phone:this.state.inputPhone});
             if(JSON.parse(result).success === 'T') {
-                var countdown = 60;
                 this.setState({code:JSON.parse(result).data});
-                var timeShow = setInterval(() => {
-                    countdown--;
-                    if( countdown<1){
-                        this.setState({sendState:'重新发送'})
-                        clearInterval(timeShow);
-                        this.setState({canState:true})
-                    }else{
-                        this.setState({sendState:countdown + 's'});
-                        this.setState({canState:false})
-                    }
-                },1000)
             }
         }else{
             return false

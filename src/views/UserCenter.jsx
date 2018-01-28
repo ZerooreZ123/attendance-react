@@ -261,6 +261,7 @@ class UserCenter extends Component {
     moveToSuper(i) {                 //超级管理员选项跳转
         this.getOfficeList();
         window.sessionStorage.removeItem('test');
+        window.sessionStorage.removeItem('dataResult');
         const superUrl = ['/attendanceData', '/enterpriseManager', '/employeeInformation', '/releaseAnnouncement', '/attendanceManagement']
         this.props.history.push(superUrl[i]);
     }

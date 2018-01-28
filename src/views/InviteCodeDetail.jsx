@@ -6,9 +6,19 @@ import XHR from '../utils/request';
 import API from '../api/index';
 
 import down from '../asset/userCenter/down_arrow.png';
+import up from '../asset/userCenter/down_up.png';
 import spread from '../asset/manager/spread.png';
 
 import headPortrait from '../asset/userCenter/headPortrait.png';
+
+
+const Icon = ({direction})  => {
+  if (direction === true) {
+    return <img className={styles.down} src={up} alt=""/>;
+  } else {
+    return <img className={styles.down} src={down} alt=""/>;
+  }
+}
 
 const Mask = ({visible,parent,List,Index}) => {               //部门列表
   if (visible) {
@@ -39,6 +49,7 @@ class InviteCodeDetail extends Component {
   constructor() {
     super();
     this.state = {
+        iconDirection:false,        //图标方向
         InputText:'',               //输入名字
         InputValue:'',              //输入部门
         departmentId:'',            //部门Id
@@ -52,10 +63,10 @@ componentDidMount() {
     this.getOfficeList();
 }
 hideMask() {
-  this.setState({ mask: false });
+  this.setState({ mask:false,iconDirection:false});
 }
 showMask() {
-  this.setState({ mask: true });
+  this.setState({ mask: true,iconDirection:true});
 }
 // getValue(ev) {          //获取部门的输入值
 //   this.setState({InputValue:ev.target.value})
@@ -99,7 +110,7 @@ async getOfficeList() {                     //获取部门列表
   this.setState({section:sectionList || []});   
 }
 render() {
-    const {mask,section,departmentIndex,InputValue,InputText} = this.state;
+    const {mask,section,departmentIndex,InputValue,InputText,iconDirection} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -110,10 +121,9 @@ render() {
           <input onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
           <div>必填</div>
         </div>
-
-        <div className = {styles.getCode}>
+        <div onClick={ev =>this.showMask(ev)} className = {styles.getCode}>
           <div>{InputValue}</div>
-          <img onClick={ev =>this.showMask(ev)} src={down} className={styles.down} alt=''/>
+          <Icon direction={iconDirection}/>
         </div>
 
         <div className={styles.next}>

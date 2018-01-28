@@ -54,9 +54,22 @@ class Search extends Component {
     componentDidMount() {
         // document.querySelector('title').innerText = '搜索';
         this.getOfficeUserList();
-
+        this.searchHistory();
+    }
+    componentWillUnmount(){
+        this.state.searchHistory.push(this.state.inputValue)
+        window.localStorage.setItem('searchName',this.state.searchHistory);
+    }
+    searchHistory() {
+        var test=window.localStorage.getItem('searchName');
+        if(test){
+            this.setState({searchHistory:test.split(',')})
+        }else{
+            this.setState({searchHistory:[]})
+        }
     }
     empty() {
+        window.localStorage.removeItem("searchName")
         this.setState({searchHistory:[]});
     }
     delete() {
@@ -64,7 +77,6 @@ class Search extends Component {
         this.setState({searchState:false});
     }
     personalInformation(i) {
-        window.localStorage.setItem('searchName',this.state.inputValue);
         window.Person = {
             userid:this.state.searchDate[i].userid,
             phone:this.state.searchDate[i].phone,
@@ -72,8 +84,8 @@ class Search extends Component {
             section:this.state.searchDate[i].officeName
         }
 
-        this.state.searchHistory.push(this.state.inputValue);
-        this.setState({searchHistory:this.state.searchHistory});
+        // this.state.searchHistory.push(this.state.inputValue);
+        // this.setState({searchHistory:this.state.searchHistory});
         this.props.history.push('/personalInformation')
     }
     getInputValue(ev) {
@@ -120,7 +132,7 @@ class Search extends Component {
                         {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
                         <DeleteImg visible={inputValue} parent={this}/>
                     </div>
-                    <div className={styles.cancel}>取消</div>
+                    <div onClick={ev =>this.delete(ev)} className={styles.cancel}>取消</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <div className={styles.content}>

@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import DayPicker from 'react-day-picker';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import styles from '../styles/ReleaseAnnouncement.css';
 
@@ -182,7 +181,7 @@ class ReleaseAnnouncement extends Component{
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                       <input type="text" className={styles.inputBox} placeholder='公告标题' onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
+                       <textarea className={styles.inputBox} type="text" placeholder="公告标题" onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle}></textarea>
                     </div>
                     <textarea className={styles.inputBlock} placeholder="公告内容" onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>

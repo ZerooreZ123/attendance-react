@@ -129,10 +129,36 @@ class AttendanceData extends Component {
     componentDidMount() {
         // document.querySelector('title').innerText = '员工考勤记录';
         this.getOfficeList();
-        this.getRecords(this.state.startTime,this.state.endTime);
+        this.selectState();
     }
     componentWillUnmount(){
         var Result = {
+            Value:this.state.Value,
+            abnormalRecord:this.state.abnormalRecord,
+            dataSource:this.state.dataSource,
+            date:this.state.date,
+            departmentId:this.state.departmentId,
+            departmentIndex:this.state.departmentIndex,
+            endTime:this.state.endTime,
+            maskDate:this.state.maskDate,
+            maskToggle:this.state.maskToggle,
+            nameId:this.state.nameId,
+            optionGroups:{data:this.state.optionGroups.data},
+            optionYears:{data:this.state.optionYears.data},
+            personData:this.state.personData,
+            personDetail:this.state.personDetail,
+            record:this.state.record,
+            section:this.state.section,
+            selectDate:this.state.selectDate,
+            selectMonth:this.state.selectMonth,
+            selectYear:this.state.selectYear,
+            showState:this.state.showState,
+            startTime:this.state.startTime,
+            tabIndex:this.state.tabIndex,
+            toggleIndex:this.state.toggleIndex,
+            valueGroups:{data:this.state.valueGroups.data},
+            valueYears:{data:this.state.valueYears.data},
+            yearSource:this.state.yearSource,
             currentIndex:this.state.currentIndex,
             departmentName:this.state.departmentName
         };
@@ -140,10 +166,79 @@ class AttendanceData extends Component {
     }
     selectState() {
         var test=JSON.parse(window.sessionStorage.getItem('dataResult'));
+        console.log(test);
         if(test){
-            this.setState({currentIndex:+test})
+            this.setState({Value:test.Value,
+                abnormalRecord:test.abnormalRecord,
+                dataSource:test.dataSource,
+                date:test.date,
+                departmentId:test.departmentId,
+                departmentIndex:test.departmentIndex,
+                endTime:test.endTime,
+                maskDate:test.maskDate,
+                maskToggle:+test.maskToggle,
+                nameId:test.nameId,
+                optionGroups:{data:test.optionGroups.data},
+                optionYears:{data:test.optionYears.data},
+                personData:test.personData,
+                personDetail:test.personDetail,
+                record:test.record,
+                section:test.section,
+                selectDate:test.selectDate,
+                selectMonth:test.selectMonth,
+                selectYear:test.selectYear,
+                showState:+test.showState,
+                startTime:test.startTime,
+                tabIndex:+test.tabIndex,
+                toggleIndex:test.toggleIndex,
+                valueGroups:{data:test.valueGroups.data},
+                valueYears:{data:test.valueYears.data},
+                yearSource:test.yearSource,
+                currentIndex:+test.currentIndex,
+                departmentName:test.departmentName})
+            // debugger
+            this.getRecords(test.selectDate,test.selectDate,test.departmentId);
+            
         }else{
-            this.setState({currentIndex:0})
+            this.setState({ 
+                Value: '',
+                date: new Date(),
+                section: [],                 //部门列表
+                departmentName:'全部',       //默认部门
+                departmentIndex: '',         //部门的索引值
+                departmentId: '',            //部门Id
+                nameId:'',                   //用户Id
+                maskDate: false,             //默认不显示日历
+                currentIndex: 0,             //日月年展示模块索引
+                showState: 0,                //默认展示全部
+                tabIndex: 0,                 //选择tab的索引
+                startTime: moment().format('YYYY-MM-DD'),     //开始时间(传参)
+                endTime: moment().format('YYYY-MM-DD'),       //结束时间(传参)
+                record: [],                  //展示打卡记录
+                abnormalRecord:[],           //异常打卡记录
+                personDetail:false,           //个人打卡记录状态
+                personData:[],                //个人打卡数据
+                dataSource: [],               //月统计打卡记录
+                yearSource: [],               //年统计打卡记录
+                toggleIndex: '',              //切换选择时间与部门的索引值
+                maskToggle: 0,                //默认不展示mask
+                selectDate: moment().format('YYYY-MM-DD'),   //日历选择
+                selectMonth:'',                //月份选择
+                selectYear:'',                 //年份选择
+                valueGroups: {                //月组件
+                    data: moment().format('YYYY-MM')
+                },
+                optionGroups: {
+                    data: []
+                },
+                valueYears:{                 //年组件
+                    data:moment().format('YYYY')
+                },
+                optionYears:{
+                    data:[]
+                }
+           })
+           this.getRecords(this.state.startTime,this.state.endTime,this.state.departmentId);
         }
     }
     getYear() {                           //获取年份
@@ -213,10 +308,10 @@ class AttendanceData extends Component {
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
         if (i === 0) {
-            this.setState({selectDate:this.state.startTime})
-            this.setState({departmentName:'全部'})
+            this.setState({selectDate:this.state.selectDate})
+            this.setState({departmentName:this.state.departmentName});
             if(this.state.tabIndex === 0) {
-                this.getRecords(this.state.startTime,this.state.endTime);
+                this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId);
             }else{
                 this.Abnormal(this.state.startTime,this.state.endTime);
             }

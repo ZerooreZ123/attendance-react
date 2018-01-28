@@ -21,7 +21,7 @@ const BottomBar = ({add,parent,deleteState}) => {           //底部选择栏组
         return(
             <div className={styles.bottomBar}>
                 <div onClick={ev =>parent.cancelSelect(ev)} className={styles.cancel}>取消</div>
-                <div onClick={ev =>parent.addOrUpdateOfficce(ev)} className={styles.determine}>确定</div>
+                <div onClick={ev =>parent.addOne(ev)} className={styles.determine}>确定</div>
             </div>
         )
     }
@@ -187,6 +187,9 @@ class EnterpriseManager extends Component {
             })
         }
     }
+    addOne() {
+        setTimeout(()=>this.addOrUpdateOfficce(), 0);
+    }
     async addOrUpdateOfficce() {            //增加部门
         this.setState({ division: false });
         this.setState({selectState:true});
@@ -195,8 +198,8 @@ class EnterpriseManager extends Component {
             officeName:this.state.inputText,
         })
         if (JSON.parse(result).success === "T") {
-            alert("添加部门成功");
             this.setState({section:this.state.section});
+            alert("添加部门成功");
         }else{
             alert(JSON.parse(result).msg);
         }

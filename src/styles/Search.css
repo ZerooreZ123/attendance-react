@@ -11,10 +11,11 @@
     justify-content:space-between;
     align-items:center;
     position: fixed;
-    top:20px;
+    top:0;
     left:0;
     height:76px;
-    padding:0 22px;
+    padding:38px 22px;
+    background:#fff;
 }
 .searchBox{
     display:flex;
@@ -76,7 +77,8 @@ input::-webkit-input-placeholder{
     display:none;
 }
 .substance{
-    padding:114px 0 104px;
+    padding:150px 0 104px;
+    background:#fff;
 }
 .department{
     width:100%;

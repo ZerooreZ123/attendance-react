@@ -102,7 +102,7 @@ class EditProfile extends Component{
                 <div className={styles.content}>
                     <div className={styles.information}>
                         <input className={styles.name} type="text" onChange={ev =>this.editName(ev)} value={this.state.valueName} />
-                        <div className={styles.department}>{departmentName}</div>
+                        <div className={styles.department}>{departmentName?departmentName:'其他'}</div>
                     </div>
                 </div>
                 <div className={styles.bottomBar}>

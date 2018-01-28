@@ -213,7 +213,7 @@ class PersonalInformation extends Component {
                     <div className={styles.header}>
                         <div className={styles.information}>
                             <div className={styles.phone}>{window.Person.name}</div>
-                            <div className={styles.department}>{window.Person.section}</div>
+                            <div className={styles.department}>{window.Person.section?window.Person.section:'其他'}</div>
                         </div>
                         <div className={styles.tabBox}>
                             <div onClick={ev =>this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab:styles.tab}>全部</div>
