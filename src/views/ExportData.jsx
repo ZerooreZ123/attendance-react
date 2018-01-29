@@ -33,14 +33,18 @@ class ExportData extends Component{
         }else if(window.Data.time.length === 7){                //月
             if(window.Data.section === '全部') {      //全部
                 this.getRecords(window.Data.time + '-01',moment(window.Data.time).endOf('month').format('YYYY-MM-DD'));   
-            }else{                                   //部门
+            }else if(window.Data.departmentId){                                   //部门
                 this.getRecords(window.Data.time + '-01',moment(window.Data.time).endOf('month').format('YYYY-MM-DD'),window.Data.departmentId)   
+            }else {
+                this.getRecords(window.Data.time + '-01',moment(window.Data.time).endOf('month').format('YYYY-MM-DD'),'',window.Data.userids)   
             }
         }else{                                                  //年
             if(window.Data.section === '全部') {      //全部
                 this.getRecords(window.Data.time + '-01-01',window.Data.time+ '-12-31');   
-            }else{                                   //部门
+            }else if(window.Data.departmentId){                                   //部门
                 this.getRecords(window.Data.time + '-01-01',window.Data.time+ '-12-31',window.Data.departmentId)   
+            }else{
+                this.getRecords(window.Data.time + '-01-01',window.Data.time+ '-12-31','',window.Data.userids)   
             }
         }
     }

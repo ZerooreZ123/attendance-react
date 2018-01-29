@@ -89,11 +89,26 @@ class PersonalInformation extends Component {
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
-
-
-
-        this.setState({dataSource:dataResult} || []);
-
+        this.setState({dataSource:dataResult.slice(0,20) || []});
+        window.sessionStorage.setItem('more',JSON.stringify(dataResult))
+    }
+    getMore() {
+        if(this.state.tabIndex === 0) {
+            var moreData = JSON.parse(window.sessionStorage.getItem('more'));
+            if(moreData.length<20){
+                alert('没有更多啦')
+            }else{
+                this.setState({dataSource:moreData || []});
+            }
+        }else{
+            var More = JSON.parse(window.sessionStorage.getItem('More'));
+            if(More.length<20){
+                alert('没有更多啦')
+            }else{
+                this.setState({dataAbnormal:More || []});
+            }
+        }
+       
     }
     async getAbnormal(i) {            //获取异常打卡记录
         this.setState({monthIndex:i});
@@ -136,7 +151,8 @@ class PersonalInformation extends Component {
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
-        this.setState({dataAbnormal:dataResult || []});
+        this.setState({dataAbnormal:dataResult.slice(0,20)|| []});
+        window.sessionStorage.setItem('More',JSON.stringify(dataResult))
     }
     render() {
         const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState} = this.state;
@@ -222,7 +238,7 @@ class PersonalInformation extends Component {
                         <div className={styles.month}>
                             {
                             monthList.map((item,index) =>
-                                <div onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} key={index} className={monthIndex === index ? styles.currentMonth:styles.noMonth}>{item}月</div>
+                                <div onClick={ tabIndex === 0?ev =>this.getRecords(index):ev =>this.getAbnormal(index)} key={index} className={monthIndex === index? styles.currentMonth:styles.noMonth}>{item}月</div>
                             )  
                             }
                         </div>
@@ -230,7 +246,7 @@ class PersonalInformation extends Component {
                     <Show></Show>
                 </div>
                 <div className={styles.bottomBar}>
-                    <div className={styles.add}>查看更多</div>
+                    <div onClick={ev =>this.getMore(ev)} className={styles.add}>查看更多</div>
                     <div onClick={ev =>this.editData(ev)} className={styles.editor}>修改资料</div>
                 </div>
             </div>

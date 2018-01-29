@@ -166,6 +166,7 @@ class UserCenter extends Component {
         super();
         window.temp = {};
         this.state = {
+            id:'',                 //用户Id
             showUserCenter:true,   //展示模块1
             showPunchClock:false,  //展示模块2
             companyid: '',         //公司Id
@@ -178,9 +179,6 @@ class UserCenter extends Component {
             normalDay: ''
         }
     }
-    componentWillUnmount() {
-       
-    }
     componentDidMount() {
         // document.querySelector('title').innerText = '个人中心';
         this.getUser();
@@ -188,6 +186,31 @@ class UserCenter extends Component {
         // this.searchIbeacons();
         this.showTime();
         this.getNewNotice();
+        this.mainPage();
+    }
+    componentWillUnmount(){
+        var main = {
+            showUserCenter:this.state.showUserCenter, 
+            showPunchClock:this.state.showPunchClock,
+            prompt:this.state.prompt 
+        }
+        window.sessionStorage.setItem('mainPage',JSON.stringify(main));
+    }
+    mainPage() {
+        var test=JSON.parse(window.sessionStorage.getItem('mainPage'));
+        if(test) {
+            this.setState({
+                showUserCenter:test.showUserCenter,
+                showPunchClock:test.showPunchClock
+            })
+
+        }else{
+            this.setState({
+                showUserCenter:true,   //展示模块1
+                showPunchClock:false,  //展示模块2
+                prompt:1
+            })
+         }
     }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
@@ -249,7 +272,7 @@ class UserCenter extends Component {
     }
     moveToUser(i) {                   //一般用户选项跳转
         this.getOfficeList();
-        const userUrl = ['/attendanceRecord', '/cardReminding', '/revisionDepartment'];
+        const userUrl = ['/attendanceRecord/'  + this.state.companyid + '/' +this.state.id, '/cardReminding', '/revisionDepartment'];
         this.props.history.push(userUrl[i]);
     }
     moveToOrdinary(i) {               //普通管理员选项跳转
@@ -366,9 +389,10 @@ class UserCenter extends Component {
     }
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser, { loginName: this.props.match.params.loginName });
-        this.setState({ dataSource: JSON.parse(result).data });
-        this.setState({ roleid: JSON.parse(result).data.roleid });
-        this.setState({ companyid: JSON.parse(result).data.companyid })
+        this.setState({ dataSource: JSON.parse(result).data, roleid: JSON.parse(result).data.roleid,companyid: JSON.parse(result).data.companyid ,id:JSON.parse(result).data.id});
+        // this.setState({ roleid: JSON.parse(result).data.roleid });
+        // this.setState({ companyid: JSON.parse(result).data.companyid })
+        // this.setState({id:JSON.parse(result).data.id})
         window.temp = {
             name: JSON.parse(result).data.name,
             officeName: JSON.parse(result).data.officeName
@@ -392,6 +416,7 @@ class UserCenter extends Component {
                             <img className={styles.informationPhoto} src={headPortrait} alt="" />
                             <div className={styles.personalInformation}>
                                 <div className={styles.name}>
+                                    <span>{dataSource.fingerprintNum}</span>
                                     <span>{dataSource.name}</span>
                                     <span>({dataSource.roleNames})</span>
                                 </div>

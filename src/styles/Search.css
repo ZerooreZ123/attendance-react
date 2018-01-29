@@ -109,3 +109,6 @@ input::-webkit-input-placeholder{
     font-size:18px;
     color:#666;
 }
+.inputBox::-webkit-input-placeholder{ 
+　　color:#666;
+}

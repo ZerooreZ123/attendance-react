@@ -277,7 +277,7 @@ class EmployeeInformation extends Component{
                 <div className={styles.header}>
                    <div className={styles.searchBox}>
                         <img className={styles.search}src={search} alt=""/>
-                        <input onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
+                        <input className={styles.inputBox} onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
                     </div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>

@@ -164,3 +164,6 @@ input::-webkit-input-placeholder{
 .hideContent{
     display:none
 }
+.inputBox::-webkit-input-placeholder{ 
+　　color:#666;
+}

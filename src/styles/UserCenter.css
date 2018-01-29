@@ -70,6 +70,9 @@
 .name{
     font-size:32px;
 }
+.name>span:nth-child(1){
+    margin-right: 8px;
+}
 .content{
     font-size:28px;
     padding:0 48px;

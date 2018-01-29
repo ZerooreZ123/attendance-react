@@ -68,10 +68,10 @@ class AttendanceRecord extends Component{
                 endTime = moment().endOf('month').format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
-            companyid:window.sessionStorage.getItem('companyid'),
+            companyid:this.props.match.params.companyid,
             beginDate:startTime,    
             endDate:endTime,
-            userids: window.sessionStorage.getItem('id')    
+            userids:this.props.match.params.loginName    
         })
         const dataResult = [];
         
@@ -111,10 +111,10 @@ class AttendanceRecord extends Component{
                      
         }
         const result = await XHR.post(API.getRecords,{
-            companyid:window.sessionStorage.getItem('companyid'),
+            companyid:this.props.match.params.companyid,
             beginDate:startTime, 
             endDate:endTime,
-            userids:window.sessionStorage.getItem('id'),
+            userids:this.props.match.params.loginName,
             abnormity:"abnormity"    
         })
         

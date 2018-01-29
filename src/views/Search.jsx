@@ -62,8 +62,18 @@ class Search extends Component {
     }
     searchHistory() {
         var test=window.localStorage.getItem('searchName');
+        function unique(arr){
+            　　var newArr = [arr[0]];
+           　　 for(var i=1;i<arr.length;i++){
+         　　　　if(newArr.indexOf(arr[i]) === -1){
+                   　　 newArr.push(arr[i]);
+             　　  }
+                 }
+                 return newArr;
+            }
         if(test){
-            this.setState({searchHistory:test.split(',')})
+            var arr =test.split(','); 
+            this.setState({searchHistory:unique(arr)})
         }else{
             this.setState({searchHistory:[]})
         }
@@ -128,7 +138,7 @@ class Search extends Component {
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.searchBox}>
-                        <input onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
+                        <input className={styles.inputBox} onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
                         {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
                         <DeleteImg visible={inputValue} parent={this}/>
                     </div>
