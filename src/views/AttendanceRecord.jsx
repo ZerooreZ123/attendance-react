@@ -85,8 +85,8 @@ class AttendanceRecord extends Component{
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
-        
-        this.setState({dataSource:dataResult || []});
+        var dataResult1 = dataResult.reverse();
+        this.setState({dataSource:dataResult1 || []});
     }
     async getAbnormal(i) {            //获取异常打卡记录
         this.setState({monthIndex:i});
@@ -130,8 +130,9 @@ class AttendanceRecord extends Component{
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
+        var dataResult1 = dataResult.reverse();
         
-        this.setState({dataAbnormal:dataResult || []});
+        this.setState({dataAbnormal:dataResult1 || []});
 
     }
     render() {
