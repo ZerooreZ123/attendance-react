@@ -150,7 +150,7 @@ class ReleaseAnnouncement extends Component{
             })
             if(JSON.parse(result).success === 'T'){
                 alert("发布成功");
-                window.history.go(-1);
+                this.props.history.push('/historyAnnouncement')
             }else{
                 alert(JSON.parse(result).msg)
             }
@@ -165,7 +165,7 @@ class ReleaseAnnouncement extends Component{
             })
             if(JSON.parse(result).success === 'T'){
                 alert("发布成功");
-                window.history.go(-1);
+                this.props.history.push('/historyAnnouncement')
             }else{
                 alert(JSON.parse(result).msg)
             }

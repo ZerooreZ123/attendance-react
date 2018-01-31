@@ -66,7 +66,8 @@ class EditProfile extends Component{
                 userName:this.state.valueName
             });
             if(JSON.parse(result).success === 'T') {
-                alert('修改资料成功')
+                alert('修改资料成功');
+                window.history.go(-1);
             }else{
                 alert(JSON.parse(result).msg);
             }
@@ -102,7 +103,7 @@ class EditProfile extends Component{
                 <div className={styles.content}>
                     <div className={styles.information}>
                         <input className={styles.name} type="text" onChange={ev =>this.editName(ev)} value={this.state.valueName} />
-                        <div className={styles.department}>{departmentName?departmentName:'其他'}</div>
+                        <div className={this.state.departmentId?styles.blueDepartment:styles.department}>{departmentName?departmentName:'其他'}</div>
                     </div>
                 </div>
                 <div className={styles.bottomBar}>

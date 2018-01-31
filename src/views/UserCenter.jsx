@@ -17,7 +17,6 @@ import person from '../asset/manager/person-1.png';
 import clock from '../asset/manager/location-2.png';
 import go from '../asset/manager/go.png';
 import scan from '../asset/manager/scan.png';
-import delete_1 from '../asset/ico/close.png';
 import person1 from '../asset/punchClock/person-2.png';
 import clock2 from '../asset/punchClock/loction-2.png';
 import notice from '../asset/punchClock/notice.png';
@@ -25,6 +24,8 @@ import warn from '../asset/punchClock/abnormal.png';
 import load from '../asset/punchClock/load.png';
 import successMin from '../asset/punchClock/successMin.png';
 import success from '../asset/punchClock/success.png';
+import redX from '../asset/punchClock/redX.png';
+
 
 const Notice = ({ noticeState, parent, title }) => {   //打卡顶部通告
     if (noticeState) {
@@ -32,7 +33,7 @@ const Notice = ({ noticeState, parent, title }) => {   //打卡顶部通告
             <div className={styles.noticeBoard}>
                 <img className={styles.noticeImg} src={notice} alt="" />
                 <span onClick={ev => parent.AnnouncementDetails(ev)} className={styles.noticeText}>{title}</span>
-                <img onClick={ev => parent.noteceDelete(ev)} className={styles.noteceDelete} src={delete_1} alt="" />
+                <img onClick={ev => parent.noteceDelete(ev)} className={styles.noteceDelete} src={redX} alt="" />
             </div>
         )
     } else {
@@ -227,7 +228,8 @@ class UserCenter extends Component {
         this.rankingList();
     }
     refresh() {                       //刷新页面
-        this.setState({ prompt: 0 })
+        this.setState({ prompt: 0 });
+        this.searchIbeacons();
     }
     noteceDelete() {                  //删除通知
         this.setState({ noticeState: false });
@@ -318,7 +320,7 @@ class UserCenter extends Component {
             // jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
             jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
         });
-        window.wx.startSearchBeacons({
+        window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
                     alert("1")
@@ -326,17 +328,37 @@ class UserCenter extends Component {
                    if(argv.errMsg === "startSearchBeacons:ok") {
                        alert('2')
                         // 监听iBeacon信号
-                        // this.setState({prompt:1})
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
-                                alert("3");
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                            // alert(JSON.stringify(argv));
+                                alert('4')
+                                if(argv.onSearchBeacons.beacons.length>0) {
+                                   this.setState({prompt:1})  
+                                }else{
+                                    alert('附近没有设备');
+                                }
                             }
                         });
                    }else{
-                       this.setState({prompt:2})
+                       //停止搜索ibeacons
+                        window.wx.stopSearchBeacons({
+                            complete:function(res){
+                              //关闭查找完成后的回调函数
+                               alert('3')
+                               this.setState({prompt:2})
+                            }
+                        });
                    }
+                   // // 超时停止扫描
+                setTimeout(function(){
+                    window.wx.stopSearchBeacons({
+                        complete:function(res){
+                          //关闭查找完成后的回调函数
+                           alert('5')
+                           this.setState({prompt:2})
+                        }
+                    });
+                },5000);
                     
             }
 
@@ -375,11 +397,11 @@ class UserCenter extends Component {
     }
     async unbind() {                //解绑员工   
         const result = await XHR.post(API.unbindUser, { loginName: this.props.match.params.loginName });
-        if (JSON.parse(result).success === 'T') {
-            alert('解绑成功');
-        } else {
-            alert('解绑失败');
-        }
+        // if (JSON.parse(result).success === 'T') {
+        //     alert('解绑成功');
+        // } else {
+        //     alert('解绑失败');
+        // }
     }
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser, { loginName: this.props.match.params.loginName });

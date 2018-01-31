@@ -38,8 +38,8 @@ input::-webkit-input-placeholder{
     color:#b5b5b5;
 }
 .search{
-    width:33px;
-    height:33px;
+    width:38px;
+    height:38px;
     margin:0 15px 0 23px;
 }
 .content{
@@ -52,7 +52,7 @@ input::-webkit-input-placeholder{
     font-size:24px;
     color:#000;
     background: #ededed;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #f6f6f6; */
 }
 .personnel{
     padding:0 48px;
@@ -63,15 +63,15 @@ input::-webkit-input-placeholder{
     justify-content:space-between;
     align-items: center;
     padding:20px 0;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #f6f6f6;
 }
 .name{
-    font-size:26px;
+    font-size:28px;
     color:#000;
     margin-bottom:14px;
 }
 .phone{
-    font-size:18px;
+    font-size:20px;
     color:#666;
 }
 .forward{
@@ -85,7 +85,7 @@ input::-webkit-input-placeholder{
     left:0;
     height:102px;
     width:100%;
-    border:2px solid #ddd;
+    border:2px solid #f6f6f6;
     text-align: center;
     line-height: 102px;
     font-size:32px;
@@ -144,7 +144,7 @@ input::-webkit-input-placeholder{
     width:30%;
     height:94px;
     margin: 0 8px 34px;
-    border:2px solid #ddd;
+    border:2px solid #f6f6f6;
     border-radius:2px;
     line-height:94px;
     text-align: center;
@@ -165,5 +165,5 @@ input::-webkit-input-placeholder{
     display:none
 }
 .inputBox::-webkit-input-placeholder{ 
-　　color:#666;
+　　color:#b0b0b0;
 }

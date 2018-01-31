@@ -206,8 +206,11 @@
     z-index:1;
     width:276px;
     height:276px;
-    border:18px solid #b4dbf7;
-    border-left-color: #90c4e9;
+    border:20px solid transparent;
+    border-left-color:#8cc2e8;
+    border-right-color:#b4dbf7;
+    border-top-color:#b4dbf7;
+    border-bottom-color:#b4dbf7;
     border-radius:50%;
     -webkit-animation:circle 1s infinite linear;/*匀速 循环*/
 }
@@ -215,7 +218,7 @@
     z-index:1;
     width:276px;
     height:276px;
-    border:18px solid #b4dbf7;
+    border:20px solid #b4dbf7;
     border-radius:50%;
 }
 .cardFinish{
@@ -246,14 +249,14 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    top:18px;
-    left:18px;
+    top:20px;
+    left:20px;
     z-index:2;
     width:276px;
     height:276px;
     border-radius: 50%;
     color:#6dbafe;
-    background: #2093e6;
+    background:-webkit-linear-gradient(top, #33b5fb 0%, #0c6dd0 100%)
 }
 .clockOn{
     font-size:44px;
@@ -270,8 +273,8 @@
 }
 .promptImg{
     display:inline-block;
-    width:32px;
-    height: 32px;
+    width:33px;
+    height:33px;
 }
 .text{
     display:inline-block;

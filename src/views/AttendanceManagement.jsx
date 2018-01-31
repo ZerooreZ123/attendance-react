@@ -166,7 +166,7 @@ class AttendanceManagement extends Component {
                     </div>
 
                     <div className={styles.workTime}>
-                        <div className={styles.work}>工作时间</div>
+                        <div className={styles.work}>工作时间 (自定义)</div>
                         <div className={styles.week}>
                             {
                                 week.map((item, index) =>

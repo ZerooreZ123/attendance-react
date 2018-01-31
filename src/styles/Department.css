@@ -9,13 +9,14 @@
 
 .content{
     padding:0 48px;
+    font-size:26px;
 }
 .item{
     display:flex;
     justify-content: space-between;
     align-items:center;
     height:102px;
-    border-bottom:3px solid #ddd;
+    border-bottom:3px solid #f6f6f6;
 }
 .name{
     font-size:26px;
@@ -23,6 +24,6 @@
 }
 .forward{
     display:inline-block;
-    width:26px;
+    width:22px;
     height: 40px;
 }

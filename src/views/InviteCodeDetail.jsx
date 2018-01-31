@@ -119,10 +119,10 @@ render() {
 
         <div className = {styles.getCode}>
           <input onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
-          <div>必填</div>
+          <div className={styles.must}>必填</div>
         </div>
         <div onClick={ev =>this.showMask(ev)} className = {styles.getCode}>
-          <div>{InputValue}</div>
+          <div>{InputValue?InputValue:'部门'}</div>
           <Icon direction={iconDirection}/>
         </div>
 

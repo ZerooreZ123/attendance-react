@@ -485,10 +485,16 @@ class AttendanceData extends Component {
                 id: item.id
             })
         });
-        sectionList.push({
-            name:'其他',
-            id: 'officeid'
-        })
+        sectionList.push(
+            {
+                name:'其他',
+                id: 'officeid'
+            },
+            {
+                name:'全部',
+                id:''
+            }
+        )
         this.setState({ section: sectionList });
     }
 
@@ -524,10 +530,10 @@ class AttendanceData extends Component {
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
         
@@ -547,10 +553,10 @@ class AttendanceData extends Component {
         JSON.parse(result).data.forEach((ev,i) =>{
             dataResult.push({
                 userName:ev.userName,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
         this.setState({ abnormalRecord: dataResult || [] } );
@@ -569,10 +575,10 @@ class AttendanceData extends Component {
         JSON.parse(result).data.forEach((ev,i) =>{
             dataResult.push({
                 userName:ev.userName,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
         this.setState({ record: dataResult || [] } );

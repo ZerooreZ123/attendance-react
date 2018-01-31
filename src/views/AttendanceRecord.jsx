@@ -79,10 +79,10 @@ class AttendanceRecord extends Component{
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
         var dataResult1 = dataResult.reverse();
@@ -124,10 +124,10 @@ class AttendanceRecord extends Component{
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
         var dataResult1 = dataResult.reverse();

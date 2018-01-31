@@ -195,10 +195,11 @@ class EnterpriseManager extends Component {
         this.setState({selectState:true});
         const result = await XHR.post(API.addOrUpdateOfficce,{
             companyid:window.sessionStorage.getItem('companyid'),
-            officeName:this.state.inputText,
+            officeName:this.state.inputText
         })
         if (JSON.parse(result).success === "T") {
             this.setState({section:this.state.section});
+            window.location.reload();
             alert("添加部门成功");
         }else{
             alert(JSON.parse(result).msg);

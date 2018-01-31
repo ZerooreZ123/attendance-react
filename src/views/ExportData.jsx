@@ -81,7 +81,7 @@ class ExportData extends Component{
                         <input onChange={ev =>this.getMail(ev)} className={styles.inputBox} type="text" placeholder="接收邮箱" value={inputMail} />
                     </div>
                 </div>
-                <div onClick={ev =>this.exportData(ev)} className={styles.button}>发送</div>
+                <div onClick={ev =>this.exportData(ev)} className={inputMail === ''?styles.Button:styles.button}>发送</div>
             </div>
         )
     }

@@ -25,7 +25,9 @@
     align-items: center;
     height:102px;
     margin: 0 46px;
+    font-size:34px;
     text-indent:24px;
+    color:#000;
 }
 .icon{
     display:inline-block;
@@ -42,6 +44,8 @@
 }
 .work{
     margin:35px 0 20px;
+    font-size:30px;
+    color:#999;
 }
 .holiday,.custom{
     font-size:30px;

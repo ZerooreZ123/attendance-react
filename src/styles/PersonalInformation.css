@@ -23,7 +23,7 @@
     align-items:center;
     height:96px;
     padding:0 22px;
-    border-bottom:2px solid #ddd;
+    border-bottom:2px solid #f6f6f6;
 }
 .currentMonth{
     height:30px;
@@ -78,7 +78,7 @@
     height:102px;
     font-size:30px;
     color:#707070;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #f6f6f6;
 }
 .currentMonth{
     color:#2295e8;
@@ -87,7 +87,7 @@
     padding:318px 24px 0;
 }
 .item{
-    border-bottom:1px solid #ddd;
+    border-bottom:1px solid #f6f6f6;
     padding:20px 0 22px;
 }
 .displayDate{
@@ -102,6 +102,7 @@
     display:inline-block;
     margin-top:26px;
     width:50%;
+    font-size:24px;
 }
 .gotoWork,.gooffWork{
     padding-left:24px;
@@ -120,7 +121,7 @@
     left:0;
     width:100%;
     line-height: 102px;
-    border-top:3px solid #ddd;
+    border-top:3px solid #f6f6f6;
     font-size:32px;
 }
 .editor{

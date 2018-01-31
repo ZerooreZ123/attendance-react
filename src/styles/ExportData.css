@@ -30,6 +30,15 @@
     color:#fff;
     font-size:34px;
     background:#2295e8;
-
-  
+}
+.Button{
+    width:658px;
+    height:94px;
+    margin: 0 auto;
+    border-radius:3px;
+    text-align: center;
+    line-height: 94px;
+    color:#fff;
+    font-size:34px;
+    background:#bcdff8;
 }

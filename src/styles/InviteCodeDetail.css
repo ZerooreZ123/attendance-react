@@ -126,6 +126,9 @@
   width:140px;
   height:140px;
 }
+.must{
+  font-size:24px;
+}
 input::-webkit-input-placeholder { /* WebKit browsers */
   　　color:#fff;
 }

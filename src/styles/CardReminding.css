@@ -67,6 +67,16 @@
     font-size:28px;
     border-bottom:2px solid #ddd;
 }
+.selectSingle{
+    z-index:6;
+    width:706px;
+    height:104px;
+    line-height: 104px;
+    text-align: center;
+    font-size:32px;
+    color:#2295e8;
+    border-bottom:2px solid #ddd;
+}
 .buleSingle{
     z-index:6;
     width:706px;

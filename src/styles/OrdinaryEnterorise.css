@@ -44,7 +44,7 @@
 }
 .forward{
     display:inline-block;
-    width:26px;
+    width:22px;
     height: 40px;
 }
 
@@ -53,7 +53,6 @@
     outline:none;
     font-size:26px;
     color:#000;
-   
 }
 .machine{
     display:inline-block;

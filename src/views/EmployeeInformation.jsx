@@ -5,12 +5,11 @@ import styles from '../styles/EmployeeInformation.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import search from '../asset/manager/search.png';
+import search from '../asset/manager/search1.png';
 import forward from '../asset/manager/go.png';
 import upBlue from '../asset/manager/triangle-top.png';
 import downBlue from '../asset/manager/downBlue.png';
 import spread from '../asset/manager/spread.png';
-
 
 const Direction = (props) => {
     if (props.checked === true) {

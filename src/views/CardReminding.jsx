@@ -16,15 +16,15 @@ const Icon = ({direction})  => {
     }
 }
 
-const TimeList =({parent,visible})  => {
-    const list = [3,5,10,20,30];
+const TimeList =({parent,visible,up})  => {
+    const list = ['3','5','10','20','30'];
     if (visible) {
         return (
             <div className={styles.mask} onClick={ev =>parent.hideTimeList(ev)}>
                 <div className={styles.maskBox}>
                     <div className={styles.timeSlot}>
                     {
-                        list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>parent.selectTime(index)}>前{item}分钟</div>)
+                        list.map((item,index) =><div className={ up === item?styles.selectSingle:styles.single} key={index} onClick={ev =>parent.selectTime(index)}>前{item}分钟</div>)
                     }
                     </div>
                 </div>
@@ -35,15 +35,15 @@ const TimeList =({parent,visible})  => {
     }
 }
 
-const TimeSlot = ({parent,visible})  => {
-    const list = [3,5,10,20,30];
+const TimeSlot = ({parent,visible,down})  => {
+    const list = ['3','5','10','20','30'];
     if (visible) {
         return (
             <div className={styles.maskCopy} onClick={ev =>parent.hideTimeSlot(ev)}>
                 <div className={styles.maskBox}>
                     <div className={styles.timeDuan}>
                     {
-                        list.map((item,index) =><div className={styles.single} key={index} onClick={ev =>parent.choiceTime(index)}>前{item}分钟</div>)
+                        list.map((item,index) =><div className={down === item?styles.selectSingle:styles.single} key={index} onClick={ev =>parent.choiceTime(index)}>前{item}分钟</div>)
                     }
                     </div>
                 </div>
@@ -138,7 +138,6 @@ class CardReminding extends Component {
         setTimeout(()=>this.clockInRemind(), 0);
     }
     async clockInRemind() {              //设置提醒设置
-        // console.log(this.state.upTime,this.state.upSwitch,this.state.downTime,this.state.downSwitch)
         const result = await XHR.post(API.clockInRemind,{
             loginName:window.sessionStorage.getItem('loginName'),
             upTime:this.state.upTime,
@@ -162,7 +161,7 @@ class CardReminding extends Component {
                     <div className={styles.item}>
                         <div>
                             <div className={styles.work}>上班打卡提醒</div>
-                            <div onClick={ev =>this.showTimeList(ev)} className={ iconTop === true ? styles.blueRemind:styles.workRemind}>上班前{upTime}分钟未打卡提醒
+                            <div onClick={ev =>this.showTimeList(ev)} className={ iconTop === true ? styles.blueRemind:styles.workRemind}>上班前{upTime}分钟打卡提醒
                                <Icon direction={iconTop}></Icon>
                             </div>
                         </div>
@@ -171,14 +170,14 @@ class CardReminding extends Component {
                     <div className={styles.itemOne}>
                         <div>
                             <div className={styles.work}>下班打卡提醒</div>
-                            <div onClick={ev =>this.showTimeSlot(ev)} className={ iconDown === true ? styles.blueRemind:styles.workRemind}>下班前{downTime}分钟未打卡提醒
+                            <div onClick={ev =>this.showTimeSlot(ev)} className={ iconDown === true ? styles.blueRemind:styles.workRemind}>下班后{downTime}分钟打卡提醒
                                <Icon direction={iconDown}></Icon>
                             </div>
                         </div>
                         <Switch onChange={ev =>this.changeSwitch(ev)} checked={downSwitch === '0' ? true:false}></Switch>
                     </div>
-                    <TimeList parent={this} visible={timeList}></TimeList>
-                    <TimeSlot parent={this} visible={timeSlot}></TimeSlot>
+                    <TimeList parent={this} visible={timeList} up={upTime}></TimeList>
+                    <TimeSlot parent={this} visible={timeSlot} down={downTime}></TimeSlot>
                 </div>
             </div>
         )

@@ -16,7 +16,7 @@
     justify-content:space-between;
     align-items:center;
     height:96px;
-    border-bottom:2px solid #ddd;
+    border-bottom:2px solid #f6f6f6;
 }
 .name{
     font-size:26px;
@@ -26,6 +26,10 @@
 }
 .department{
     font-size:32px;
+}
+.blueDepartment{
+    font-size:32px;
+    color:#2295e8;
 }
 .selectDepartment{
     position:fixed;
@@ -38,7 +42,7 @@
     font-size:32px;
     color: #2e79ca;
     background: #fff;
-    border:2px solid #ddd;
+    border:2px solid #f6f6f6;
 }
 .top{
     width:20px;
@@ -62,6 +66,7 @@
 .departmentBox{
     padding:0 22px;
     margin-bottom:104px;
+    overflow-y :yes;
 
 }
 .term,.selectTerm{

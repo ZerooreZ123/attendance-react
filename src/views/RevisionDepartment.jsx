@@ -62,7 +62,7 @@ class RevisionDepartment extends Component{
     }
     confirmBtn() {                                     //确认修改
         this.setState({edit:false})
-        this.setState({departmentIndex:''})
+        this.setState({departmentIndex:'',departmentId:''})
         this.update();
     }
     async getOfficeList() {                           //部门列表

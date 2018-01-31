@@ -142,7 +142,7 @@ class Search extends Component {
                         {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
                         <DeleteImg visible={inputValue} parent={this}/>
                     </div>
-                    <div onClick={ev =>this.delete(ev)} className={styles.cancel}>取消</div>
+                    <div onClick={ev =>this.delete(ev)} className={styles.cancel}>搜索</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <div className={styles.content}>
