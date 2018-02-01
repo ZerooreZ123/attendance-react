@@ -15,7 +15,7 @@ import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
 
-const NoData =({parent,selectDate,departmentName}) =>{
+const NoData =({parent,selectDate,departmentName,maskState}) =>{
     return (
         <div className={styles.blankBox}>
              <div className={styles.box}>
@@ -27,7 +27,7 @@ const NoData =({parent,selectDate,departmentName}) =>{
                     <span>{selectDate}</span>/<span>{departmentName}</span>
                     <img className={styles.top} src={top} alt="" />
                 </div>
-                <div onClick={ev => parent.export(ev)} className={styles.exportData}>导出数据</div>
+                <div onClick={ev => parent.export(ev)} className={maskState === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
              </div>
         </div>
     )
@@ -285,47 +285,51 @@ class AttendanceData extends Component {
         this.props.history.push('/search');
     }
     export() {                       //跳转至导出页面
-        if(this.state.currentIndex === 0) {     //导出日
-            window.Data = {
-                time:this.state.selectDate,
-                section:this.state.departmentName,
-                departmentId:this.state.departmentId
-            }
-            this.props.history.push('/exportData');
-        }else if(this.state.currentIndex === 1) { //导出月
-            if( this.state.personDetail === false){
+        if(this.state.maskToggle === 0){
+            if(this.state.currentIndex === 0) {     //导出日
                 window.Data = {
-                    time:this.state.selectMonth,
-                    section:this.state.departmentName,
-                    departmentId:this.state.departmentId,
-                }
-                this.props.history.push('/exportData'); 
-            }else{                               //导出个人
-                window.Data = {
-                    time:this.state.selectMonth,
-                    section:this.state.departmentName,
-                    userids:this.state.nameId
-                }
-                this.props.history.push('/exportData'); 
-            }
-        }else{                                  //导出年
-            if(this.state.personYearDetail === false) {
-                window.Data = {
-                    time:this.state.selectYear,
+                    time:this.state.selectDate,
                     section:this.state.departmentName,
                     departmentId:this.state.departmentId
                 }
-                this.props.history.push('/exportData'); 
-            }else{
-                window.Data = {
-                    time:this.state.selectYear,
-                    section:this.state.departmentName,
-                    userids:this.state.nameId
+                this.props.history.push('/exportData');
+            }else if(this.state.currentIndex === 1) { //导出月
+                if( this.state.personDetail === false){
+                    window.Data = {
+                        time:this.state.selectMonth,
+                        section:this.state.departmentName,
+                        departmentId:this.state.departmentId,
+                    }
+                    this.props.history.push('/exportData'); 
+                }else{                               //导出个人
+                    window.Data = {
+                        time:this.state.selectMonth,
+                        section:this.state.departmentName,
+                        userids:this.state.nameId
+                    }
+                    this.props.history.push('/exportData'); 
                 }
-                this.props.history.push('/exportData'); 
+            }else{                                  //导出年
+                if(this.state.personYearDetail === false) {
+                    window.Data = {
+                        time:this.state.selectYear,
+                        section:this.state.departmentName,
+                        departmentId:this.state.departmentId
+                    }
+                    this.props.history.push('/exportData'); 
+                }else{
+                    window.Data = {
+                        time:this.state.selectYear,
+                        section:this.state.departmentName,
+                        userids:this.state.nameId
+                    }
+                    this.props.history.push('/exportData'); 
+                }
             }
-        }
 
+        }else{
+            return false
+        }
     }
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
@@ -655,13 +659,13 @@ class AttendanceData extends Component {
                                         <span>{selectDate}</span>/<span>{departmentName}</span>
                                         <img className={styles.top} src={top} alt="" />
                                     </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                    <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
                             </div>
                         );
                     }else{
                         return(
-                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName}/>
+                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName} maskState={maskToggle}/>
                         )
                     }
                     
@@ -689,13 +693,13 @@ class AttendanceData extends Component {
                                         <span>{selectDate}</span>/<span>{departmentName}</span>
                                         <img className={styles.top} src={top} alt="" />
                                     </div>
-                                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                    <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
                             </div>
                         );
                     }else{
                         return(
-                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName}/>
+                            <NoData parent={this} selectDate={selectDate} departmentName={departmentName} maskState={maskToggle}/>
                         )
                     }
                     
@@ -730,13 +734,13 @@ class AttendanceData extends Component {
                                             <span>{selectMonth}</span>/<span>{departmentName}</span>
                                             <img className={styles.top} src={top} alt="" />
                                         </div>
-                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                        <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
                                 </div>
                             )   
                         }else{
                             return(
-                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
+                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName} maskState={maskToggle}/>
                             )
                         } 
                     }else{                               //异常
@@ -766,13 +770,13 @@ class AttendanceData extends Component {
                                             <span>{selectMonth}</span>/<span>{departmentName}</span>
                                             <img className={styles.top} src={top} alt="" />
                                         </div>
-                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                        <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
                                 </div>
                             )   
                         }else{
                             return(
-                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
+                                <NoData parent={this} selectDate={selectMonth} departmentName={departmentName} maskState={maskToggle}/>
                             )
                         } 
                     }       
@@ -800,13 +804,13 @@ class AttendanceData extends Component {
                                     <span>{selectMonth}</span>/<span>{departmentName}</span>
                                     <img className={styles.top} src={top} alt="" />
                                 </div>
-                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
                         </div>   
                         )
                     }else{
                         return(
-                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName}/>
+                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName} maskState={maskToggle}/>
                         )
                     }
                 }
@@ -839,13 +843,13 @@ class AttendanceData extends Component {
                                             <span>{selectYear}</span>/<span>{departmentName}</span>
                                             <img className={styles.top} src={top} alt="" />
                                         </div>
-                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                        <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
                                 </div>
                             );
                         }else{
                             return(
-                                <NoData parent={this} selectDate={selectYear} departmentName={departmentName}/>
+                                <NoData parent={this} selectDate={selectYear} departmentName={departmentName} maskState={maskToggle}/>
                             )
                         }
                    }else{                   //异常
@@ -874,13 +878,13 @@ class AttendanceData extends Component {
                                             <span>{selectYear}</span>/<span>{departmentName}</span>
                                             <img className={styles.top} src={top} alt="" />
                                         </div>
-                                        <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                        <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
                                 </div>
                             );
                         }else{
                             return(
-                                <NoData parent={this} selectDate={selectYear} departmentName={departmentName}/>
+                                <NoData parent={this} selectDate={selectYear} departmentName={departmentName} maskState={maskToggle}/>
                             )
                         }
                    }
@@ -908,13 +912,13 @@ class AttendanceData extends Component {
                                     <span>{selectYear}</span>/<span>{departmentName}</span>
                                     <img className={styles.top} src={top} alt="" />
                                 </div>
-                                <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
+                                <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
                         </div>   
                         )
                     }else{                  
                         return(
-                            <NoData parent={this} selectDate={selectYear} departmentName={departmentName}/>
+                            <NoData parent={this} selectDate={selectYear} departmentName={departmentName} maskState={maskToggle}/>
                         )
                     }
                 }

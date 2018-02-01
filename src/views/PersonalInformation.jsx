@@ -89,25 +89,26 @@ class PersonalInformation extends Component {
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
-        this.setState({dataSource:dataResult.slice(0,20) || []});
+        this.setState({dataSource:dataResult || []});
         window.sessionStorage.setItem('more',JSON.stringify(dataResult))
     }
     getMore() {
-        if(this.state.tabIndex === 0) {
-            var moreData = JSON.parse(window.sessionStorage.getItem('more'));
-            if(moreData.length<20){
-                alert('没有更多啦')
-            }else{
-                this.setState({dataSource:moreData || []});
-            }
-        }else{
-            var More = JSON.parse(window.sessionStorage.getItem('More'));
-            if(More.length<20){
-                alert('没有更多啦')
-            }else{
-                this.setState({dataAbnormal:More || []});
-            }
-        }
+        this.props.history.push('/attendanceData')
+        // if(this.state.tabIndex === 0) {
+        //     var moreData = JSON.parse(window.sessionStorage.getItem('more'));
+        //     if(moreData.length<20){
+        //         alert('没有更多啦')
+        //     }else{
+        //         this.setState({dataSource:moreData || []});
+        //     }
+        // }else{
+        //     var More = JSON.parse(window.sessionStorage.getItem('More'));
+        //     if(More.length<20){
+        //         alert('没有更多啦')
+        //     }else{
+        //         this.setState({dataAbnormal:More || []});
+        //     }
+        // }
        
     }
     async getAbnormal(i) {            //获取异常打卡记录
@@ -151,7 +152,7 @@ class PersonalInformation extends Component {
                 backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
             })
         })
-        this.setState({dataAbnormal:dataResult.slice(0,20)|| []});
+        this.setState({dataAbnormal:dataResult || []});
         window.sessionStorage.setItem('More',JSON.stringify(dataResult))
     }
     render() {

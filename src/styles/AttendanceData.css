@@ -158,7 +158,14 @@
     text-align: center;
     color:#fff;
     background: #2295e8;
-
+}
+.exportProhibit{
+    height:102px;
+    width:186px;
+    line-height: 102px;
+    text-align: center;
+    color:#fff;
+    background: rgb(173, 214, 243)
 }
 .mask {
     background: rgba(0, 0, 0, 0.3);

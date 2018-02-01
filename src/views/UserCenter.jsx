@@ -281,6 +281,7 @@ class UserCenter extends Component {
     moveToOrdinary(i) {               //普通管理员选项跳转
         this.getOfficeList();
         window.sessionStorage.removeItem('test');
+        window.sessionStorage.removeItem('dataResult');
         const ordinaryUrl = ['/attendanceData', '/ordinaryEnterorise', '/employeeInformation', '/releaseAnnouncement']
         this.props.history.push(ordinaryUrl[i]);
     }
@@ -323,15 +324,15 @@ class UserCenter extends Component {
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
-                    alert("1")
+                    // alert("1")
                     //开启查找完成后的回调函数
                    if(argv.errMsg === "startSearchBeacons:ok") {
-                       alert('2')
+                    //    alert('2')
                         // 监听iBeacon信号
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                                alert('4')
+                                // alert('4')
                                 if(argv.onSearchBeacons.beacons.length>0) {
                                    this.setState({prompt:1})  
                                 }else{
@@ -344,7 +345,7 @@ class UserCenter extends Component {
                         window.wx.stopSearchBeacons({
                             complete:function(res){
                               //关闭查找完成后的回调函数
-                               alert('3')
+                            //    alert('3')
                                this.setState({prompt:2})
                             }
                         });
@@ -354,11 +355,11 @@ class UserCenter extends Component {
                     window.wx.stopSearchBeacons({
                         complete:function(res){
                           //关闭查找完成后的回调函数
-                           alert('5')
+                        //    alert('5')
                            this.setState({prompt:2})
                         }
                     });
-                },5000);
+                },30000);
                     
             }
 

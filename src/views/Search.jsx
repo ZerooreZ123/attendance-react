@@ -86,6 +86,31 @@ class Search extends Component {
         this.setState({inputValue:''});
         this.setState({searchState:false});
     }
+    backCancel() {
+        window.history.go(-1);
+    }
+    pushSearch(i) {
+        this.setState({inputValue:this.state.searchHistory[i]});
+        const list = this.state.departmentStaff;
+        const dataResult = [];
+        list.forEach(el=>{
+            el.staff.forEach(item =>{
+                if(this.state.searchHistory[i] && (item.name.match(this.state.searchHistory[i])) || this.state.searchHistory[i] && item.phone.match(this.state.searchHistory[i])){
+                    this.setState({searchState:true});
+                    dataResult.push({
+                        name:item.name || '',
+                        phone:item.phone || '',
+                        officeName:item.officeName || '',
+                        userid:item.id || ''
+                    })
+                }
+            })
+            if(!this.state.searchHistory[i]) {
+                this.setState({searchState:false});
+            }
+        })
+        this.setState({searchDate:dataResult || []});
+    }
     personalInformation(i) {
         window.Person = {
             userid:this.state.searchDate[i].userid,
@@ -96,7 +121,7 @@ class Search extends Component {
 
         // this.state.searchHistory.push(this.state.inputValue);
         // this.setState({searchHistory:this.state.searchHistory});
-        this.props.history.push('/personalInformation')
+        this.props.history.push('/attendanceData')
     }
     getInputValue(ev) {
         this.setState({inputValue:ev.target.value});
@@ -142,7 +167,7 @@ class Search extends Component {
                         {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
                         <DeleteImg visible={inputValue} parent={this}/>
                     </div>
-                    <div onClick={ev =>this.delete(ev)} className={styles.cancel}>搜索</div>
+                    <div onClick={ev =>this.backCancel(ev)} className={styles.cancel}>取消</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <div className={styles.content}>
@@ -151,7 +176,7 @@ class Search extends Component {
                     </div>
                     <div className={styles.list}>
                         {
-                            searchHistory.map((item,index) =><div key={index}>{item}</div>)
+                            searchHistory.map((item,index) =><div onClick={ev =>this.pushSearch(index)} key={index}>{item}</div>)
                         }
                     </div>
                 </div>
