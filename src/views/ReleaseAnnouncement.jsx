@@ -94,15 +94,10 @@ class ReleaseAnnouncement extends Component{
         this.setState({iconState:true});
     }
     delete(i) {
-        var msg = '确定删除吗？';
-        if(window.confirm(msg) === true) {
-            this.state.imgBox.splice(i,1);
-            this.state.imgSrcConcat.splice(i,1);
-            this.setState({imgBox:this.state.imgBox});
-            this.setState({imgSrcConcat:this.state.imgSrcConcat});
-        }else{
-            return false
-        }
+        this.state.imgBox.splice(i,1);
+        this.state.imgSrcConcat.splice(i,1);
+        this.setState({imgBox:this.state.imgBox});
+        this.setState({imgSrcConcat:this.state.imgSrcConcat});
     }
     getBase64(callback) {            //获取图片
         var file = this.refs.files.files[0];

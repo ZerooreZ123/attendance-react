@@ -941,13 +941,6 @@ class AttendanceData extends Component {
                     }
                 </div>
                 <DateChange></DateChange>
-                {/* <div className={styles.footer}>
-                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                        <span>{currentIndex ===0?selectDate: defaultTime}</span>/<span>{departmentName}</span>
-                        <img className={styles.top} src={top} alt="" />
-                    </div>
-                    <div onClick={ev => this.export(ev)} className={styles.exportData}>导出数据</div>
-                </div> */}
                 <div className={maskToggle === 0 ? styles.hideMask : styles.mask}>
                     <div className={styles.maskBox}>
                         <div className={styles.operation}>

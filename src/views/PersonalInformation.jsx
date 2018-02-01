@@ -93,7 +93,7 @@ class PersonalInformation extends Component {
         window.sessionStorage.setItem('more',JSON.stringify(dataResult))
     }
     getMore() {
-        this.props.history.push('/attendanceData')
+        this.props.history.push('/personalRecord')
         // if(this.state.tabIndex === 0) {
         //     var moreData = JSON.parse(window.sessionStorage.getItem('more'));
         //     if(moreData.length<20){

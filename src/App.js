@@ -30,6 +30,8 @@ import PersonalRegister from './views/PersonalRegister';
 import EnterpriseRegistration from './views/EnterpriseRegistration';
 import WriteInformation from './views/WriteInformation';
 import Prompt from './views/Prompt';
+import PersonalRecord from './views/PersonalRecord';
+import PersonExport from './views/PersonExport';
 
 
 
@@ -80,7 +82,9 @@ class App extends Component {
                   <Route location={props.location} exact path="/personalRegister/:companyid/:loginName" component={PersonalRegister}/>
                   <Route location={props.location} exact path="/enterpriseRegistration/:serialNumber/:loginName" component={EnterpriseRegistration}/>
                   <Route location={props.location} exact path="/writeInformation" component={WriteInformation}/>
-                  <Route location={props.location} exact path="/prompt/:msg" component={Prompt}/>   
+                  <Route location={props.location} exact path="/prompt/:msg" component={Prompt}/>
+                  <Route location={props.location} exact path="/personalRecord" component={PersonalRecord}/>
+                  <Route location={props.location} exact path="/personExport" component={PersonExport}/>
                 </div>
               </CSSTransitionGroup>
             )

@@ -86,8 +86,21 @@ class Search extends Component {
         this.setState({inputValue:''});
         this.setState({searchState:false});
     }
-    backCancel() {
-        window.history.go(-1);
+    search(ev) {
+        this.setState({inputValue:ev.target.value});
+        const list = this.state.departmentStaff;
+        list.forEach(el=>{
+            el.staff.forEach(item =>{
+                if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
+                    window.Person = {
+                        userid:item.id,
+                        name:item.name,
+                    }
+                    this.props.history.push('/personalRecord');
+                }
+            })
+        })
+       
     }
     pushSearch(i) {
         this.setState({inputValue:this.state.searchHistory[i]});
@@ -114,15 +127,11 @@ class Search extends Component {
     personalInformation(i) {
         window.Person = {
             userid:this.state.searchDate[i].userid,
-            phone:this.state.searchDate[i].phone,
             name:this.state.searchDate[i].name,
-            section:this.state.searchDate[i].officeName
         }
-
-        // this.state.searchHistory.push(this.state.inputValue);
-        // this.setState({searchHistory:this.state.searchHistory});
-        this.props.history.push('/attendanceData')
+        this.props.history.push('/personalRecord')
     }
+    
     getInputValue(ev) {
         this.setState({inputValue:ev.target.value});
         const list = this.state.departmentStaff;
@@ -167,7 +176,7 @@ class Search extends Component {
                         {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
                         <DeleteImg visible={inputValue} parent={this}/>
                     </div>
-                    <div onClick={ev =>this.backCancel(ev)} className={styles.cancel}>取消</div>
+                    <div onClick={ev =>this.search(ev)} className={styles.cancel}>搜索</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <div className={styles.content}>

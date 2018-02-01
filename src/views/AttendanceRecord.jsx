@@ -65,7 +65,7 @@ class AttendanceRecord extends Component{
                 break;
             default:
                 startTime = moment().startOf('month').format("YYYY-MM-DD");
-                endTime = moment().endOf('month').format("YYYY-MM-DD"); 
+                endTime = moment().format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
             companyid:this.props.match.params.companyid,
@@ -107,7 +107,7 @@ class AttendanceRecord extends Component{
                 break;
             default:
                 startTime = moment().startOf('month').format("YYYY-MM-DD");
-                endTime = moment().endOf('month').format("YYYY-MM-DD");     
+                endTime = moment().format("YYYY-MM-DD");     
                      
         }
         const result = await XHR.post(API.getRecords,{
