@@ -21,11 +21,17 @@ class Department extends Component{
         this.getOfficeUserList();
     }
     personalInformation(i) {
-        window.Person={};
-        window.Person.name = this.state.departmentStaff[i].name;
-        window.Person.section = this.state.departmentStaff[i].officeName;
-        window.Person.userid = this.state.departmentStaff[i].id;
-        window.Person.loginN = this.state.departmentStaff[i].loginN;
+        window.Person={
+            name: this.state.departmentStaff[i].name,
+            section:this.state.departmentStaff[i].officeName,
+            userid:this.state.departmentStaff[i].id,
+            loginN :this.state.departmentStaff[i].loginN,
+            barState:false
+        };
+        // window.Person.name = this.state.departmentStaff[i].name;
+        // window.Person.section = this.state.departmentStaff[i].officeName;
+        // window.Person.userid = this.state.departmentStaff[i].id;
+        // window.Person.loginN = this.state.departmentStaff[i].loginN;
         this.props.history.push('/personalInformation');
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表

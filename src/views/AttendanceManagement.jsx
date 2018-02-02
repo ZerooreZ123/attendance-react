@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import TimePicker from 'rc-time-picker';
+import Toast from '../components/Toast';
 
 import styles from '../styles/AttendanceManagement.css';
 
@@ -34,6 +35,7 @@ class AttendanceManagement extends Component {
         super();
         window.temp = {};
         this.state = {
+            tipState:false,        //提示状态
             iconState1:false,      //上小三角状态
             iconState2:false,      //下小三角状态
             value: moment(),
@@ -121,13 +123,16 @@ class AttendanceManagement extends Component {
             id: this.state.data.id
         })
         if(JSON.parse(result).success === 'T'){
-            alert("设置成功")
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
         }else{
             alert(JSON.parse(result).msg);
         }
     }
     render() {
-        const { status,iconState1,iconState2} = this.state;
+        const { status,iconState1,iconState2,tipState} = this.state;
         const format = 'H:mm';
 
         const week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
@@ -177,6 +182,7 @@ class AttendanceManagement extends Component {
                     </div>
                     <div onClick={ev => this.attendanceManagement(ev)} className={styles.determine}>确认</div>
                 </div>
+                <Toast isShow={tipState} text="考勤设置成功"/>   
             </div>
         )
     }

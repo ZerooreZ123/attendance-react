@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1,user-scalable=no,shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
     <!--
       manifest.json provides metadata used when your web app is added to the
@@ -25,8 +26,19 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
-    <script src="%PUBLIC_URL%/onfire.js"></script>
+    <!-- <script src="%PUBLIC_URL%/jweixin.js"></script> -->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <!-- <script type="text/javascript">
+        wx.config({
+          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: 'wx99a066ed3be3d52e', // 必填，公众号的唯一标识
+          timestamp: 1462521975, // 必填，生成签名的时间戳
+          nonceStr: '9f2c415b-0b8a-48be-ae2c-b4b92a76f494', // 必填，生成签名的随机串
+          signature: '0f978b1b7884092cfb825fed7ea18bc9b9fd3b27',// 必填，签名，见附录1
+          jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      });
+    </script> -->
+    <title>gogo考勤</title>
   </head>
   <body>
     <noscript>

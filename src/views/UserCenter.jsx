@@ -262,8 +262,7 @@ class UserCenter extends Component {
 
 
     punchClock() {
-        this.setState({showUserCenter:false});
-        this.setState({showPunchClock:true});
+        this.setState({showUserCenter:false,showPunchClock:true,prompt: 0});
         this.searchIbeacons();
     }
     personCenter() {
@@ -318,48 +317,51 @@ class UserCenter extends Component {
             timestamp:this.state.result.timestamp, // 必填，生成签名的时间戳
             nonceStr:this.state.result.nonceStr, // 必填，生成签名的随机串
             signature:this.state.result.signature,// 必填，签名
-            // jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
-            jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
+            jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
+            // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
         });
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
-                    // alert("1")
                     //开启查找完成后的回调函数
                    if(argv.errMsg === "startSearchBeacons:ok") {
-                    //    alert('2')
                         // 监听iBeacon信号
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                                // alert('4')
-                                if(argv.onSearchBeacons.beacons.length>0) {
-                                   this.setState({prompt:1})  
+                                if(argv.beacons.length>0) {
+                                    this.setState({prompt:1})
+                                    window.wx.stopSearchBeacons({
+                                            complete:(res) =>{
+                                        }
+                                    });  
                                 }else{
                                     alert('附近没有设备');
+                                    window.wx.stopSearchBeacons({
+                                            complete:(res) =>{
+                                        }
+                                    });  
                                 }
                             }
                         });
                    }else{
                        //停止搜索ibeacons
                         window.wx.stopSearchBeacons({
-                            complete:function(res){
+                            complete:(res) =>{
                               //关闭查找完成后的回调函数
-                            //    alert('3')
                                this.setState({prompt:2})
                             }
                         });
                    }
-                   // // 超时停止扫描
-                setTimeout(function(){
-                    window.wx.stopSearchBeacons({
-                        complete:function(res){
-                          //关闭查找完成后的回调函数
-                        //    alert('5')
-                           this.setState({prompt:2})
-                        }
-                    });
-                },30000);
+                // setTimeout(() =>{
+                //     window.wx.stopSearchBeacons({
+                //         complete:(res)=>{
+                //           //关闭查找完成后的回调函数
+                //            alert('超时停止iBeacon')
+                //            this.setState({prompt:2})
+                //         }
+                //     });
+                // },30000);
                     
             }
 

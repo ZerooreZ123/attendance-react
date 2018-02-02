@@ -57,7 +57,6 @@ class Search extends Component {
         this.searchHistory();
     }
     componentWillUnmount(){
-        this.state.searchHistory.push(this.state.inputValue)
         window.localStorage.setItem('searchName',this.state.searchHistory);
     }
     searchHistory() {
@@ -87,20 +86,24 @@ class Search extends Component {
         this.setState({searchState:false});
     }
     search(ev) {
-        this.setState({inputValue:ev.target.value});
-        const list = this.state.departmentStaff;
-        list.forEach(el=>{
-            el.staff.forEach(item =>{
-                if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
-                    window.Person = {
-                        userid:item.id,
-                        name:item.name,
-                    }
-                    this.props.history.push('/personalRecord');
-                }
-            })
-        })
-       
+        this.state.searchHistory.push(this.state.inputValue);
+
+
+
+        // const list = this.state.departmentStaff;
+        // list.forEach(el=>{
+        //     el.staff.forEach(item =>{
+        //         if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
+        //             window.Person = {
+        //                 userid:item.id,
+        //                 name:item.name,
+        //             }
+        //             this.props.history.push('/personalRecord');
+        //         }else{
+        //             return false
+        //         }
+        //     })
+        // })  
     }
     pushSearch(i) {
         this.setState({inputValue:this.state.searchHistory[i]});

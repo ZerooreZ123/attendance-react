@@ -44,7 +44,7 @@ class AddAttendanceMachine extends Component{
                        <input className={styles.phone}/>
                      </div>
                 </div>
-                <div className={styles.binding} onClick={ev =>this.update(ev)}>确认绑定</div>    
+                <div className={styles.binding} onClick={ev =>this.update(ev)}>确认绑定</div>
             </div>
         )
     }

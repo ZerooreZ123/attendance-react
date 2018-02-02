@@ -1,0 +1,14 @@
+.box{
+    position:absolute;
+    top:50%;
+    left:50%;
+    padding-left:38px;
+    padding-right:38px;
+    text-align: center;
+    line-height:110px;
+    transform:translate(-50%,-50%);
+    border-radius:50px;
+    color:#fff;
+    font-size:34px;
+    background:rgba(0,0,0,0.6);
+}

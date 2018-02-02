@@ -84,7 +84,8 @@ class EmployeeInformation extends Component{
                        name:e.name,
                        userid:e.id,
                        section:e.officeName || '其他',
-                       loginN:e.loginName
+                       loginN:e.loginName,
+                       barState:true
                    }
                }
             })

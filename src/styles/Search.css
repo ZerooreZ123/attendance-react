@@ -27,19 +27,23 @@
     border-radius:38px;
     background:#f5f5f5;
 }
-.searchBox>input{
+.inputBox:focus{color:#2295e8}
+.inputBox::-webkit-input-placeholder{
+    color:#666;
+}
+.inputBox{
     width:536px;
     height:36px;
     padding-left:24px;
     font-size:34px;
     color:#000;
     background:transparent;
+    text-shadow: 0px 0px 0px #000;
+    -webkit-text-fill-color: transparent;
     outline:none;
     border: none;
 }
-input::-webkit-input-placeholder{
-    color:#b5b5b5;
-}
+
 .cleanButton{
     width:33px;
     height:33px;
@@ -108,7 +112,4 @@ input::-webkit-input-placeholder{
 .phone{
     font-size:18px;
     color:#666;
-}
-.inputBox::-webkit-input-placeholder{ 
-　　color:#666;
 }

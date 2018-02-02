@@ -8,6 +8,23 @@ import API from '../api/index';
 
 import data from '../asset/statePrompt/data.png';
 
+const BottomBar=({visible,parent}) =>{
+    if(visible) {
+        return(
+            <div className={styles.bottomBar}>
+                <div onClick={ev =>parent.getMore(ev)} className={styles.add}>查看更多</div>
+                <div onClick={ev =>parent.editData(ev)} className={styles.editor}>修改资料</div>
+            </div>
+        )
+    }else{
+        return (
+            <div className={styles.bottomBar}>
+                <div onClick={ev =>parent.getMore(ev)} className={styles.more}>查看更多</div>
+            </div>
+        )
+    }
+}
+
 class PersonalInformation extends Component {
     constructor() {
         super();
@@ -18,6 +35,7 @@ class PersonalInformation extends Component {
             monthList:[],               //月份列表
             monthIndex:0,               //月份索引
             tabIndex:0,                 //tab索引
+            barState:window.Person.barState               //底部bar状态
         }
     }
     componentDidMount() {
@@ -93,23 +111,7 @@ class PersonalInformation extends Component {
         window.sessionStorage.setItem('more',JSON.stringify(dataResult))
     }
     getMore() {
-        this.props.history.push('/personalRecord')
-        // if(this.state.tabIndex === 0) {
-        //     var moreData = JSON.parse(window.sessionStorage.getItem('more'));
-        //     if(moreData.length<20){
-        //         alert('没有更多啦')
-        //     }else{
-        //         this.setState({dataSource:moreData || []});
-        //     }
-        // }else{
-        //     var More = JSON.parse(window.sessionStorage.getItem('More'));
-        //     if(More.length<20){
-        //         alert('没有更多啦')
-        //     }else{
-        //         this.setState({dataAbnormal:More || []});
-        //     }
-        // }
-       
+        this.props.history.push('/personalRecord');
     }
     async getAbnormal(i) {            //获取异常打卡记录
         this.setState({monthIndex:i});
@@ -156,7 +158,7 @@ class PersonalInformation extends Component {
         window.sessionStorage.setItem('More',JSON.stringify(dataResult))
     }
     render() {
-        const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState} = this.state;
+        const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState,barState} = this.state;
         const Show = props =>{
             if(showState === true) {
                 if(dataSource.length>0) {
@@ -246,10 +248,7 @@ class PersonalInformation extends Component {
                     </div>
                     <Show></Show>
                 </div>
-                <div className={styles.bottomBar}>
-                    <div onClick={ev =>this.getMore(ev)} className={styles.add}>查看更多</div>
-                    <div onClick={ev =>this.editData(ev)} className={styles.editor}>修改资料</div>
-                </div>
+                <BottomBar visible = {barState} parent={this}/>
             </div>
         )
     }
