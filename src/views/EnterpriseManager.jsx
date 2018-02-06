@@ -26,7 +26,7 @@ const BottomBar = ({add,parent,deleteState}) => {           //底部选择栏组
         )
     }
 }
-const TabContent = ({currentIndex,deleteSection,division,inputText,section, machineNum,parent}) => {
+const TabContent = ({currentIndex,deleteSection,division,inputText,section, machineNum,parent,imgClick}) => {
     if (currentIndex === 1) {
          if(deleteSection === false) {
             return (
@@ -79,8 +79,11 @@ const TabContent = ({currentIndex,deleteSection,division,inputText,section, mach
         return (
             <div className={styles.content}>
                 <div className={styles.codeWrap}>
-                    <div className={styles.code}>
+                    <div className={imgClick?styles.hideCode:styles.code}>
                         <QRCode value={parent.state.invitationCode} />
+                    </div>
+                    <div className={imgClick?styles.code:styles.hideCode}> 
+                        <img className={styles.imgSize} src={imgClick} alt=""/>
                     </div>
                     <div className={styles.codetext}>邀请码</div>
                     <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
@@ -101,7 +104,8 @@ class EnterpriseManager extends Component {
             section: [],                 //部门列表
             machineNum: [],              //考勤机列表
             inputText:'',                //部门名称
-            deleteSection:false          //删除部门状态
+            deleteSection:false,          //删除部门状态
+            imgBase64:''
         }
     }
     componentDidMount() {
@@ -119,6 +123,7 @@ class EnterpriseManager extends Component {
         var test=window.sessionStorage.getItem('test');
         if(test){
             this.setState({currentIndex:+test})
+            // this.setState({qr:window.sessionStorage.getItem('qr')})
         }else{
             this.setState({currentIndex:0})
         }
@@ -199,6 +204,7 @@ class EnterpriseManager extends Component {
         })
         if (JSON.parse(result).success === "T") {
             this.setState({section:this.state.section});
+            window.sessionStorage.setItem('test',this.state.currentIndex);
             window.location.reload();
             alert("添加部门成功");
         }else{
@@ -216,10 +222,26 @@ class EnterpriseManager extends Component {
             alert(JSON.parse(result).msg)
         }
     }
+    getBase64(canvas){
+        if(this.state.currentIndex === 0) {
+            var image = new Image();  
+            image.src = canvas.toDataURL("image/png");
+            this.setState({imgBase64:image.getAttribute('src')})    
+        }else{
+            return false;
+        }
+         
+    }
     async getCompany() {                   //获取公司信息
-        const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
-        const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-        this.setState({invitationCode:admin})
+        if(this.state.currentIndex === 0){
+            const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+            const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+            this.setState({invitationCode:admin});
+            this.getBase64(document.getElementsByTagName('canvas')[0]);
+        }else{
+            return false
+        }
+       
       }
 
     async getOfficeList() {                //获取公司部门列表
@@ -267,6 +289,7 @@ class EnterpriseManager extends Component {
                 section = {section}
                 machineNum ={machineNum}
                 parent={this}
+                imgClick={this.state.imgBase64}
                 />
             </div>
         )

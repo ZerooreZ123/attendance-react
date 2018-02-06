@@ -1,5 +1,7 @@
 //搜索
 import React,{Component} from 'react';
+import Toast from '../components/Toast';
+
 import styles from '../styles/Search.css';
 
 import XHR from '../utils/request';
@@ -44,6 +46,7 @@ class Search extends Component {
     constructor() {
         super();
         this.state={
+            tipState:false,              //提示状态
             searchDate:'',               //搜索数据
             searchState:false,           //搜索状态
             inputValue:'',               //搜索关键字
@@ -79,17 +82,21 @@ class Search extends Component {
     }
     empty() {
         window.localStorage.removeItem("searchName")
-        this.setState({searchHistory:[]});
+        this.setState({searchHistory:[],tipState:true});
+        setTimeout(()=>{
+            this.setState({tipState:false});
+        },2000)
     }
     delete() {
         this.setState({inputValue:''});
         this.setState({searchState:false});
     }
     search(ev) {
-        this.state.searchHistory.push(this.state.inputValue);
-
-
-
+        if(this.state.searchHistory.indexOf(this.state.inputValue) === -1){
+            this.state.searchHistory.push(this.state.inputValue);
+        }else{
+            return false;
+        }
         // const list = this.state.departmentStaff;
         // list.forEach(el=>{
         //     el.staff.forEach(item =>{
@@ -170,7 +177,7 @@ class Search extends Component {
         this.setState({departmentStaff:userList});
     }
     render() {
-        const {searchHistory,inputValue,searchState,searchDate} = this.state;
+        const {searchHistory,inputValue,searchState,searchDate,tipState} = this.state;
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -193,6 +200,7 @@ class Search extends Component {
                     </div>
                 </div>
                 <SearchList visible={searchState} parent={this} allPerson={searchDate} />
+                <Toast isShow={tipState} text="记录清除成功"/>
             </div>
         )
     }

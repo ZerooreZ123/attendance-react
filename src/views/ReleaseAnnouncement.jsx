@@ -62,7 +62,7 @@ class ReleaseAnnouncement extends Component{
     handleDayClick(day) {
         var myDate = new Date(day);
         this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
-        this.hideMask1()
+        this.hideMask1();
     }
     selectDayClick(day) {
         var myDate = new Date(day);
@@ -84,6 +84,7 @@ class ReleaseAnnouncement extends Component{
     hideMask1() {
         this.setState({mask:false});
         this.setState({iconState:true});
+        setTimeout(()=>this.showMask2(),500)
     }
     showMask2() {
         this.setState({copyMask:true})
@@ -193,14 +194,12 @@ class ReleaseAnnouncement extends Component{
                     <div className={styles.releaseTime}>公告将发布:从<button onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</button>至<button onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect}>{this.state.chooseDay}</button></div>
                 </div>
                 <div className={styles.footer}>
-                    <div className={styles.case}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
                         <div className={styles.photoBox}>
                            <img className={styles.addphoto} src={addphoto} alt=""/>
                            <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
-                    </div>
-                    <div onClick={ev =>this.showMask2(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div>
+                    {/* <div onClick={ev =>this.showMask2(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div> */}
                 </div>
                 <div className={mask === false? styles.hideMask:styles.showMask}>
                    <div className={styles.maskBox}>

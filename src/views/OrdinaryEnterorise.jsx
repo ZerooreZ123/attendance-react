@@ -17,7 +17,8 @@ class OrdinaryEnterorise extends Component {
             division: false,
             section: [],                 //部门列表
             machineNum: [],              //考勤机列表
-            inputText:''                 //部门名称
+            inputText:'',                //部门名称
+            imgBase64:''
         }
     }
     componentWillUnmount(){
@@ -48,11 +49,19 @@ class OrdinaryEnterorise extends Component {
         window.officeId = this.state.section[i].id;
         this.props.history.push("/department");
     }
+    getBase64(canvas){
+        var image = new Image();  
+        image.src = canvas.toDataURL("image/png");
+        console.log(image)
+        this.setState({imgBase64:image.getAttribute('src')})
+        // return image;      
+    }
     async getCompany() {                   //获取公司信息
         const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
         const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
         this.setState({invitationCode:admin})
-      }
+        this.getBase64(document.getElementsByTagName('canvas')[0])
+    }
     async getOfficeList() {                //获取公司部门列表
         const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data || [];
@@ -112,8 +121,15 @@ class OrdinaryEnterorise extends Component {
                 return (
                     <div className={styles.content}>
                         <div className={styles.codeWrap}>
-                            <div className={styles.code}>
+                            {/* <div className={styles.code}>
                                 <QRCode value={this.state.invitationCode} />
+                                <img src={this.state.imgBase64} alt=""/>
+                            </div> */}
+                            <div className={this.state.imgBase64?styles.hideCode:styles.code}>
+                                <QRCode value={this.state.invitationCode} />
+                            </div>
+                            <div className={styles.code}> 
+                                <img className={styles.imgSize} src={this.state.imgBase64} alt=""/>
                             </div>
                             <div className={styles.codetext}>邀请码</div>
                             <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>

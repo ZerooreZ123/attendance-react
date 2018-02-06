@@ -146,8 +146,9 @@ class EmployeeInformation extends Component{
     }
     async getOfficeList() {                     //获取部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const dataSource=JSON.parse(result).data || [];
         const sectionList = [];
-        JSON.parse(result).data.forEach((item,index) =>{
+        dataSource.forEach((item,index) =>{
             sectionList.push({
                 name:item.name,
                 id:item.id

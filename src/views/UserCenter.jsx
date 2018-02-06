@@ -326,15 +326,21 @@ class UserCenter extends Component {
                     //开启查找完成后的回调函数
                    if(argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
+                        alert("1")
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
+                                alert("2")
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if(argv.beacons.length>0) {
-                                    this.setState({prompt:1})
-                                    window.wx.stopSearchBeacons({
-                                            complete:(res) =>{
-                                        }
-                                    });  
+                                    alert("3")
+                                    const backData = []
+                                    argv.beacons.forEach((ev,index) =>{
+                                        backData.push({
+                                            major:ev.major,
+                                            minor:ev.minor
+                                        })
+                                    })
+                                    this.backState(backData)
                                 }else{
                                     alert('附近没有设备');
                                     window.wx.stopSearchBeacons({
@@ -375,6 +381,22 @@ class UserCenter extends Component {
             return false
         }
     }
+    async backState(data) {
+        alert("hhahhh")
+        const result = await XHR.post(API.judgeDevice,{
+            companyid:this.state.companyid,
+            devices:data
+        })
+        if(JSON.stringify(result).data === true){
+            this.setState({prompt:1})
+            window.wx.stopSearchBeacons({
+                    complete:(res) =>{
+                }
+            });  
+        }else{
+            return false
+        }
+    }
     async getWX() {
         const result = await XHR.post(API.getSignature);
         if (JSON.parse(result).success === 'T') {
@@ -389,8 +411,9 @@ class UserCenter extends Component {
     }
     async getOfficeList() {          //部门列表
         const result = await XHR.post(API.getOfficeList, { companyid: this.state.companyid });
+        const dataSource=JSON.parse(result).data || [];
         const sectionList = [];
-        JSON.parse(result).data.forEach((item, index) => {
+        dataSource.forEach((item, index) => {
             sectionList.push({
                 name: item.name,
                 id: item.id

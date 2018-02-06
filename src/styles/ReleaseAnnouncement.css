@@ -88,13 +88,11 @@ textarea{
     font-size:28px;
     color:#000;
 }
-.footer,.case{
+.footer{
+    z-index:10;
     display:flex;
     justify-content: space-around;
     align-items: center;
-}
-.footer{
-    z-index:10;
     position:fixed;
     bottom:0;
     left:0;
@@ -104,18 +102,16 @@ textarea{
     border-top:2px solid #ddd;
     background: #fff;
 }
-.case{
-    border-right: 2px solid #ddd;
-}
 .history{
-    padding:0 36px;
-    border-right:2px solid #ddd;
+    /* padding:0 36px; */
+    /* border-right:2px solid #ddd; */
     font-size:28px;
 }
 .addphoto{
+    position: relative;
+    top:-4px;
     width:40px;
     height:32px;
-    padding:0 70px;
     vertical-align: middle;
 }
 .selectDate{

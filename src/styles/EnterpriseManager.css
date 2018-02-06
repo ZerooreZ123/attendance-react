@@ -140,6 +140,13 @@
     box-shadow: 0 0 10px #e7e7e7;
 
 }
+.hideCode{
+    display:none;
+}
+.imgSize{
+    width:256px;
+    height: 256px;
+}
 .codetext{
     margin-top:54px;
     font-size:36px;
