@@ -117,11 +117,11 @@ render() {
             <img className={styles.informationPhoto} src={headPortrait} alt=""/>
         </div>
 
-        <div className = {styles.getCode}>
-          <input onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
+        <div className = {InputText?styles.getCode1:styles.getCode}>
+          <input className={styles.nameShow} onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
           <div className={styles.must}>必填</div>
         </div>
-        <div onClick={ev =>this.showMask(ev)} className = {styles.getCode}>
+        <div onClick={ev =>this.showMask(ev)} className = {InputValue?styles.getCode1:styles.getCode}>
           <div>{InputValue?InputValue:'部门'}</div>
           <Icon direction={iconDirection}/>
         </div>

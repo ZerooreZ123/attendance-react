@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../styles/Toast.css'
 
-class AddAttendanceMachine extends Component {
+class Toast extends Component {
     constructor() {
         super();
         this.state = {}
@@ -19,4 +19,4 @@ class AddAttendanceMachine extends Component {
     }
 
 }
-export default AddAttendanceMachine;
+export default Toast;

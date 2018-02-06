@@ -1,6 +1,9 @@
 //企业管理（xxx有限公司）
 import React, { Component } from 'react';
 import QRCode from 'qrcode.react';
+import Alert from '../components/Alert';
+
+
 import styles from '../styles/EnterpriseManager.css';
 
 import XHR from '../utils/request';
@@ -97,6 +100,7 @@ class EnterpriseManager extends Component {
     constructor() {
         super();
         this.state = {
+            alertState:false,            //alert状态
             selectState:true,            //底部栏展示
             invitationCode:'0',          //邀请码
             currentIndex: 0,             //切换tab的index
@@ -154,12 +158,8 @@ class EnterpriseManager extends Component {
         this.setState({inputText:ev.target.value});
     }
     deleteClick(i) {                       //删除部门
-        var meg = '确认删除'+ this.state.section[i].officeName + '吗？';
-        if(window.confirm(meg) === true){
-           this.deleteOfficce(i);
-        }else{
-            return null
-        }
+           this.setState({alertState:true});
+        //    this.deleteOfficce(i);
     }
     scan() {                         //扫一扫
         window.wx.config({
@@ -272,7 +272,7 @@ class EnterpriseManager extends Component {
     }
 
     render() {
-        const { section, machineNum, division,currentIndex,inputText,deleteSection} = this.state;
+        const { section, machineNum, division,currentIndex,inputText,deleteSection,alertState} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
         return (
             <div className={styles.container}>
@@ -291,6 +291,7 @@ class EnterpriseManager extends Component {
                 parent={this}
                 imgClick={this.state.imgBase64}
                 />
+                <Alert text='确定要删除部门吗' isShow={alertState}/>
             </div>
         )
     }

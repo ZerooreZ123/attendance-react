@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import styles from '../styles/RevisionDepartment.css';
+import Toast from '../components/Toast';
 
 import XHR from '../utils/request';
 import API from '../api/index';
@@ -39,7 +40,8 @@ class RevisionDepartment extends Component{
             section:[],                //部门列表
             departmentName:window.temp.officeName,  //默认部门
             departmentId:'',           //部门Id
-            departmentIndex:''         //部门的索引值
+            departmentIndex:'',         //部门的索引值
+            tipState:false,        //提示状态
         }
     }
     componentDidMount() {
@@ -83,13 +85,16 @@ class RevisionDepartment extends Component{
             officeid:this.state.departmentId
         })
         if (JSON.parse(result).success === "T") {
-            alert("修改部门成功")
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
         }else{
             alert(JSON.parse(result).msg);
         }
     }
     render() {
-        const {section,edit,departmentName,departmentIndex} = this.state;
+        const {section,edit,departmentName,departmentIndex,tipState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.information}>
@@ -97,6 +102,7 @@ class RevisionDepartment extends Component{
                     <div className={ this.state.departmentIndex === ''?styles.department :styles.departmentSlect}>{departmentName}</div>
                 </div>
                 <Revision visible={edit} section={section} departmentIndex={departmentIndex} parent={this}></Revision>
+                <Toast isShow={tipState} text="部门修改成功"/>   
             </div>
         )
     }

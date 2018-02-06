@@ -110,8 +110,8 @@ class AttendanceData extends Component {
             toggleIndex: '',              //切换选择时间与部门的索引值
             maskToggle: 0,                //默认不展示mask
             selectDate: moment().format('YYYY-MM-DD'),   //日历选择
-            selectMonth:'',                //月份选择
-            selectYear:'',                 //年份选择
+            selectMonth:moment().format("YYYY-MM"),      //月份选择
+            selectYear:moment().format("YYYY"),          //年份选择
             valueGroups: {                //月组件
                 data: moment().format('YYYY-MM')
             },
@@ -227,8 +227,8 @@ class AttendanceData extends Component {
                 toggleIndex: '',              //切换选择时间与部门的索引值
                 maskToggle: 0,                //默认不展示mask
                 selectDate: moment().format('YYYY-MM-DD'),   //日历选择
-                selectMonth:'',                //月份选择
-                selectYear:'',                 //年份选择
+                selectMonth:moment().format("YYYY-MM"),      //月份选择
+                selectYear:moment().format("YYYY"),          //年份选择
                 valueGroups: {                //月组件
                     data: moment().format('YYYY-MM')
                 },
@@ -343,25 +343,25 @@ class AttendanceData extends Component {
             }
         } else if (i === 1) {
             this.setState({departmentName:'全部'});
-            this.setState({selectMonth:moment().format("YYYY-MM")});
+            this.setState({selectMonth:this.state.selectMonth});
             if(this.state.tabIndex === 0) {
-                this.getStatisticalInfo(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
+                this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'));
                 this.getMonth();
                 this.setState({personDetail:false});
             }else{
-                this.Abnormal(moment().startOf('month').format("YYYY-MM-DD"),moment().endOf('month').format("YYYY-MM-DD"));
+                this.Abnormal(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'));
                 this.getMonth();
                 this.setState({personDetail:false});
             }     
         }else{
             this.setState({departmentName:'全部'});
-            this.setState({selectYear:moment().format("YYYY")});
+            this.setState({selectYear:this.state.selectYear});
             if(this.state.tabIndex === 0){
-                this.getYarnInfomation(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+                this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31');
                 this.getYear();
                 this.setState({personYearDetail:false})
             }else{
-                this.Abnormal(moment().format("YYYY") + '-01-01',moment().format("YYYY") + '-12-31');
+                this.Abnormal(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31');
                 this.getYear();
                 this.setState({personYearDetail:false}) 
             }
@@ -385,14 +385,14 @@ class AttendanceData extends Component {
         this.setState({selectYear:this.state.valueYears.data});
         this.setState({departmentName:this.state.yearSource[i].name});
         this.setState({nameId:this.state.yearSource[i].userid})
-        this.getPersonRecords(this.state.valueYears.data + '-1-1',this.state.valueYears.data + '-12-31',this.state.yearSource[i].userid)
+        this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
     }
     personAbnormalYear(i) {           //个人异常打卡记录年 
         this.setState({personYearDetail:true});
         this.setState({selectYear:this.state.valueYears.data});
         this.setState({departmentName:this.state.yearSource[i].name});
         this.setState({nameId:this.state.yearSource[i].userid})
-        this.getPersonRecords(this.state.valueYears.data + '-1-1',this.state.valueYears.data + '-12-31',this.state.yearSource[i].userid)
+        this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
     }
 
     selectDay = (date) => {          //日历日期选择
@@ -432,7 +432,7 @@ class AttendanceData extends Component {
             if(this.state.personYearDetail === false) {
                 this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
             }else{
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId)
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId)
             }
            
         }
@@ -454,7 +454,7 @@ class AttendanceData extends Component {
             if(this.state.personYearDetail === false) {
                 this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
             }else{
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity')
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity')
             }
            
         }
@@ -541,8 +541,8 @@ class AttendanceData extends Component {
                 backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
-        
-        this.setState({personData:dataResult || []});
+        var dataResult1 = dataResult.reverse();
+        this.setState({personData:dataResult1 || []});
     }
     async Abnormal(startTime,endTime,officeId) {            //获取异常全部员工某日考勤记录
         const result = await XHR.post(API.getRecords, {

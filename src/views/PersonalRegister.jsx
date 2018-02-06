@@ -77,14 +77,19 @@ render() {
            <img className={styles.informationPhoto} src={headPortrait} alt=""/>
         </div>
 
-        <div className = {styles.invite}>
-          <input onChange={ev =>this.getPhone(ev)} type="text" placeholder = "手机号" value={inputText}/>
+        <div className = {inputText?styles.showBorder:styles.invite}>
+          <div className={inputText?styles.showPhone:styles.hidePhone}>手机号</div>
+          <input className={styles.inputClass} onChange={ev =>this.getPhone(ev)} type="text" placeholder = "手机号" value={inputText}/>
         </div>
-
-        <div className = {styles.getCode}>
-          <input onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputValue}/>
-          <input onClick={ev =>this.sendSms(ev)} type="button" className={canState === false?styles.noSendCode:styles.sendCode} value={sendState} />
+         
+        <div className={styles.box}>
+            <div className={inputValue?styles.showCode:styles.hideCode}>验证码</div>
+            <div className = {inputValue?styles.getCode1:styles.getCode}>
+                <input className={styles.codeClass} onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputValue}/>
+                <input onClick={ev =>this.sendSms(ev)} type="button" className={canState === false?styles.noSendCode:styles.sendCode} value={sendState} />
+            </div>
         </div>
+        
 
         <div className={styles.next}>
           <div className = {(inputText && inputValue) ? styles.nextCan:styles.nextStep} onClick={ev =>this.goToNextStep(ev)}>下一步</div>

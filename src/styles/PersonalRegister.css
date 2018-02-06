@@ -15,9 +15,18 @@
   }
   
   .invite{
+    position: relative;
     padding:82px 0 23px;
     margin:0 50px;
     border-bottom:2px solid #68b3ea;
+    font-size:32px;
+    color: #fff;
+  }
+  .showBorder{
+    position: relative;
+    padding:82px 0 23px;
+    margin:0 50px;
+    border-bottom:2px solid #fff;
     font-size:32px;
     color: #fff;
   }
@@ -31,7 +40,17 @@
     font-size:32px;
     color: #fff;
   }
-  .getCode input[type="text"] {
+  .getCode1{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    padding:82px 0 23px;
+    margin:0 50px;
+    border-bottom:2px solid #fff;
+    font-size:32px;
+    color: #fff;
+  }
+  .codeClass{
     background: transparent;
     border:none;
     outline:medium;
@@ -69,12 +88,35 @@
       box-shadow: none;
       opacity:0.5;
   }
-  .invite input {
+  .box{
+    position: relative;
+  }
+  .inputClass{
     background: transparent;
     border:none;
     outline:medium;
     width: 90%;
     display: inline-block;
+  }
+  .showPhone{
+    display:block;
+    position: absolute;
+    top:23px;
+    left:0;
+    font-size:26px;
+  }
+  .hidePhone{
+    display:none;
+  }
+  .showCode{
+    position:absolute;
+    top:30px;
+    left:50px;
+    font-size:26px;
+    color: #fff;
+  }
+  .hideCode{
+    display:none;
   }
   .next{
     display: flex;
@@ -91,7 +133,7 @@
     line-height: 94px;
     background: #4eaded;
     color: #147dd9;
-    font-size:28px;  
+    font-size:32px;  
   }
   .nextCan{
     height:94px;

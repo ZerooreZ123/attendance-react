@@ -17,12 +17,16 @@
 }
 .department{
     color:#000;
+    font-size:32px;
 }
 .departmentSlect{
     color:#2295e8;
+    font-size:32px;
 }
 .departmentBox{
     padding:0 22px;
+    height:920px;
+    overflow: auto;
 }
 .itemList,.selectItem{
     float:left;
@@ -54,6 +58,7 @@
     width:100%;
     font-size:30px;
     text-align: center;
+    height: 100px;
     line-height: 100px;
     color:#2295e8;
     background:#fff;

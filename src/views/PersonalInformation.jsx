@@ -85,7 +85,7 @@ class PersonalInformation extends Component {
                 break;
             default:
                 startTime = moment().startOf('month').format("YYYY-MM-DD");
-                endTime = moment().endOf('month').format("YYYY-MM-DD"); 
+                endTime = moment().format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
             companyid:window.sessionStorage.getItem('companyid'),
@@ -101,14 +101,14 @@ class PersonalInformation extends Component {
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
-        this.setState({dataSource:dataResult || []});
-        window.sessionStorage.setItem('more',JSON.stringify(dataResult))
+        var dataResult1 = dataResult.reverse();
+        this.setState({dataSource:dataResult1 || []});
     }
     getMore() {
         this.props.history.push('/personalRecord');
@@ -132,7 +132,7 @@ class PersonalInformation extends Component {
                 break;
             default:
                 startTime = moment().startOf('month').format("YYYY-MM-DD");
-                endTime = moment().endOf('month').format("YYYY-MM-DD"); 
+                endTime = moment().format("YYYY-MM-DD"); 
         }
         const result = await XHR.post(API.getRecords,{
             companyid:window.sessionStorage.getItem('companyid'),
@@ -148,14 +148,14 @@ class PersonalInformation extends Component {
             dataResult.push({
                 dateDay:ev.date.slice(0,10),
                 week:ev.week,
-                goState:(ev.gotoWork+'').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[1],
-                goTime:(ev.gotoWork + '').length<10 ? ev.gotoWork:ev.gotoWork.split('/')[0],
-                backState:(ev.getoffWork+'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[1],
-                backTime:(ev.getoffWork +'').length<10 ? ev.getoffWork:ev.getoffWork.split('/')[0]
+                goState:ev.gotoWorkStatus,
+                goTime:ev.upWork?ev.upWork:'--:--:--',
+                backState:ev.getoffWorkStatus,
+                backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
-        this.setState({dataAbnormal:dataResult || []});
-        window.sessionStorage.setItem('More',JSON.stringify(dataResult))
+        var dataResult1 = dataResult.reverse();  
+        this.setState({dataAbnormal:dataResult1 || []});
     }
     render() {
         const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState,barState} = this.state;
