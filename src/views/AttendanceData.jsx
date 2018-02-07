@@ -1,7 +1,8 @@
 //员工考勤记录（普通管理员）
 import React, { Component } from 'react';
-import InfiniteCalendar from 'react-infinite-calendar';
+// import InfiniteCalendar from 'react-infinite-calendar';
 import Picker from 'react-mobile-picker';
+import DayPicker from 'react-day-picker';
 import moment from 'moment';
 
 import styles from '../styles/AttendanceData.css';
@@ -49,15 +50,16 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
     } else {
         if (dateIndex === 0) {
             return (
-                <div>
-                    <InfiniteCalendar
+                <div className={styles.maskDate}>
+                    {/* <InfiniteCalendar
                         width={'100%'} height={170}
                         locale={{
                             headerFormat: 'MM D',
                             weekdays: ["日", "一", "二", "三", "四", "五", "六"]
                         }}
                         onSelect={parent.selectDay}
-                    />
+                    /> */}
+                      <DayPicker onDayClick={ev =>parent.preClockInRemind(ev)} />
                 </div>
             )
         } else if (dateIndex === 1) {
@@ -244,6 +246,14 @@ class AttendanceData extends Component {
            })
            this.getRecords(this.state.startTime,this.state.endTime,this.state.departmentId);
         }
+    }
+    handleDayClick(day) {
+        var d = new Date(day);
+        var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
+        this.setState({selectDate:dateTime});
+    }
+    preClockInRemind(day) {
+        setTimeout(()=>this.handleDayClick(day), 0);
     }
     getYear() {                           //获取年份
         var myDate = new Date();

@@ -5,18 +5,18 @@ class Toast extends Component {
     constructor() {
         super();
         this.state = {
-            confire:false,
-            cancel:false,
+            clickState:true,    //点击状态
+            cancelState:false
         }
     }
     componentDidMount() {
 
     }
     confirm(){
-       this.setState({confire:true})
+       this.props.onSelect(this.state.clickState)
     }
     cancel(){
-       this.setState({cancel:true})
+       this.props.onSelect(this.state.cancelState)
     }
     render() {
         const html = this.props.isShow?<div className={styles.wrap}>

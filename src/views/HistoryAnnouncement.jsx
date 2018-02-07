@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
+import Toast from '../components/Toast';
 import styles from '../styles/HistoryAnnouncement.css';
+
 
 import XHR from '../utils/request';
 import API from '../api/index';
@@ -42,6 +44,7 @@ class HistoryAnnouncement extends Component{
     constructor() {
         super();
         this.state = {
+            tipState:false,        //提示状态
             dataSource:[],
             img:''
         }
@@ -49,6 +52,25 @@ class HistoryAnnouncement extends Component{
     componentDidMount() {
         // document.querySelector('title').innerText = '历史公告';
         this.noticeList();
+        this.canTip();
+    }
+    componentWillUnmount(){
+        window.sessionStorage.removeItem('backTip')
+    }
+    canTip(){
+        const data = window.sessionStorage.getItem('backTip');
+        if(data){
+            this.setState({tipState:data});
+            this.hideTip();
+        }else{
+            this.setState({tipState:false});
+        }
+    }
+    hideTip() {
+        setTimeout(()=>this.hide(),2000)
+    }
+    hide() {
+        this.setState({tipState:false});
     }
     announcementDetail(i) {
         window.sessionStorage.setItem('listId', this.state.dataSource[i].id);
@@ -77,11 +99,12 @@ class HistoryAnnouncement extends Component{
 
     }
     render() {
-        const {dataSource,img} = this.state;
+        const {dataSource,img,tipState} = this.state;
         return(
             <div className={styles.container}>
                 <Module imgHave={img} data={dataSource} parent={this}/>
                 <div onClick={ev =>this.releaseAnnouncement(ev)} className={styles.release}>发布公告</div>
+                <Toast isShow={tipState} text="公告发布成功"/>
             </div>
         )
     }

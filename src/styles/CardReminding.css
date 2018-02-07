@@ -53,9 +53,11 @@
     width: 100%;
 }
 .timeSlot{
+    z-index:6;
     padding-top:68px;
 }
 .timeDuan{
+    z-index:6;
     padding-top:210px;
 }
 .single{

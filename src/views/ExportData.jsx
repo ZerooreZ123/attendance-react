@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import styles from '../styles/ExportData.css';
+import Toast from '../components/Toast';
 
 import XHR from '../utils/request';
 import API from '../api/index';
@@ -10,6 +11,7 @@ class ExportData extends Component{
     constructor(){
         super();
         this.state={
+            tipState:false,        //提示状态
             inputMail:'',           //输入的mail
         }
     }
@@ -62,13 +64,16 @@ class ExportData extends Component{
             mail:this.state.inputMail                              //传部门则导部门人员
         })
         if(JSON.parse(result).success === 'T') {
-            alert("邮件发送成功")
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
         }else{
             alert(JSON.parse(result).msg)
         }
     }
     render() {
-        const {inputMail} = this.state;
+        const {inputMail,tipState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.content}>
@@ -82,6 +87,7 @@ class ExportData extends Component{
                     </div>
                 </div>
                 <div onClick={ev =>this.exportData(ev)} className={inputMail === ''?styles.Button:styles.button}>发送</div>
+                <Toast isShow={tipState} text="邮件发送成功"/>
             </div>
         )
     }

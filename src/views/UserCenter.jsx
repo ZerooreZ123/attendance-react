@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../styles/UserCenter.css';
 
+import Alert from '../components/Alert';
+
 import XHR from '../utils/request';
 import API from '../api/index';
 
@@ -167,6 +169,7 @@ class UserCenter extends Component {
         super();
         window.temp = {};
         this.state = {
+            alertState:false,      //alert状态
             id:'',                 //用户Id
             showUserCenter:true,   //展示模块1
             showPunchClock:false,  //展示模块2
@@ -260,7 +263,17 @@ class UserCenter extends Component {
         }
     }
 
+    selectBtn(dataState) {
+        if(dataState){
+            this.unbind();
+            this.setState({alertState:false})
+        }else{
+            this.setState({alertState:false})
+            return false
+        }
 
+
+    }
     punchClock() {
         this.setState({showUserCenter:false,showPunchClock:true,prompt: 0});
         this.searchIbeacons();
@@ -374,19 +387,20 @@ class UserCenter extends Component {
         })
     }   
     unbindUser() {                  //解绑员工二次确认
-        let mes = "解绑后您的资料与考勤数据将消失,确认解绑吗？";
-        if (window.confirm(mes) === true) {
-            this.unbind()
-        } else {
-            return false
-        }
+        this.setState({alertState:true})
     }
+
     async backState(data) {
-        alert("hhahhh")
+        window.wx.stopSearchBeacons({
+                complete:(res) =>{
+            }
+        });
+        alert(JSON.stringify(data)); 
         const result = await XHR.post(API.judgeDevice,{
             companyid:this.state.companyid,
             devices:data
         })
+        alert(JSON.stringify(result).data);
         if(JSON.stringify(result).data === true){
             this.setState({prompt:1})
             window.wx.stopSearchBeacons({
@@ -423,11 +437,6 @@ class UserCenter extends Component {
     }
     async unbind() {                //解绑员工   
         const result = await XHR.post(API.unbindUser, { loginName: this.props.match.params.loginName });
-        // if (JSON.parse(result).success === 'T') {
-        //     alert('解绑成功');
-        // } else {
-        //     alert('解绑失败');
-        // }
     }
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser, { loginName: this.props.match.params.loginName });
@@ -445,7 +454,7 @@ class UserCenter extends Component {
     }
     render() {
 
-        const { roleid, dataSource,prompt, h, m, s, noticeState,noticeTitle,showUserCenter,showPunchClock} = this.state;
+        const { roleid, dataSource,prompt, h, m, s, noticeState,noticeTitle,showUserCenter,showPunchClock,alertState} = this.state;
         const user = [{ icon: record, name: '考勤记录' }, { icon: remind, name: '打卡提醒' }, { icon: revise, name: '修改部门' }];
         const superMan = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }, { icon: setUp, name: '设置考勤' }];
         const ordinary = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }];
@@ -497,6 +506,7 @@ class UserCenter extends Component {
                         <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>个人中心</div>
                     </div>
                 </div>
+                <Alert text='解绑后您的资料与考勤记录将消失,确认解绑吗？' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
             </div>
         )
     }

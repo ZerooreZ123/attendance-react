@@ -135,15 +135,15 @@ input::-webkit-input-placeholder{
     color:#2295e8;
 }
 .departmentBox{
-    padding:0 22px;
+    padding:16px 12px;
     margin-bottom:104px;
 
 }
 .term,.selectTerm{
     float:left;
-    width:30%;
+    width:28.1%;
     height:94px;
-    margin: 0 8px 34px;
+    margin:16px;
     border:2px solid #f6f6f6;
     border-radius:2px;
     line-height:94px;

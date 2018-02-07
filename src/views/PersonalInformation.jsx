@@ -1,6 +1,7 @@
 //员工个人信息(王大陆)
 import React,{Component} from 'react';
 import moment from 'moment';
+import Toast from '../components/Toast';
 import styles from '../styles/PersonalInformation.css';
 
 import XHR from '../utils/request';
@@ -29,6 +30,7 @@ class PersonalInformation extends Component {
     constructor() {
         super();
         this.state = {
+            tipState:false,        //提示状态
             dataSource:[],              //全部
             dataAbnormal:[],            //异常
             showState:true,             //默认展示全部
@@ -42,6 +44,25 @@ class PersonalInformation extends Component {
         // document.querySelector('title').innerText = '个人考勤记录';
         this.showAll();
         this.getTime();
+        this.canTip();
+    }
+    componentWillUnmount(){
+        window.sessionStorage.removeItem('editState')
+    }
+    canTip(){
+        const data = window.sessionStorage.getItem('editState');
+        if(data){
+            this.setState({tipState:data});
+            this.hideTip();
+        }else{
+            this.setState({tipState:false});
+        }
+    }
+    hideTip() {
+        setTimeout(()=>this.hide(),2000)
+    }
+    hide() {
+        this.setState({tipState:false});
     }
     editData() {                     //跳转至修改资料
         this.props.history.push('/editProfile');
@@ -158,7 +179,7 @@ class PersonalInformation extends Component {
         this.setState({dataAbnormal:dataResult1 || []});
     }
     render() {
-        const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState,barState} = this.state;
+        const { dataSource,dataAbnormal,monthList,monthIndex,tabIndex,showState,barState,tipState} = this.state;
         const Show = props =>{
             if(showState === true) {
                 if(dataSource.length>0) {
@@ -249,6 +270,7 @@ class PersonalInformation extends Component {
                     <Show></Show>
                 </div>
                 <BottomBar visible = {barState} parent={this}/>
+                <Toast isShow={tipState} text="资料修改完成"/>
             </div>
         )
     }

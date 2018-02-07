@@ -66,7 +66,7 @@ class EditProfile extends Component{
                 userName:this.state.valueName
             });
             if(JSON.parse(result).success === 'T') {
-                alert('修改资料成功');
+                window.sessionStorage.setItem('editState',true)
                 window.history.go(-1);
             }else{
                 alert(JSON.parse(result).msg);

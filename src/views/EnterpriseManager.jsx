@@ -1,6 +1,7 @@
 //企业管理（xxx有限公司）
 import React, { Component } from 'react';
 import QRCode from 'qrcode.react';
+import Toast from '../components/Toast';
 import Alert from '../components/Alert';
 
 
@@ -100,6 +101,7 @@ class EnterpriseManager extends Component {
     constructor() {
         super();
         this.state = {
+            tipState:false,              //提示状态
             alertState:false,            //alert状态
             selectState:true,            //底部栏展示
             invitationCode:'0',          //邀请码
@@ -159,6 +161,7 @@ class EnterpriseManager extends Component {
     }
     deleteClick(i) {                       //删除部门
            this.setState({alertState:true});
+           window.index = i
         //    this.deleteOfficce(i);
     }
     scan() {                         //扫一扫
@@ -206,9 +209,12 @@ class EnterpriseManager extends Component {
             this.setState({section:this.state.section});
             window.sessionStorage.setItem('test',this.state.currentIndex);
             window.location.reload();
-            alert("添加部门成功");
+            // alert("添加部门成功");
         }else{
-            alert(JSON.parse(result).msg);
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
         }
     }
     async deleteOfficce(i) {              //删除部门
@@ -270,9 +276,17 @@ class EnterpriseManager extends Component {
         )
         this.setState({ machineNum: machineList });
     }
+    selectBtn(dataState) {
+        if(dataState){
+            this.deleteOfficce(window.index);
+            this.setState({alertState:false,deleteSection:false})
+        }else{
+            this.setState({alertState:false,deleteSection:false})
+        }
 
+    }
     render() {
-        const { section, machineNum, division,currentIndex,inputText,deleteSection,alertState} = this.state;
+        const { section, machineNum, division,currentIndex,inputText,deleteSection,alertState,tipState} = this.state;
         const tab = ['邀请码', '部门管理', '考勤机编号']
         return (
             <div className={styles.container}>
@@ -291,7 +305,8 @@ class EnterpriseManager extends Component {
                 parent={this}
                 imgClick={this.state.imgBase64}
                 />
-                <Alert text='确定要删除部门吗' isShow={alertState}/>
+                <Alert text='确定要删除部门吗' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
+                <Toast isShow={tipState} text="部门名称不能为空"/>
             </div>
         )
     }

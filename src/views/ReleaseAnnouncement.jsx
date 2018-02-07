@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import DayPicker from 'react-day-picker';
+import Alert from '../components/Alert';
 
 import styles from '../styles/ReleaseAnnouncement.css';
 
@@ -26,6 +27,7 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
+            alertState:false,            //alert状态
             iconState:true,           //图标状态
             chooseDay:'',             //结束选择时间
             selectedDay:'',           //开始选择时间
@@ -45,14 +47,24 @@ class ReleaseAnnouncement extends Component{
         this.props.history.push('/historyAnnouncement');
     }
     cancelRelease() {
-        let mes = "是否保存草稿";
-        if(window.confirm(mes) === true) {
+        this.setState({alertState:true})
+        // if(window.confirm(mes) === true) {
+        //     window.localStorage.setItem('title',this.state.announcementTitle);
+        //     window.localStorage.setItem('content',this.state.announcementContent);
+        //    window.history.go(-1);
+        // }else{
+        //     window.history.go(-1);
+        // }
+    }
+    selectBtn(dataState) {
+        if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-           window.history.go(-1);
+            window.history.go(-1);
         }else{
             window.history.go(-1);
         }
+
     }
     startDate() {
         var date = new Date();
@@ -101,18 +113,26 @@ class ReleaseAnnouncement extends Component{
         this.setState({imgSrcConcat:this.state.imgSrcConcat});
     }
     getBase64(callback) {            //获取图片
-        var file = this.refs.files.files[0];
-        if (window.FileReader) {
-            var fr = new FileReader();
-            fr.onloadend = function(e) {
-                var result = e.target.result.split(",");
-                callback(result[1])
+
+        var data = this.refs.files.files;
+        var file =[];
+        for(var i in data){
+            if (data.hasOwnProperty(i)) {
+                file.push(data[i])
             }
-          
-            fr.readAsDataURL(file);            
-        } else {
-            alert("NO FileReader!");
         }
+        file.forEach(el =>{
+            if (window.FileReader) {
+                var fr = new FileReader();
+                fr.onloadend = function(e) {
+                    var result = e.target.result.split(",");
+                    callback(result[1])
+                }
+                fr.readAsDataURL(el);
+            } else {
+                alert("NO FileReader!");
+            }
+        })
     }
     getTitle(ev) {                             //获取标题
         this.setState({announcementTitle: ev.target.value});
@@ -145,7 +165,7 @@ class ReleaseAnnouncement extends Component{
                 endDate: this.state.chooseDay+  " 00:00:00"    
             })
             if(JSON.parse(result).success === 'T'){
-                alert("发布成功");
+                window.sessionStorage.setItem('backTip',true)
                 this.props.history.push('/historyAnnouncement')
             }else{
                 alert(JSON.parse(result).msg)
@@ -160,7 +180,8 @@ class ReleaseAnnouncement extends Component{
                 endDate: this.state.chooseDay+  " 00:00:00"    
             })
             if(JSON.parse(result).success === 'T'){
-                alert("发布成功");
+                // alert("发布成功");
+                window.sessionStorage.setItem('backTip',true)
                 this.props.history.push('/historyAnnouncement')
             }else{
                 alert(JSON.parse(result).msg)
@@ -168,7 +189,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox,iconState} = this.state;
+        const {mask,copyMask,imgBox,iconState,alertState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -211,7 +232,7 @@ class ReleaseAnnouncement extends Component{
                      <DayPicker onDayClick={ev =>this.selectTime(ev)} />
                     </div>
                 </div>
-                
+                <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
             </div>
         )
     }
