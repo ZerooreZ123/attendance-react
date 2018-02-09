@@ -70,8 +70,8 @@ class EmployeeInformation extends Component{
         this.setState({ mask: false });
     }
     showMask() {
-        this.setState({ mask: true });
-        this.setState({iconState1:true});
+        this.setState({ mask: true,iconState1:true });
+        // this.setState({iconState1:true});
     }
     jumpSearch() {
         this.props.history.push('/search')
@@ -140,9 +140,9 @@ class EmployeeInformation extends Component{
         
     }
     clickTerm(i) {                              //设置部门索引、名字、Id  
-        this.setState({departmentIndex:i})
-        this.setState({departmentName:this.state.section[i].name});
-        this.setState({departmentId:this.state.section[i].id});
+        this.setState({departmentIndex:i,departmentName:this.state.section[i].name,departmentId:this.state.section[i].id})
+        // this.setState({departmentName:this.state.section[i].name});
+        // this.setState({departmentId:this.state.section[i].id});
     }
     async getOfficeList() {                     //获取部门列表
         const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
@@ -157,6 +157,9 @@ class EmployeeInformation extends Component{
         sectionList.push({
             name:'其他',
             id:'officeid'
+        },{
+            name:'全部',
+            id:''
         })
         this.setState({section:sectionList});   
     }
@@ -179,7 +182,7 @@ class EmployeeInformation extends Component{
                 companyid:window.sessionStorage.getItem('companyid'),
                 officeid:this.state.departmentId    
             });
-            const dataSource = JSON.parse(result).data;
+            const dataSource = JSON.parse(result).data || [];
             const userList = [];
             dataSource.map((item,index) =>
                 userList.push({
@@ -190,11 +193,12 @@ class EmployeeInformation extends Component{
                     loginName:item.loginName || ''
                 })
             )
-            this.setState({iconState1:false});
-            this.setState({departmentPart:userList});
-            this.setState({exhibition:1});
+            this.setState({iconState1:false,departmentPart:userList,exhibition:1});
+            // this.setState({departmentPart:userList});
+            // this.setState({exhibition:1});
         }else{
-            return null;
+            this.getOfficeUserList();
+            this.setState({ exhibition:0});
         }
     }
     render() {

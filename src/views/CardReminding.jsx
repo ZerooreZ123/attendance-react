@@ -146,11 +146,11 @@ class CardReminding extends Component {
             downSwitch:this.state.downSwitch,
             id:this.state.dataSource.id
         });
-        if(JSON.parse(result).success === 'T') {
-            alert("修改成功")
-        }else{
-            alert(JSON.parse(result).msg);
-        }
+        // if(JSON.parse(result).success === 'T') {
+        //     alert("修改成功")
+        // }else{
+        //     alert(JSON.parse(result).msg);
+        // }
         
     }
     render() {

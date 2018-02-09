@@ -13,7 +13,7 @@
 }
 .caption{
     margin:40px 0 64px;
-    font-size:32px;
+    font-size:34px;
     font-weight:700;
     color:#000;
 }
@@ -27,7 +27,7 @@
 }
 .photoBox>img{
     display:inline-block;
-    width:700px;
-    height:478px;
+    max-width:700px;
+    /* height:478px; */
     margin-bottom:36px;
 }

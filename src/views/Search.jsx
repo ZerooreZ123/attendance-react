@@ -46,6 +46,7 @@ class Search extends Component {
     constructor() {
         super();
         this.state={
+            tipState1:false,
             tipState:false,              //提示状态
             searchDate:'',               //搜索数据
             searchState:false,           //搜索状态
@@ -95,22 +96,20 @@ class Search extends Component {
         if(this.state.searchHistory.indexOf(this.state.inputValue) === -1){
             this.state.searchHistory.push(this.state.inputValue);
         }else{
-            return false;
+            return false
         }
-        // const list = this.state.departmentStaff;
-        // list.forEach(el=>{
-        //     el.staff.forEach(item =>{
-        //         if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
-        //             window.Person = {
-        //                 userid:item.id,
-        //                 name:item.name,
-        //             }
-        //             this.props.history.push('/personalRecord');
-        //         }else{
-        //             return false
-        //         }
-        //     })
-        // })  
+        const list = this.state.departmentStaff;
+        list.forEach(el=>{
+            el.staff.forEach(item =>{
+                if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
+                }else{
+                    this.setState({tipState1:true});
+                    setTimeout(()=>{
+                        this.setState({tipState1:false});
+                    },2000)
+                }
+            })
+        })  
     }
     pushSearch(i) {
         this.setState({inputValue:this.state.searchHistory[i]});
@@ -177,7 +176,7 @@ class Search extends Component {
         this.setState({departmentStaff:userList});
     }
     render() {
-        const {searchHistory,inputValue,searchState,searchDate,tipState} = this.state;
+        const {searchHistory,inputValue,searchState,searchDate,tipState,tipState1} = this.state;
         return (
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -201,6 +200,8 @@ class Search extends Component {
                 </div>
                 <SearchList visible={searchState} parent={this} allPerson={searchDate} />
                 <Toast isShow={tipState} text="记录清除成功"/>
+                <Toast isShow={tipState1} text="暂无此员工"/>
+                
             </div>
         )
     }

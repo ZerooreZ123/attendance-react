@@ -7,14 +7,14 @@
     background: #fff;
 }
 .content{
-    padding:0 22px;
+    padding:0 22px 102px;
     background:#fff;
 }
 .item{
     display:flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom:2px solid #ddd;
+    border-bottom:2px solid #fbfbfb;
 }
 .itemText{
     flex:1;
@@ -22,17 +22,20 @@
 .caption{
     margin:46px 0 26px;
     font-size:32px;
+    font-weight: 600;
     color:#000;
 }
 .itemContent{
-    font-size:26px;
+    height:86px;
+    font-size:28px;
     line-height: 42px;
-    color:#333;
+    color:#444;
+    overflow: hidden;
 }
 .itemDate{
     margin:28px 0 34px;
-    font-size:20px;
-    color:#bbb;
+    font-size:22px;
+    color:#ababab;
 }
 .itemImg{
     width:136px;
@@ -77,4 +80,10 @@
 }
 .hideImg{
     display:none;
+}
+.imgClass{
+    display:inline-block;
+    position:absolute;
+    clip:rect(0px 136px 136px 0px);
+    max-height:223px;    
 }

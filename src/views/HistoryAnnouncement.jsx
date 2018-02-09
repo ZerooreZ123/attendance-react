@@ -21,7 +21,9 @@ const Module =({imgHave,data,parent}) =>{
                                 <div className={styles.itemContent}>{ev.content}</div>
                                 <div className={styles.itemDate}>{ev.createDate}</div>
                             </div>
-                            <img className={ ev.hasOwnProperty('image')?styles.itemImg:styles.hideImg}src={ev.image} alt=""/>
+                            <div className={ev.hasOwnProperty('image')?styles.itemImg:styles.hideImg}>
+                                <img className={styles.imgClass} src={ev.image} alt=""/>
+                            </div>
                         </div>
                     )
                 }
@@ -81,8 +83,9 @@ class HistoryAnnouncement extends Component{
     }
     async noticeList() {
         const result = await XHR.post(API.noticeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const data = JSON.parse(result).data || [];
         const ret = [];
-        JSON.parse(result).data.forEach((item,index) =>{
+        data.forEach((item,index) =>{
             ret.push({
                 id:item.id,
                 title:item.title,

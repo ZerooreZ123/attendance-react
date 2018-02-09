@@ -58,7 +58,7 @@ class App extends Component {
               >
                 <div key={props.location.pathname}>
                   <Route location={props.location} exact path="/punchClock/:loginName" component={PunchClock} />
-                  <Route location={props.location} exact path="/userCenter/:loginName" component={UserCenter}/>
+                  <Route location={props.location} exact path="/userCenter/:loginName/:num" component={UserCenter}/>
                   <Route location={props.location} exact path="/revisionDepartment" component={RevisionDepartment}/>
                   <Route location={props.location} exact path="/cardReminding" component={CardReminding}/>
                   <Route location={props.location} exact path="/attendanceRecord/:companyid/:loginName" component={AttendanceRecord}/>

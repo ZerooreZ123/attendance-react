@@ -60,20 +60,20 @@
 .maskBox {
     position: absolute;
     width: 100%;
-    top: 134px;
+    top: 102px;
     background:#fff;
 }
 .departmentBox{
-    padding:0 22px;
+    padding:16px 12px;
     margin-bottom:104px;
     overflow-y :yes;
 
 }
 .term,.selectTerm{
     float:left;
-    width:30%;
+    width:28.1%;
     height:94px;
-    margin: 0 8px 34px;
+    margin:16px;
     border:2px solid #ddd;
     border-radius:2px;
     line-height:94px;

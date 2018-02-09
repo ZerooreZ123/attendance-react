@@ -209,11 +209,21 @@ class UserCenter extends Component {
             })
 
         }else{
-            this.setState({
-                showUserCenter:true,   //展示模块1
-                showPunchClock:false,  //展示模块2
-                prompt:0
-            })
+            if(this.props.match.params.num === '6') {
+            
+                this.setState({
+                    showUserCenter:false,   //展示模块1
+                    showPunchClock:true,  //展示模块2
+                    prompt:0
+                })
+                this.searchIbeacons();
+            }else{
+                this.setState({
+                    showUserCenter:true,   //展示模块1
+                    showPunchClock:false,  //展示模块2
+                    prompt:0
+                })
+            }
          }
     }
     AnnouncementDetails(ev) {         //切换至公告详情
@@ -339,13 +349,12 @@ class UserCenter extends Component {
                     //开启查找完成后的回调函数
                    if(argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
-                        alert("1")
+                       
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
-                                alert("2")
+                             
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if(argv.beacons.length>0) {
-                                    alert("3")
                                     const backData = []
                                     argv.beacons.forEach((ev,index) =>{
                                         backData.push({
@@ -353,6 +362,10 @@ class UserCenter extends Component {
                                             minor:ev.minor
                                         })
                                     })
+                                    window.wx.stopSearchBeacons({
+                                            complete:(res) =>{
+                                        }
+                                    });
                                     this.backState(backData)
                                 }else{
                                     alert('附近没有设备');
@@ -391,16 +404,11 @@ class UserCenter extends Component {
     }
 
     async backState(data) {
-        window.wx.stopSearchBeacons({
-                complete:(res) =>{
-            }
-        });
         alert(JSON.stringify(data)); 
         const result = await XHR.post(API.judgeDevice,{
             companyid:this.state.companyid,
             devices:data
         })
-        alert(JSON.stringify(result).data);
         if(JSON.stringify(result).data === true){
             this.setState({prompt:1})
             window.wx.stopSearchBeacons({

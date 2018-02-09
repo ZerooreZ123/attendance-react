@@ -26,6 +26,10 @@
     padding-right:22px;
     color:#2295e8;
 }
+.noRelease{
+    padding-right:22px;
+    color:#afd1f4;
+}
 .title{
     font-size:36px;
 }
@@ -38,7 +42,7 @@
 }
 .inputBox{
     margin:34px 0;
-    font-size:30px;
+    font-size:34px;
     font-weight: 700;
     color:#000;
     width:100%;
@@ -54,9 +58,10 @@ textarea{
 }
 .inputBlock{
     width:100%;
-    min-height: 200px;
+    min-height: 375px;
     margin-top:30px;
     font-size:28px;
+    line-height: 42px;
 }
 .imgBox{
     width:726px;
@@ -79,8 +84,9 @@ textarea{
 }
 .img{
     display:inline-block;
-    width:100%;
-    height:100%;    
+    position:absolute;
+    clip:rect(0px 223px 223px 0px);
+    max-height:223px;    
 }
 .releaseTime{
     margin-top:36px;
