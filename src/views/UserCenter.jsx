@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../styles/UserCenter.css';
+import Toast from '../components/Toast';
 
 import Alert from '../components/Alert';
 
@@ -169,6 +170,7 @@ class UserCenter extends Component {
         super();
         window.temp = {};
         this.state = {
+            tipState:false,        //提示状态
             alertState:false,      //alert状态
             id:'',                 //用户Id
             showUserCenter:false,   //展示模块1
@@ -186,11 +188,10 @@ class UserCenter extends Component {
     componentDidMount() {
         // document.querySelector('title').innerText = '个人中心';
         this.getUser();
-        this.getWX();
         this.showTime();
         this.getNewNotice();
         this.mainPage();
-        this.searchIbeacons();
+        this.delaySearch();
     }
     componentWillUnmount(){
         var main = {
@@ -210,12 +211,15 @@ class UserCenter extends Component {
             })
 
         }else{
-                this.setState({
-                    showUserCenter:false,   //展示模块1
-                    showPunchClock:true,  //展示模块2
-                    prompt:0
-                })
+            this.setState({
+                showUserCenter:false,   //展示模块1
+                showPunchClock:true,  //展示模块2
+                prompt:0
+            })
          }
+    }
+    delaySearch() {
+        setTimeout(() =>this.searchIbeacons(),0)
     }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
@@ -280,8 +284,9 @@ class UserCenter extends Component {
         this.searchIbeacons();
     }
     personCenter() {
-        this.setState({showUserCenter:true});
-        this.setState({showPunchClock:false});
+        this.setState({showUserCenter:true,showPunchClock:false});
+        // this.setState({showPunchClock:false});
+        this.getWX();
     }
     attendanceData() {
         this.props.history.push('/attendanceData')
@@ -325,39 +330,44 @@ class UserCenter extends Component {
         });
     }
     async searchIbeacons() {
-        window.wx.config({
-            debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
-            timestamp:this.state.result.timestamp, // 必填，生成签名的时间戳
-            nonceStr:this.state.result.nonceStr, // 必填，生成签名的随机串
-            signature:this.state.result.signature,// 必填，签名
-            jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
-            // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
-        });
+        const result = await XHR.post(API.getSignature);
+        if (JSON.parse(result).success === 'T') {
+            window.wx.config({
+                debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+                timestamp:JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
+                signature:JSON.parse(result).data.signature,// 必填，签名
+                jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
+                // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
+            });
+             
+        }
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
+                    // alert('1')
                     //开启查找完成后的回调函数
                    if(argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
-                       
+                        // alert('2')
                         window.wx.onSearchBeacons({
                             complete:(argv) =>{
                              
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if(argv.beacons.length>0) {
-                                    const backData = []
-                                    argv.beacons.forEach((ev,index) =>{
-                                        backData.push({
-                                            major:ev.major,
-                                            minor:ev.minor
-                                        })
-                                    })
                                     window.wx.stopSearchBeacons({
-                                            complete:(res) =>{
+                                        complete:(res) =>{
+                                            const backData = []
+                                            argv.beacons.forEach((ev,index) =>{
+                                                backData.push({
+                                                    major:ev.major,
+                                                    minor:ev.minor
+                                                })
+                                            })
+                                            this.backState(backData)
                                         }
                                     });
-                                    this.backState(backData)
                                 }else{
                                     alert('附近没有设备');
                                     window.wx.stopSearchBeacons({
@@ -376,16 +386,6 @@ class UserCenter extends Component {
                             }
                         });
                    }
-                // setTimeout(() =>{
-                //     window.wx.stopSearchBeacons({
-                //         complete:(res)=>{
-                //           //关闭查找完成后的回调函数
-                //            alert('超时停止iBeacon')
-                //            this.setState({prompt:2})
-                //         }
-                //     });
-                // },30000);
-                    
             }
 
         })
@@ -394,20 +394,18 @@ class UserCenter extends Component {
         this.setState({alertState:true})
     }
 
-    async backState(data) {
-        alert(JSON.stringify(data)); 
+    async backState(data) { 
         const result = await XHR.post(API.judgeDevice,{
             companyid:this.state.companyid,
             devices:data
         })
-        if(JSON.stringify(result).data === true){
+        if(JSON.parse(result).success === 'T'){
             this.setState({prompt:1})
-            window.wx.stopSearchBeacons({
-                    complete:(res) =>{
-                }
-            });  
         }else{
-            return false
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000);
         }
     }
     async getWX() {
@@ -453,7 +451,7 @@ class UserCenter extends Component {
     }
     render() {
 
-        const { roleid, dataSource,prompt, h, m, s, noticeState,noticeTitle,showUserCenter,showPunchClock,alertState} = this.state;
+        const { roleid, dataSource,prompt, h, m, s, noticeState,noticeTitle,showUserCenter,showPunchClock,alertState,tipState} = this.state;
         const user = [{ icon: record, name: '考勤记录' }, { icon: remind, name: '打卡提醒' }, { icon: revise, name: '修改部门' }];
         const superMan = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }, { icon: setUp, name: '设置考勤' }];
         const ordinary = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }];
@@ -505,6 +503,7 @@ class UserCenter extends Component {
                         <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>个人中心</div>
                     </div>
                 </div>
+                <Toast isShow={tipState} text="附近没有可打卡的考勤设备"/> 
                 <Alert text='解绑后您的资料与考勤记录将消失,确认解绑吗？' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
             </div>
         )

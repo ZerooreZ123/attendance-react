@@ -176,6 +176,10 @@ class AttendanceData extends Component {
     }
     componentWillUnmount(){
         var Result = {
+            maskToggle1:this.state.maskToggle1,
+            tipState1:this.state.tipState1,
+            tipState:this.state.tipState,   
+            secondTime:this.state.secondTime,
             Value:this.state.Value,
             abnormalRecord:this.state.abnormalRecord,
             dataSource:this.state.dataSource,
@@ -211,7 +215,12 @@ class AttendanceData extends Component {
     selectState() {
         var test=JSON.parse(window.sessionStorage.getItem('dataResult'));
         if(test){
-            this.setState({Value:test.Value,
+            this.setState({
+                maskToggle1:test.maskToggle1,
+                tipState1:test.tipState1,
+                tipState:test.tipState,    
+                secondTime:test.secondTime,
+                Value:test.Value,
                 abnormalRecord:test.abnormalRecord,
                 dataSource:test.dataSource,
                 date:test.date,
@@ -245,6 +254,10 @@ class AttendanceData extends Component {
             
         }else{
             this.setState({
+                maskToggle1:0,
+                tipState1:false,
+                tipState:false,        //提示状态
+                secondTime:(new Date()).getTime(),
                 Value: '',
                 date: new Date(),
                 section: [],                 //部门列表
