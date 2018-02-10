@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import DayPicker from 'react-day-picker';
+import Toast from '../components/Toast';
 import Alert from '../components/Alert';
 
 import styles from '../styles/ReleaseAnnouncement.css';
@@ -13,13 +14,13 @@ import addphoto from '../asset/ico/photo.png';
 import top from '../asset/manager/triangle-top.png';
 import down from '../asset/manager/downBlue.png';
 
-const Icon = ({direction})  => {
-    if (direction === true) {
-      return <img className={styles.icon} src={top} alt=""/>;
-    } else {
-      return <img className={styles.icon} src={down} alt=""/>;
-    }
-}
+// const Icon = ({direction})  => {
+//     if (direction === true) {
+//       return <img className={styles.icon} src={top} alt=""/>;
+//     } else {
+//       return <img className={styles.icon} src={down} alt=""/>;
+//     }
+// }
 
 
 class ReleaseAnnouncement extends Component{
@@ -27,8 +28,10 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
+            tipState:false,           //tip状态
+            secondTime:(new Date()).getTime(),             //秒
             alertState:false,            //alert状态
-            iconState:true,           //图标状态
+            // iconState:false,           //图标状态
             chooseDay:'',             //结束选择时间
             selectedDay:'',           //开始选择时间
             mask:false,               //日历开始遮罩
@@ -73,14 +76,23 @@ class ReleaseAnnouncement extends Component{
     }
     handleDayClick(day) {
         var myDate = new Date(day);
+        this.setState({secondTime:myDate.getTime()})
         this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
         this.hideMask1();
     }
     selectDayClick(day) {
         var myDate = new Date(day);
-        this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
-        this.setState({copyMask:false});
-        this.hideMask2();
+        if(this.state.secondTime <= myDate.getTime()) {
+            this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+            this.setState({copyMask:false});
+            this.hideMask2();
+        }else{
+            this.hideMask2();
+            this.setState({tipState:true});
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
+        }
 
     }
     preClockInRemind(day) {
@@ -91,20 +103,20 @@ class ReleaseAnnouncement extends Component{
     }
     showMask1() {
         this.setState({mask:true})
-        this.setState({iconState:false});
+        // this.setState({iconState:false});
     }
     hideMask1() {
         this.setState({mask:false});
-        this.setState({iconState:true});
+        // this.setState({iconState:true});
         setTimeout(()=>this.showMask2(),500)
     }
     showMask2() {
         this.setState({copyMask:true})
-        this.setState({iconState:false});
+        // this.setState({iconState:false});
     }
     hideMask2() {
         this.setState({copyMask:false});
-        this.setState({iconState:true});
+        // this.setState({iconState:true});
     }
     delete(i) {
         this.state.imgBox.splice(i,1);
@@ -189,7 +201,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox,iconState,alertState} = this.state;
+        const {mask,copyMask,imgBox,alertState,tipState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -212,7 +224,7 @@ class ReleaseAnnouncement extends Component{
                             ))
                         }                   
                     </div>
-                    <div className={styles.releaseTime}>公告将发布:从<button onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</button>至<button onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect}>{this.state.chooseDay}</button></div>
+                    <div className={styles.releaseTime}>公告起止日期:<span onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</span><img className={styles.icon} src={down} alt=""/>-<span onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect1}>{this.state.chooseDay}</span><img className={styles.icon} src={down} alt=""/></div>
                 </div>
                 <div className={styles.footer}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
@@ -233,6 +245,7 @@ class ReleaseAnnouncement extends Component{
                     </div>
                 </div>
                 <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
+                <Toast isShow={tipState} text="结束日期必须在开始日期之后或同一天"/>
             </div>
         )
     }

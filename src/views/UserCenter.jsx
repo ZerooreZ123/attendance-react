@@ -171,8 +171,8 @@ class UserCenter extends Component {
         this.state = {
             alertState:false,      //alert状态
             id:'',                 //用户Id
-            showUserCenter:true,   //展示模块1
-            showPunchClock:false,  //展示模块2
+            showUserCenter:false,   //展示模块1
+            showPunchClock:true,  //展示模块2
             companyid: '',         //公司Id
             roleid: '',            //用户权限
             dataSource: {},        //用户信息
@@ -190,6 +190,7 @@ class UserCenter extends Component {
         this.showTime();
         this.getNewNotice();
         this.mainPage();
+        this.searchIbeacons();
     }
     componentWillUnmount(){
         var main = {
@@ -209,21 +210,11 @@ class UserCenter extends Component {
             })
 
         }else{
-            if(this.props.match.params.num === '6') {
-            
                 this.setState({
                     showUserCenter:false,   //展示模块1
                     showPunchClock:true,  //展示模块2
                     prompt:0
                 })
-                this.searchIbeacons();
-            }else{
-                this.setState({
-                    showUserCenter:true,   //展示模块1
-                    showPunchClock:false,  //展示模块2
-                    prompt:0
-                })
-            }
          }
     }
     AnnouncementDetails(ev) {         //切换至公告详情

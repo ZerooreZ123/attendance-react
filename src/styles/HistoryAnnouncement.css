@@ -40,6 +40,7 @@
 .itemImg{
     width:136px;
     height:136px;
+    overflow: hidden;
 }
 .release{
     position:fixed;
@@ -83,7 +84,6 @@
 }
 .imgClass{
     display:inline-block;
-    position:absolute;
     clip:rect(0px 136px 136px 0px);
     max-height:223px;    
 }

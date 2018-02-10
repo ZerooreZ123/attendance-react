@@ -1,6 +1,8 @@
 //员工考勤记录（普通管理员）
 import React, { Component } from 'react';
-import InfiniteCalendar from 'react-infinite-calendar';
+import Toast from '../components/Toast';
+// import InfiniteCalendar from 'react-infinite-calendar';
+import DayPicker from 'react-day-picker';
 import Picker from 'react-mobile-picker';
 import moment from 'moment';
 
@@ -47,15 +49,16 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
     } else {
         if (dateIndex === 0) {
             return (
-                <div>
-                    <InfiniteCalendar
+                <div className={styles.maskDate}>
+                    {/* <InfiniteCalendar
                         width={'100%'} height={170}
                         locale={{
                             headerFormat: 'MM D',
                             weekdays: ["日", "一", "二", "三", "四", "五", "六"]
                         }}
                         onSelect={parent.selectDay}
-                    />
+                    /> */}
+                    <DayPicker onDayClick={ev =>parent.preClockInRemind(ev)} />
                 </div>
             )
         } else if (dateIndex === 1) {
@@ -85,6 +88,9 @@ class PersonalRecord extends Component {
     constructor() {
         super();
         this.state = {
+            tipState1:false,
+            tipState:false,        //提示状态
+            secondTime:(new Date()).getTime(),
             Value: '',
             date: new Date(),
             nameId:window.Person.userid,                   //用户Id
@@ -121,8 +127,8 @@ class PersonalRecord extends Component {
     }
     getYear() {                           //获取年份
         var myDate = new Date();
-        var startYear = myDate.getFullYear();//起始年份
-        var endYear = myDate.getFullYear() + 10;//结束年份
+        var startYear = myDate.getFullYear()-2;//起始年份
+        var endYear = myDate.getFullYear() + 1;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
             list.push(i.toString());
@@ -136,8 +142,8 @@ class PersonalRecord extends Component {
     }
     getMonth() {                          //获取年+月份
         var myDate = new Date();
-        var startYear = myDate.getFullYear() - 1;//起始年份
-        var endYear = myDate.getFullYear() + 10;//结束年份
+        var startYear = myDate.getFullYear() - 2;//起始年份
+        var endYear = myDate.getFullYear() + 1;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
             list.push(i.toString());
@@ -200,19 +206,34 @@ class PersonalRecord extends Component {
         }else{                      //年
             this.setState({selectYear:this.state.selectYear});
             if(this.state.tabIndex === 0){    //全部
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
                 this.getYear();
             }else{                           //异常
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
                 this.getYear(); 
             }  
         }
     }
-    selectDay = (date) => {          //日历日期选择
-        var d = new Date(date);
-        var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
-        this.setState({selectDate:dateTime});
+    // selectDay = (date) => {          //日历日期选择
+    //     var d = new Date(date);
+    //     var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
+    //     this.setState({selectDate:dateTime});
 
+    // }
+    handleDayClick(day) {
+        var d = new Date(day);
+        var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
+        if(this.state.secondTime >= (new Date(dateTime)).getTime()){
+           this.setState({selectDate:dateTime});
+        }else{
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },1500)
+        }
+    }
+    preClockInRemind(day) {         //日历选择
+        setTimeout(()=>this.handleDayClick(day), 0);
     }
     handleChange = (name, value) => { //月日期选择
         this.setState({ valueGroups: { data: value } });
@@ -237,7 +258,7 @@ class PersonalRecord extends Component {
         }else if(this.state.currentIndex === 1) {           //月
             this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid)
         }else{                                              //年
-            this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid) 
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid) 
         }
     }
     showAbnormal() {                 //展示异常
@@ -248,7 +269,7 @@ class PersonalRecord extends Component {
         }else if(this.state.currentIndex === 1){            //月
             this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid,'abnormity')
         }else{                                              //年
-            this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity')
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity')
            
         }
         
@@ -256,27 +277,38 @@ class PersonalRecord extends Component {
     determineDepartment() {    //确认选择
         if(this.state.currentIndex === 0) {      //日子
             if(this.state.tabIndex === 0){       //全部
-                this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid)
+                this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid);
+                this.hideMask();
             }else{                               //异常
-                this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid,'abnormity')
+                this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid,'abnormity');
+                this.hideMask();
             } 
         }else if(this.state.currentIndex === 1) { //月期
-            this.setState({selectMonth:this.state.valueGroups.data})
-            if(this.state.tabIndex === 0){       //全部
-    
-                this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid)
-            }else{                               //异常
-                this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid,'abnormity')
-            } 
+            if(this.state.secondTime >=(new Date(this.state.valueGroups.data).getTime())) {
+                this.setState({selectMonth:this.state.valueGroups.data})
+                if(this.state.tabIndex === 0){       //全部
+                    this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid);
+                    this.hideMask();
+                }else{                               //异常
+                    this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid,'abnormity');
+                    this.hideMask();
+                } 
+            }else{
+                this.setState({tipState1:true})
+                setTimeout(()=>{
+                    this.setState({tipState1:false})
+                },1500)
+            }
         }else{                                    //年份
             this.setState({selectYear:this.state.valueYears.data})
             if(this.state.tabIndex === 0){       //全部
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid)
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+                this.hideMask();
             }else{                               //异常
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity')
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+                this.hideMask();
             } 
         }
-        this.hideMask();
     }
     async getPersonRecords(startTime,endTime,userId,abnormity) {            //获取个人打卡记录
         const result = await XHR.post(API.getRecords,{
@@ -299,11 +331,11 @@ class PersonalRecord extends Component {
                 backTime:ev.downWork?ev.downWork:'--:--:--'
             })
         })
-        
-        this.setState({personData:dataResult || []});
+        var dataResult1 = dataResult.reverse();
+        this.setState({personData:dataResult1 || []});
     }
     render() {
-        const { currentIndex,tabIndex, section, departmentIndex, toggleIndex, maskToggle, optionGroups, valueGroups,selectYear,selectDate,valueYears,optionYears,abnormalRecord,personData,selectMonth} = this.state;
+        const { currentIndex,tabIndex, section, departmentIndex, toggleIndex, maskToggle, optionGroups, valueGroups,selectYear,selectDate,valueYears,optionYears,abnormalRecord,personData,selectMonth,tipState,tipState1} = this.state;
         const timeSlot = ['日', '月', '年'];
         const DateChange = props => {              //日期显示内容
             if (currentIndex === 0) {              //日
@@ -445,7 +477,8 @@ class PersonalRecord extends Component {
                         </div>
                     </div>
                 </div>
-
+                <Toast isShow={tipState} text="请勿选择当日之后日期"/>
+                <Toast isShow={tipState1} text="请勿选择当月之后日期"/>
             </div>
         )
     }

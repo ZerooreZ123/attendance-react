@@ -1,5 +1,6 @@
 //员工考勤记录（普通管理员）
 import React, { Component } from 'react';
+import Toast from '../components/Toast';
 // import InfiniteCalendar from 'react-infinite-calendar';
 import Picker from 'react-mobile-picker';
 import DayPicker from 'react-day-picker';
@@ -34,6 +35,49 @@ const NoData =({parent,selectDate,departmentName,maskState}) =>{
     )
 }
 
+const NoRecord =({parent,selectDate,departmentName,maskState1}) =>{
+    return (
+        <div className={styles.blankBox}>
+             <div className={styles.box}>
+                <img className={styles.blankImg} src={data} alt='' />
+                <div className={styles.font}>暂无考勤记录</div>
+             </div>
+             <div className={styles.footer}>
+                <div className={styles.brief} onClick={ev => parent.showMask1(ev)}>
+                    <span>{selectDate}</span>/<span>{departmentName}</span>
+                    <img className={styles.top} src={top} alt="" />
+                </div>
+                <div onClick={ev => parent.export(ev)} className={maskState1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
+             </div>
+        </div>
+    )
+}
+
+const MaskPerson = ({parent, optionGroups, valueGroups,dateIndex,optionTeams,valueTeams}) => { 
+    if (dateIndex === 1) {
+        return (
+            <div>
+                <Picker
+                    optionGroups={optionGroups}
+                    valueGroups={valueGroups}
+                    onChange={parent.handleChange}
+                />
+            </div>
+        )
+    } else if(dateIndex === 2) {
+        return (
+            <div>
+                <Picker
+                    optionGroups={optionTeams}
+                    valueGroups={valueTeams}
+                    onChange={parent.selectChange}
+                />
+            </div>
+        )
+    }else{
+        return null
+    }   
+}
 
 const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, valueGroups, Value, dateIndex,optionTeams,valueTeams}) => {   //部门列表组件
     if (tabIndex === 1) {
@@ -51,15 +95,7 @@ const MaskAttendance = ({ list, parent, tabIndex, divisionIndx, optionGroups, va
         if (dateIndex === 0) {
             return (
                 <div className={styles.maskDate}>
-                    {/* <InfiniteCalendar
-                        width={'100%'} height={170}
-                        locale={{
-                            headerFormat: 'MM D',
-                            weekdays: ["日", "一", "二", "三", "四", "五", "六"]
-                        }}
-                        onSelect={parent.selectDay}
-                    /> */}
-                      <DayPicker onDayClick={ev =>parent.preClockInRemind(ev)} />
+                    <DayPicker onDayClick={ev =>parent.preClockInRemind(ev)} />
                 </div>
             )
         } else if (dateIndex === 1) {
@@ -89,6 +125,10 @@ class AttendanceData extends Component {
     constructor() {
         super();
         this.state = {
+            maskToggle1:0,
+            tipState1:false,
+            tipState:false,        //提示状态
+            secondTime:(new Date()).getTime(),
             Value: '',
             date: new Date(),
             section: [],                 //部门列表
@@ -170,7 +210,6 @@ class AttendanceData extends Component {
     }
     selectState() {
         var test=JSON.parse(window.sessionStorage.getItem('dataResult'));
-        console.log(test);
         if(test){
             this.setState({Value:test.Value,
                 abnormalRecord:test.abnormalRecord,
@@ -205,7 +244,7 @@ class AttendanceData extends Component {
             this.getRecords(test.selectDate,test.selectDate,test.departmentId);
             
         }else{
-            this.setState({ 
+            this.setState({
                 Value: '',
                 date: new Date(),
                 section: [],                 //部门列表
@@ -250,15 +289,22 @@ class AttendanceData extends Component {
     handleDayClick(day) {
         var d = new Date(day);
         var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
-        this.setState({selectDate:dateTime});
+        if(this.state.secondTime >= (new Date(dateTime)).getTime()){
+           this.setState({selectDate:dateTime});
+        }else{
+            this.setState({tipState:true})
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },1500)
+        }
     }
     preClockInRemind(day) {
         setTimeout(()=>this.handleDayClick(day), 0);
     }
     getYear() {                           //获取年份
         var myDate = new Date();
-        var startYear = myDate.getFullYear();//起始年份
-        var endYear = myDate.getFullYear() + 10;//结束年份
+        var startYear = myDate.getFullYear()-2;//起始年份
+        var endYear = myDate.getFullYear()+1;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
             list.push(i.toString());
@@ -272,8 +318,8 @@ class AttendanceData extends Component {
     }
     getMonth() {                          //获取年+月份
         var myDate = new Date();
-        var startYear = myDate.getFullYear() - 1;//起始年份
-        var endYear = myDate.getFullYear() + 10;//结束年份
+        var startYear = myDate.getFullYear() - 2;//起始年份
+        var endYear = myDate.getFullYear() + 1;//结束年份
         var list = []
         for (var i = startYear; i < endYear; i++) {
             list.push(i.toString());
@@ -405,12 +451,13 @@ class AttendanceData extends Component {
         this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
     }
 
-    selectDay = (date) => {          //日历日期选择
-        var d = new Date(date);
-        var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
-        this.setState({selectDate:dateTime});
+    // selectDay = (date) => {          //日历日期选择
+    //     var d = new Date(date);
+    //     var dateTime = this.addZero(d.getFullYear()) + '-' + this.addZero((d.getMonth() + 1)) + '-' + this.addZero(d.getDate());
+    //     this.setState({currentDay:dateTime})
+    //     this.setState({selectDate:dateTime});
 
-    }
+    // }
     handleChange = (name, value) => { //月日期选择
         this.setState({ valueGroups: { data: value } });
     }
@@ -420,11 +467,17 @@ class AttendanceData extends Component {
     addZero(s) {                     //时间格式转化
         return s < 10 ? '0' + s: s;
     }
-    showMask() {                     //显示mask  
+    showMask() {                     //显示mask 
         this.setState({ maskToggle: 1 })
+    }
+    showMask1() {
+        this.setState({ maskToggle1: 1 })
     }
     hideMask() {                     //隐藏mask
         this.setState({ maskToggle: 0 });
+    }
+    hideMask1() {                     //隐藏mask
+        this.setState({ maskToggle1: 0 });
     }
     showAll() {                      //展示所有
         this.setState({ showState: 0 });
@@ -512,23 +565,63 @@ class AttendanceData extends Component {
         )
         this.setState({ section: sectionList });
     }
+    makeSure(){                  //个人确认选择
+        if(this.state.currentIndex === 1) { //月期
+            if(this.state.secondTime >=(new Date(this.state.valueGroups.data).getTime())) {   //判断是否为大于当月
+                if(this.state.showState === 0){         //判断是否为全部
+                    this.setState({selectMonth:this.state.valueGroups.data})
+                    this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.nameId);
+                    this.hideMask1();
+                }else{
+                    this.setState({selectMonth:this.state.valueGroups.data})
+                    this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.nameId,'abnormity');
+                    this.hideMask1();
+                }
+            }else{
+                this.setState({tipState1:true})
+                setTimeout(()=>{
+                    this.setState({tipState1:false})
+                },1500)
+            }
+        }else{                                    //年份
+            if(this.state.showState === 0) {          //判断是否为全部
+                this.setState({selectYear:this.state.valueYears.data})
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId);
+                this.hideMask1();
+            }else{
+                this.setState({selectYear:this.state.valueYears.data})
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity');
+                this.hideMask1();
+            }
+        }
+    }
+
 
     determineDepartment() {    //确认选择
         if(this.state.currentIndex === 0) {      //日子
             if(this.state.tabIndex === 0){       //全部
-                this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId)
+                this.getRecords(this.state.selectDate,this.state.selectDate,this.state.departmentId);
+                this.hideMask();
             }else{                               //异常
                 this.Abnormal(this.state.selectDate,this.state.selectDate,this.state.departmentId)
+                this.hideMask();
             }
-           
         }else if(this.state.currentIndex === 1) { //月期
-            this.setState({selectMonth:this.state.valueGroups.data})
-            this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId)
+            if(this.state.secondTime >=(new Date(this.state.valueGroups.data).getTime())) {
+                this.setState({selectMonth:this.state.valueGroups.data})
+                this.getStatisticalInfo(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.departmentId);
+                this.hideMask();
+            }else{
+                this.setState({tipState1:true})
+                setTimeout(()=>{
+                    this.setState({tipState1:false})
+                },1500)
+            }
         }else{                                    //年份
             this.setState({selectYear:this.state.valueYears.data})
-            this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
+            this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId );
+            this.hideMask();
         }
-        this.hideMask();
     }
     async getPersonRecords(startTime,endTime,userId,abnormity) {            //获取个人打卡记录
         const result = await XHR.post(API.getRecords,{
@@ -584,7 +677,7 @@ class AttendanceData extends Component {
             endDate:endTime,
             officeid:officeId
         })
-        console.log(JSON.parse(result))
+        // console.log(JSON.parse(result))
         window.time = this.state.startTime;
         const dataResult = [];
         JSON.parse(result).data.forEach((ev,i) =>{
@@ -641,7 +734,7 @@ class AttendanceData extends Component {
         this.setState({ yearSource: list });
     }
     render() {
-        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,selectYear,selectDate,valueYears,optionYears,abnormalRecord,personDetail,personData,selectMonth,personYearDetail } = this.state;
+        const { record, currentIndex,yearSource,dataSource, tabIndex, section, departmentIndex, departmentName, toggleIndex, maskToggle, optionGroups, valueGroups,selectYear,selectDate,valueYears,optionYears,abnormalRecord,personDetail,personData,selectMonth,personYearDetail,tipState,tipState1,maskToggle1} = this.state;
         const timeSlot = ['日', '月', '年'];
         const list = ['时间', '部门']
         const DateChange = props => {              //日期显示内容
@@ -811,17 +904,17 @@ class AttendanceData extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                <div className={styles.brief} onClick={ev => this.showMask1(ev)}>
                                     <span>{selectMonth}</span>/<span>{departmentName}</span>
                                     <img className={styles.top} src={top} alt="" />
                                 </div>
-                                <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
+                                <div onClick={ev => this.export(ev)} className={maskToggle1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
                         </div>   
                         )
                     }else{
                         return(
-                            <NoData parent={this} selectDate={selectMonth} departmentName={departmentName} maskState={maskToggle}/>
+                            <NoRecord parent={this} selectDate={selectMonth} departmentName={departmentName} maskState={maskToggle1}/>
                         )
                     }
                 }
@@ -919,17 +1012,17 @@ class AttendanceData extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
+                                <div className={styles.brief} onClick={ev => this.showMask1(ev)}>
                                     <span>{selectYear}</span>/<span>{departmentName}</span>
                                     <img className={styles.top} src={top} alt="" />
                                 </div>
-                                <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
+                                <div onClick={ev => this.export(ev)} className={maskToggle1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
                         </div>   
                         )
                     }else{                  
                         return(
-                            <NoData parent={this} selectDate={selectYear} departmentName={departmentName} maskState={maskToggle}/>
+                            <NoRecord parent={this} selectDate={selectYear} departmentName={departmentName} maskState={maskToggle1}/>
                         )
                     }
                 }
@@ -979,7 +1072,26 @@ class AttendanceData extends Component {
                         </div>
                     </div>
                 </div>
-
+                <div className={maskToggle1 === 0 ? styles.hideMask : styles.mask}>
+                    <div className={styles.maskBox}>
+                        <div className={styles.operation}>
+                            <img onClick={ev => this.hideMask1(ev)} className={styles.spread} src={spread} alt="" />
+                        </div>
+                        <div className={styles.determine} onClick={ev => this.makeSure(ev)}>确定</div>
+                        <div>
+                            <MaskPerson
+                                parent={this}
+                                optionGroups={optionGroups}
+                                valueGroups={valueGroups}
+                                dateIndex={currentIndex}
+                                optionTeams={optionYears}
+                                valueTeams={valueYears}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <Toast isShow={tipState} text="请勿选择当日之后日期"/>
+                <Toast isShow={tipState1} text="请勿选择当月之后日期"/>
             </div>
         )
     }
