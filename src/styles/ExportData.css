@@ -13,12 +13,26 @@
 .describe,.mailbox{
     padding:45px 0 25px;
     margin:0 46px;
-    border-bottom:2px solid #ddd;
+    color:#5d5d69;
+    border-bottom:2px solid #c7c7c7;
+}
+.mailbox1{
+    padding:45px 0 25px;
+    margin:0 46px;
+    color:#5d5d69;
+    border-bottom:2px solid #f4f4f4;
 }
 .inputBox{
     outline:none;
     border:0;
     width:80%;
+}
+.dataDescribe,.receiveMail{
+    font-size:24px;
+    color:#5d5d69;
+}
+.hideReceive{
+    display:none;
 }
 .button{
     width:658px;

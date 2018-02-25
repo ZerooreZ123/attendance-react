@@ -12,24 +12,37 @@
     width:100%;
     font-size:30px;
     color:#707070;
-    border-bottom: 2px solid #f6f6f6;
+    border-bottom: 3px solid #f6f6f6;
 }
 .currentTab{
-    height:30px;
+    position: relative;
+    flex:1;
     padding-top:36px;
     padding-bottom:36px;
-    border-bottom: 6px solid #2295e8;
+    text-align:center;
     color:#2295e8;
 }
 .elseTab{
-    height:30px;
+    flex:1;
     padding-top:36px;
     padding-bottom:36px;
     border-bottom: 6px solid transparent;
+    text-align: center;
     color:#7c7c7c;
 }
+.currentTab::before{
+    content:'';
+    position:absolute;
+    bottom:0;
+    left:44%;
+    width:36px;
+    height:6px;
+    background:#2295e8;
+
+}
 .content{
-    padding:0 48px;
+    padding:0 48px 104px;
+    background: #fff;
 }
 .item{
     display:flex;

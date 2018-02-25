@@ -48,13 +48,13 @@ const Header = ({roleid,parent})=> {           //个人中心头部
         return (
             <div className={styles.header}>
                 <div onClick={ev => parent.scan(ev)} className={styles.scanBox}><img className={styles.scanImg} src={scan} alt='' /><span className={styles.scanText}>后台登录</span></div>
-                <div onClick={ev => parent.unbindUser(ev)}>解绑企业</div>
+                <div onClick={ev => parent.unbindUser(ev)} className={styles.unbindButton}>解绑企业</div>
             </div>
         )
     } else {
         return (
             <div className={styles.Userheader}>
-                <div onClick={ev => parent.unbindUser(ev)}>解绑企业</div>
+                <div onClick={ev => parent.unbindUser(ev)} className={styles.unbindButton}>解绑企业</div>
             </div>
         )
     }
@@ -63,32 +63,38 @@ const Header = ({roleid,parent})=> {           //个人中心头部
 const Module=({roleid,superMan,ordinary,parent})=> {   //个人中心不同权限展示模块
     if (roleid === '2') {                //超级管理员
         return (
-            <div className={styles.jurisdictionModule_1}>
-                {
-                    superMan.map((ev, index) =>
-                        <div className={styles.item} key={index} onClick={ev => parent.moveToSuper(index)}>
-                            <img className={styles.itemImg} src={ev.icon} alt="" />
-                            <span className={styles.itemName}>{ev.name}</span>
-                            <img className={styles.itemGo} src={go} alt="" />
-                        </div>
+            <div>
+                <div className={styles.emptyBox}></div>
+                <div className={styles.jurisdictionModule_1}>
+                    {
+                        superMan.map((ev, index) =>
+                            <div className={styles.item} key={index} onClick={ev => parent.moveToSuper(index)}>
+                                <img className={styles.itemImg} src={ev.icon} alt="" />
+                                <span className={styles.itemName}>{ev.name}</span>
+                                <img className={styles.itemGo} src={go} alt="" />
+                            </div>
 
-                    )
-                }
+                        )
+                    }
+                </div>
             </div>
         );
     } else if (roleid === '3') {           //普通管理员
         return (
-            <div className={styles.jurisdictionModule_1}>
-                {
-                    ordinary.map((ev, index) =>
-                        <div className={styles.item} key={index} onClick={ev => parent.moveToOrdinary(index)}>
-                            <img className={styles.itemImg} src={ev.icon} alt="" />
-                            <span className={styles.itemName}>{ev.name}</span>
-                            <img className={styles.itemGo} src={go} alt="" />
-                        </div>
+            <div>
+                <div className={styles.emptyBox}></div>
+                <div className={styles.jurisdictionModule_1}>
+                    {
+                        ordinary.map((ev, index) =>
+                            <div className={styles.item} key={index} onClick={ev => parent.moveToOrdinary(index)}>
+                                <img className={styles.itemImg} src={ev.icon} alt="" />
+                                <span className={styles.itemName}>{ev.name}</span>
+                                <img className={styles.itemGo} src={go} alt="" />
+                            </div>
 
-                    )
-                }
+                        )
+                    }
+                </div>
             </div>
         );
     } else {                              //一般用户
@@ -459,19 +465,21 @@ class UserCenter extends Component {
             <div className={showUserCenter === true ?styles.container:styles.container1}>
                 <div>
                     <div className={showUserCenter === true ? styles.moduleShow:styles.moduleHide}>
-                        <Header roleid = {roleid} parent ={this}></Header>
-                        <div className={styles.information}>
-                            <img className={styles.informationPhoto} src={headPortrait} alt="" />
-                            <div className={styles.personalInformation}>
-                                <div className={styles.name}>
-                                    <span>{dataSource.fingerprintNum}</span>
-                                    <span>{dataSource.name}</span>
-                                    <span>({dataSource.roleNames})</span>
-                                </div>
-                                <div className={styles.phone}>{dataSource.phone}</div>
-                                <div className={styles.company}>
-                                    <span>{dataSource.companyName}</span>/
-                                    <span>{dataSource.officeName}</span>
+                        <div className={styles.headerBox}>
+                            <Header roleid = {roleid} parent ={this}></Header>
+                            <div className={styles.information}>
+                                <img className={styles.informationPhoto} src={headPortrait} alt="" />
+                                <div className={styles.personalInformation}>
+                                    <div className={styles.name}>
+                                        <span>{dataSource.fingerprintNum}</span>
+                                        <span>{dataSource.name}</span>
+                                        <span>({dataSource.roleNames})</span>
+                                    </div>
+                                    <div className={styles.phone}>{dataSource.phone}</div>
+                                    <div className={styles.company}>
+                                        <span>{dataSource.companyName}</span>/
+                                        <span>{dataSource.officeName}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
