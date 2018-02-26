@@ -17,6 +17,7 @@
     align-items:center;
     height:146px;
     border-bottom:2px solid #fafafa;
+    background: #fff;
 }
 .itemOne{
     z-index:10;
@@ -26,6 +27,7 @@
     align-items:center;
     height:146px;
     border-bottom:2px solid #fafafa;
+    background: #fff;
 }
 .mask {
     z-index:11;

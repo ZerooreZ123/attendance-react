@@ -34,9 +34,9 @@ const TabContent = ({currentIndex,deleteSection,division,inputText,section, mach
     if (currentIndex === 1) {
          if(deleteSection === false) {
             return (
-                <div className={styles.content}>
+                <div className={styles.content}>               
                     <div className={ division === true ?styles.item:styles.hideInput}>
-                        <input onChange={ev =>parent.getInput(ev)} placeholder="请输入部门名称" className={styles.designation} value={inputText}/>
+                        <input className={styles.designation} onChange={ev =>parent.getInput(ev)} type="text"  placeholder="请输入部门名称" value={inputText}  />
                         <img className={styles.forward} src={go} alt="" />
                     </div>
                     {
@@ -145,9 +145,9 @@ class EnterpriseManager extends Component {
         this.setState({deleteSection:true})
     }
     addDivision() {                        //添加部门
-        this.setState({inputText:''})
-        this.setState({ division: true });
-        this.setState({selectState:false});
+        this.setState({inputText:'',division: true,selectState:false})
+        // this.setState({ division: true });
+        // this.setState({selectState:false});
     }
     cancelSelect() {                       //取消选择
         this.setState({ division: false });
@@ -209,7 +209,6 @@ class EnterpriseManager extends Component {
             this.setState({section:this.state.section});
             window.sessionStorage.setItem('test',this.state.currentIndex);
             window.location.reload();
-            // alert("添加部门成功");
         }else{
             this.setState({tipState:true})
             setTimeout(()=>{

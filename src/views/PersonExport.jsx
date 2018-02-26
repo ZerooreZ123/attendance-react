@@ -64,8 +64,8 @@ class PersonExport extends Component{
                         <div>数据描述</div>
                         <div><span>{window.Data.time}</span>/<span>{window.Person.name}</span></div>
                     </div>
-                    <div className={styles.mailbox}>
-                        <div>接收邮箱</div>
+                    <div className={inputMail === ''?styles.mailbox1:styles.mailbox}>
+                        <div className={inputMail?styles.receiveMail:styles.hideReceive}>接收邮箱</div>
                         <input onChange={ev =>this.getMail(ev)} className={styles.inputBox} type="text" placeholder="接收邮箱" value={inputMail} />
                     </div>
                 </div>

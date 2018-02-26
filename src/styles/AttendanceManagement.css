@@ -120,3 +120,10 @@
     color:#369fea;
     background:#fff;
 }
+.dateClass{
+    width: 140px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color:#000;
+}

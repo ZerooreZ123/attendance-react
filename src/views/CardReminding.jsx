@@ -43,7 +43,7 @@ const TimeSlot = ({parent,visible,down})  => {
                 <div className={styles.maskBox}>
                     <div className={styles.timeDuan}>
                     {
-                        list.map((item,index) =><div className={down === item?styles.selectSingle:styles.single} key={index} onClick={ev =>parent.choiceTime(index)}>前{item}分钟</div>)
+                        list.map((item,index) =><div className={down === item?styles.selectSingle:styles.single} key={index} onClick={ev =>parent.choiceTime(index)}>后{item}分钟</div>)
                     }
                     </div>
                 </div>

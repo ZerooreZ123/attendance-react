@@ -60,8 +60,8 @@
 }
 .forward{
     display:inline-block;
-    width:26px;
-    height: 40px;
+    width:21px;
+    height:39px;
 }
 
 .designation{
@@ -69,8 +69,10 @@
     outline:none;
     width:80%;
     font-size:26px;
-    color:#000;
-   
+    color:#000;   
+}
+.designation::-webkit-input-placeholder{ 
+    color:#b0b0b0;
 }
 .machine{
     display:inline-block;
@@ -186,16 +188,4 @@
     margin-left:24px;
     font-size: 0.346667rem;
     color: #000;
-}
-input::-webkit-input-placeholder { /* WebKit browsers */
-　　color:#666;
-}
-input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:#666;
-}
-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:#666;
-}
-input::-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:#666;
 }

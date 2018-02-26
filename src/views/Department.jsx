@@ -26,8 +26,9 @@ class Department extends Component{
             section:this.state.departmentStaff[i].officeName,
             userid:this.state.departmentStaff[i].id,
             loginN :this.state.departmentStaff[i].loginN,
-            barState:false
+            barState:false,
         };
+        console.log(window.Person);
         // window.Person.name = this.state.departmentStaff[i].name;
         // window.Person.section = this.state.departmentStaff[i].officeName;
         // window.Person.userid = this.state.departmentStaff[i].id;

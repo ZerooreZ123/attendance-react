@@ -49,23 +49,6 @@
   color: #FFF;
   width: 100%
 }
-input::-webkit-input-placeholder { /* WebKit browsers */ 
-  color: #FFF; 
-} 
-  
-input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */ 
-  color: #FFF; 
-} 
-  
-input::-moz-placeholder { /* Mozilla Firefox 19+ */ 
-  color: #FFF; 
-  
-} 
-  
-input:-ms-input-placeholder { /* Internet Explorer 10+ */ 
-  color: #FFF; 
-} 
-
 .next{
   display: flex;
   justify-content: center;
@@ -78,16 +61,4 @@ input:-ms-input-placeholder { /* Internet Explorer 10+ */
   width: 90%;
   background: lightgray;
   color: #2e79ca;
-}
-input::-webkit-input-placeholder { /* WebKit browsers */
-  　　color:#fff;
-}
-input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-  　　color:#fff;;
-}
-input::-moz-placeholder { /* Mozilla Firefox 19+ */
-  　　color:#fff;;
-}
-input::-ms-input-placeholder { /* Internet Explorer 10+ */
-  　　color:#fff;;
 }

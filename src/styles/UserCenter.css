@@ -134,8 +134,8 @@
     flex:1;
 }
 .itemGo{
-    width:26px;
-    height:40px;
+    width:21px;
+    height:39px;
 }
 .jurisdictionModule_1{
     padding:0 48px 160px;
@@ -173,10 +173,10 @@
     left:0;
     bottom:0;
     width:100%;
-    /* height:98px; */
-    /* font-size:20px; */
-    /* padding:12px 0 6px; */
-    border-top:1px solid #ededed;
+    height:88px;
+    font-size:24px;
+    padding:12px 0 16px;
+    border-top:2px solid #ededed;
     background: #fff;
 }
 .tab{
@@ -186,13 +186,20 @@
 }
 .tabImg{
     display:inline-block;
-    /* width:44px;
-    height:44px;
-    margin-bottom:10px; */
+    width:45px;
+    height:48px;
 }
-/* .tabText{
-    padding-top:8px;
-} */
+.tabImg1{
+    display:inline-block;
+    width:34px;
+    height:48px;
+}
+.tabText{
+    color:#bbbbbb;
+}
+.currenTabText{
+    color:#53aded;
+}
 .headerTip{
     padding:0 22px;
     height:32px;
@@ -271,7 +278,8 @@
     border-top-color:#b4dbf7;
     border-bottom-color:#b4dbf7;
     border-radius:50%;
-    -webkit-animation:circle 1s infinite linear;/*匀速 循环*/
+    -webkit-animation:circle 1s infinite linear;
+    background-color:#b4dbf7;
 }
 .circular{
     z-index:1;
@@ -318,14 +326,21 @@
     background:-webkit-linear-gradient(top, #33b5fb 0%, #0c6dd0 100%)
 }
 .clockOn{
-    font-size:44px;
+    height:42px;
+    line-height: 42px;
+    font-size:42px;
+    color:#50a7ec;
 }
 .clockCan{
     font-size:44px;
     color:#fff;
 }
 .clockDate{
+    margin-top:20px;
+    height:30px;
+    line-height:30px;
     font-size:30px;
+    color:#6dbafe;
 }
 .prompt{
     vertical-align:bottom;
@@ -341,6 +356,7 @@
     top:-4px;
     left:0;
     margin-left:10px;
+    font-size:28px;
 }
 .refreshHide{
     width:376px;

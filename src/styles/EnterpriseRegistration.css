@@ -111,15 +111,6 @@
     color: #147dd9;
     font-size:28px;  
   }
-  input::-webkit-input-placeholder { /* WebKit browsers */
-    　　color:#fff;
-  }
-  input::-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    　　color:#fff;;
-  }
-  input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    　　color:#fff;;
-  }
-  input::-ms-input-placeholder { /* Internet Explorer 10+ */
-    　　color:#fff;;
+  .inputClass::-webkit-input-placeholder{
+    color: #fff;
   }

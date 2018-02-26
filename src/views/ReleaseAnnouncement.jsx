@@ -210,7 +210,7 @@ class ReleaseAnnouncement extends Component{
                 </div>
                 <div className={styles.content}>
                     <div className={styles.box}>
-                       <textarea className={styles.inputBox} type="text" placeholder="公告标题" onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle}></textarea>
+                       <input className={styles.inputBox} type="text" placeholder="公告标题" onChange={ev =>this.getTitle(ev)} value={this.state.announcementTitle} />
                     </div>
                     <textarea className={styles.inputBlock} placeholder="公告内容" onChange={ev =>this.getContent(ev)} value={this.state.announcementContent}></textarea>
                     <div className={styles.imgBox}>

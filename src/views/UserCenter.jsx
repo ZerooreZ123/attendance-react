@@ -501,14 +501,14 @@ class UserCenter extends Component {
                         <ClockPage prompt={prompt} parent={this} h={h} m ={m}s ={s}></ClockPage>
                     </div>
                 </div>
-                <div style={{'height':40,'paddingTop':6,'paddingBottom':4}} className={styles.tabBox}>
-                    <div style={{'height':40}}  className={styles.tab} onClick={ev => this.punchClock(ev)}>
-                        <img style={{'height':22,'width':22}} className={styles.tabImg} src={ showPunchClock === true ? clock2 :clock} alt="" />
-                        <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>考勤打卡</div>
+                <div className={styles.tabBox}>
+                    <div className={styles.tab} onClick={ev => this.punchClock(ev)}>
+                        <img className={styles.tabImg1} src={ showPunchClock === true ? clock2 :clock} alt="" />
+                        <div className={showPunchClock === true?styles.currenTabText:styles.tabText}>考勤打卡</div>
                     </div>
-                    <div style={{'height':40}} className={styles.tab} onClick={ev =>this.personCenter(ev)}>
-                        <img style={{'height':22,'width':22}} className={styles.tabImg} src={ showUserCenter === true? person:person1} alt="" />
-                        <div style={{'fontSize':12,'height':14,'lineHight':14}} className={styles.tabText}>个人中心</div>
+                    <div className={styles.tab} onClick={ev =>this.personCenter(ev)}>
+                        <img className={styles.tabImg} src={ showUserCenter === true? person:person1} alt="" />
+                        <div className={showUserCenter === true?styles.currenTabText:styles.tabText}>个人中心</div>
                     </div>
                 </div>
                 <Toast isShow={tipState} text="附近没有可打卡的考勤设备"/> 

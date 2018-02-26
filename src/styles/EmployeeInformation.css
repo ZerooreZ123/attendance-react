@@ -34,9 +34,6 @@
     outline:none;
     border: none;
 }
-input::-webkit-input-placeholder{
-    color:#b5b5b5;
-}
 .search{
     width:38px;
     height:38px;
@@ -76,8 +73,8 @@ input::-webkit-input-placeholder{
 }
 .forward{
     display:inline-block;
-    width:24px;
-    height:40px;
+    width:21px;
+    height:39px;
 }
 .footer{
     position:fixed;
@@ -162,8 +159,8 @@ input::-webkit-input-placeholder{
     display:block;
 }
 .hideContent{
-    display:none
+    display:none;
 }
 .inputBox::-webkit-input-placeholder{ 
-　　color:#b0b0b0;
+    color:#b0b0b0;
 }

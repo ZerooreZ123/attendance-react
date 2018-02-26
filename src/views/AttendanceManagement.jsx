@@ -143,7 +143,7 @@ class AttendanceManagement extends Component {
                         <div className={styles.clock}>打卡时间</div>
                         <div className={styles.time}>
                             <div>上午</div>
-                            <div onClick={ev => this.clickUp(ev)}>
+                            <div onClick={ev => this.clickUp(ev)} className={styles.dateClass}>
                                 <TimePicker
                                     showSecond={false}
                                     value={this.state.now}
@@ -157,7 +157,7 @@ class AttendanceManagement extends Component {
                         </div>
                         <div className={styles.time}>
                             <div>下午</div>
-                            <div onClick={ev => this.clickDown(ev)}>
+                            <div onClick={ev => this.clickDown(ev)} className={styles.dateClass}>
                                 <TimePicker
                                     showSecond={false}
                                     value={this.state.now1}

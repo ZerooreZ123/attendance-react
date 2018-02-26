@@ -82,7 +82,7 @@ class ExportData extends Component{
                         <div><span>{window.Data.time}</span>/<span>{window.Data.section}</span></div>
                     </div>
                     <div className={inputMail === ''?styles.mailbox1:styles.mailbox}>
-                        <div className={styles.receiveMail}>接收邮箱</div>
+                        <div className={inputMail?styles.receiveMail:styles.hideReceive}>接收邮箱</div>
                         <input onChange={ev =>this.getMail(ev)} className={styles.inputBox} type="text" placeholder="接收邮箱" value={inputMail} />
                     </div>
                 </div>
