@@ -43,7 +43,7 @@ const Notice = ({ noticeState, parent, title }) => {   //打卡顶部通告
         return null
     }
 }
-const Header = ({roleid,parent})=> {           //个人中心头部
+const Header = ({ roleid, parent }) => {           //个人中心头部
     if (roleid === '2' || roleid === '3') {
         return (
             <div className={styles.header}>
@@ -60,7 +60,7 @@ const Header = ({roleid,parent})=> {           //个人中心头部
     }
 }
 
-const Module=({roleid,superMan,ordinary,parent})=> {   //个人中心不同权限展示模块
+const Module = ({ roleid, superMan, ordinary, parent }) => {   //个人中心不同权限展示模块
     if (roleid === '2') {                //超级管理员
         return (
             <div>
@@ -102,71 +102,71 @@ const Module=({roleid,superMan,ordinary,parent})=> {   //个人中心不同权�
     }
 }
 
-const ClockPage = ({prompt,parent,h,m,s}) => {
+const ClockPage = ({ prompt, parent, h, m, s }) => {
     if (prompt === 0) {            //搜索中
         return (
-        <div className={styles.content}>
-            <div className={styles.clickClock}>
-            <div className={styles.ring}></div>
-            <div className={styles.clickButton}>
-                <div className={styles.clockOn}>打卡</div>
-                <div className={styles.clockDate}>{h}:{m}:{s}</div>
+            <div className={styles.content}>
+                <div className={styles.clickClock}>
+                    <div className={styles.ring}></div>
+                    <div className={styles.clickButton}>
+                        <div className={styles.clockOn}>打卡</div>
+                        <div className={styles.clockDate}>{h}:{m}:{s}</div>
+                    </div>
+                </div>
+                <div className={styles.prompt}>
+                    <img className={styles.promptImg} src={load} alt="" /><span className={styles.text}>正在搜索考勤机...</span>
+                </div>
+                <div className={styles.refreshHide}>刷新页面</div>
+                <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
-            </div>
-            <div className={styles.prompt}>
-            <img className={styles.promptImg} src={load} alt="" /><span className={styles.text}>正在搜索考勤机...</span>
-            </div>
-            <div className={styles.refreshHide}>刷新页面</div>
-            <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
-        </div>
         )
     } else if (prompt === 1) {      //可打卡
         return (
-        <div className={styles.content}>
-            <div className={styles.clickClock}>
-            <div className={styles.circular}></div>
-            <div onClick={ev => parent.clockIn(ev)} className={styles.clickButton}>
-                <div className={styles.clockCan}>打卡</div>
-                <div className={styles.clockDate}>{h}:{m}:{s}</div>
+            <div className={styles.content}>
+                <div className={styles.clickClock}>
+                    <div className={styles.circular}></div>
+                    <div onClick={ev => parent.clockIn(ev)} className={styles.clickButton}>
+                        <div className={styles.clockCan}>打卡</div>
+                        <div className={styles.clockDate}>{h}:{m}:{s}</div>
+                    </div>
+                </div>
+                <div className={styles.prompt}>可以打卡了</div>
+                <div className={styles.refreshHide}>刷新页面</div>
+                <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
-            </div>
-            <div className={styles.prompt}>可以打卡了</div>
-            <div className={styles.refreshHide}>刷新页面</div>
-            <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
-        </div>
         )
     } else if (prompt === 2) {     //打卡异常
         return (
-        <div className={styles.content}>
-            <div className={styles.clickClock}>
-            <div className={styles.circular}></div>
-            <div className={styles.clickButton}>
-                <div className={styles.clockOn}>打卡</div>
-                <div className={styles.clockDate}>{h}:{m}:{s}</div>
+            <div className={styles.content}>
+                <div className={styles.clickClock}>
+                    <div className={styles.circular}></div>
+                    <div className={styles.clickButton}>
+                        <div className={styles.clockOn}>打卡</div>
+                        <div className={styles.clockDate}>{h}:{m}:{s}</div>
+                    </div>
+                </div>
+                <div className={styles.prompt}>
+                    <img className={styles.promptImg} src={warn} alt="" /><span className={styles.text}>网络连接异常,蓝牙未打开</span>
+                </div>
+                <div onClick={ev => parent.refresh(ev)} className={styles.refreshShow}>刷新页面</div>
+                <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
-            </div>
-            <div className={styles.prompt}>
-            <img className={styles.promptImg} src={warn} alt="" /><span className={styles.text}>网络连接异常,蓝牙未打开</span>
-            </div>
-            <div onClick={ev => parent.refresh(ev)} className={styles.refreshShow}>刷新页面</div>
-            <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
-        </div>
         )
     } else {                      //打卡成功
         return (
-        <div className={styles.content}>
-            <div className={styles.clickClock}>
-            <img className={styles.cardFinish} src={success} alt="" />
-            <div className={styles.cardTime}>
-                <div className={styles.clockDate}>{h}:{m}:{s}</div>
+            <div className={styles.content}>
+                <div className={styles.clickClock}>
+                    <img className={styles.cardFinish} src={success} alt="" />
+                    <div className={styles.cardTime}>
+                        <div className={styles.clockDate1}>{h}:{m}:{s}</div>
+                    </div>
+                </div>
+                <div className={styles.prompt}>
+                    <img className={styles.promptImg} src={successMin} alt="" /><span className={styles.text}>打卡成功!</span>
+                </div>
+                <div className={styles.refreshHide}>刷新页面</div>
+                <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
-            </div>
-            <div className={styles.prompt}>
-            <img className={styles.promptImg} src={successMin} alt="" /><span className={styles.text}>打卡成功!</span>
-            </div>
-            <div className={styles.refreshHide}>刷新页面</div>
-            <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
-        </div>
         )
     }
 }
@@ -176,11 +176,11 @@ class UserCenter extends Component {
         super();
         window.temp = {};
         this.state = {
-            tipState:false,        //提示状态
-            alertState:false,      //alert状态
-            id:'',                 //用户Id
-            showUserCenter:false,   //展示模块1
-            showPunchClock:true,  //展示模块2
+            tipState: false,        //提示状态
+            alertState: false,      //alert状态
+            id: '',                 //用户Id
+            showUserCenter: false,   //展示模块1
+            showPunchClock: true,  //展示模块2
             companyid: '',         //公司Id
             roleid: '',            //用户权限
             dataSource: {},        //用户信息
@@ -199,33 +199,33 @@ class UserCenter extends Component {
         this.mainPage();
         this.delaySearch();
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         var main = {
-            showUserCenter:this.state.showUserCenter, 
-            showPunchClock:this.state.showPunchClock,
-            prompt:this.state.prompt 
+            showUserCenter: this.state.showUserCenter,
+            showPunchClock: this.state.showPunchClock,
+            prompt: this.state.prompt
         }
-        window.sessionStorage.setItem('mainPage',JSON.stringify(main));
+        window.sessionStorage.setItem('mainPage', JSON.stringify(main));
     }
     mainPage() {
-        var test=JSON.parse(window.sessionStorage.getItem('mainPage'));
-        if(test) {
+        var test = JSON.parse(window.sessionStorage.getItem('mainPage'));
+        if (test) {
             this.setState({
-                showUserCenter:test.showUserCenter,
-                showPunchClock:test.showPunchClock,
-                prompt:test.prompt 
+                showUserCenter: test.showUserCenter,
+                showPunchClock: test.showPunchClock,
+                prompt: test.prompt
             })
 
-        }else{
+        } else {
             this.setState({
-                showUserCenter:false,   //展示模块1
-                showPunchClock:true,  //展示模块2
+                showUserCenter: false,   //展示模块1
+                showPunchClock: true,  //展示模块2
                 prompt:0
             })
-         }
+        }
     }
     delaySearch() {
-        setTimeout(() =>this.searchIbeacons(),0)
+        setTimeout(() => this.searchIbeacons(), 0)
     }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
@@ -258,7 +258,7 @@ class UserCenter extends Component {
         const result = await XHR.post(API.getNewNotice, { companyid: window.sessionStorage.getItem('companyid') });
         if (JSON.parse(result).data) {
             this.setState({ noticeTitle: JSON.parse(result).data.title });
-            window.sessionStorage.setItem('listId',JSON.parse(result).data.id)
+            window.sessionStorage.setItem('listId', JSON.parse(result).data.id)
         } else {
             this.setState({ noticeState: false })
             return false;
@@ -275,22 +275,22 @@ class UserCenter extends Component {
     }
 
     selectBtn(dataState) {
-        if(dataState){
+        if (dataState) {
             this.unbind();
-            this.setState({alertState:false})
-        }else{
-            this.setState({alertState:false})
+            this.setState({ alertState: false })
+        } else {
+            this.setState({ alertState: false })
             return false
         }
 
 
     }
     punchClock() {
-        this.setState({showUserCenter:false,showPunchClock:true,prompt: 0});
+        this.setState({ showUserCenter: false, showPunchClock: true, prompt: 0 });
         this.searchIbeacons();
     }
     personCenter() {
-        this.setState({showUserCenter:true,showPunchClock:false});
+        this.setState({ showUserCenter: true, showPunchClock: false });
         // this.setState({showPunchClock:false});
         this.getWX();
     }
@@ -299,7 +299,7 @@ class UserCenter extends Component {
     }
     moveToUser(i) {                   //一般用户选项跳转
         this.getOfficeList();
-        const userUrl = ['/attendanceRecord/'  + this.state.companyid + '/' +this.state.id, '/cardReminding', '/revisionDepartment'];
+        const userUrl = ['/attendanceRecord/' + this.state.companyid + '/' + this.state.id, '/cardReminding', '/revisionDepartment'];
         this.props.history.push(userUrl[i]);
     }
     moveToOrdinary(i) {               //普通管理员选项跳转
@@ -339,79 +339,81 @@ class UserCenter extends Component {
         const result = await XHR.post(API.getSignature);
         if (JSON.parse(result).success === 'T') {
             window.wx.config({
-                debug:false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
                 appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
-                timestamp:JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+                timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
                 nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
-                signature:JSON.parse(result).data.signature,// 必填，签名
-                jsApiList: ['startSearchBeacons','stopSearchBeacons','onSearchBeacons']
+                signature: JSON.parse(result).data.signature,// 必填，签名
+                jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
                 // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
             });
-             
+
         }
-        window.wx.startSearchBeacons({       //开启ibeacons
-            ticket: "",
-            complete: (argv) => {
+        window.wx.ready(function(){
+            window.wx.startSearchBeacons({       //开启ibeacons
+                ticket: "",
+                complete: (argv) => {
                     // alert('1')
                     //开启查找完成后的回调函数
-                   if(argv.errMsg === "startSearchBeacons:ok") {
+                    if (argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
                         // alert('2')
                         window.wx.onSearchBeacons({
-                            complete:(argv) =>{
-                             
-                            //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                                if(argv.beacons.length>0) {
+                            complete: (argv) => {
+
+                                //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+                                if (argv.beacons.length > 0) {
                                     window.wx.stopSearchBeacons({
-                                        complete:(res) =>{
+                                        complete: (res) => {
                                             const backData = []
-                                            argv.beacons.forEach((ev,index) =>{
+                                            argv.beacons.forEach((ev, index) => {
                                                 backData.push({
-                                                    major:ev.major,
-                                                    minor:ev.minor
+                                                    major: ev.major,
+                                                    minor: ev.minor
                                                 })
                                             })
                                             this.backState(backData)
                                         }
                                     });
-                                }else{
-                                    alert('附近没有设备');
+                                } else {
+                                    // alert('附近没有设备');
                                     window.wx.stopSearchBeacons({
-                                            complete:(res) =>{
+                                        complete: (res) => {
                                         }
-                                    });  
+                                    });
                                 }
                             }
                         });
-                   }else{
-                       //停止搜索ibeacons
+                    } else {
+                        //停止搜索ibeacons
                         window.wx.stopSearchBeacons({
-                            complete:(res) =>{
-                              //关闭查找完成后的回调函数
-                               this.setState({prompt:2})
+                            complete: (res) => {
+                                //关闭查找完成后的回调函数
+                                this.setState({ prompt: 2 })
                             }
                         });
-                   }
-            }
+                    }
+                }
 
-        })
-    }   
+            })
+        });
+    }
     unbindUser() {                  //解绑员工二次确认
-        this.setState({alertState:true})
+        this.setState({ alertState: true })
     }
 
-    async backState(data) { 
-        const result = await XHR.post(API.judgeDevice,{
-            companyid:this.state.companyid,
-            devices:data
+    async backState(data) {
+        const result = await XHR.post(API.judgeDevice, {
+            companyid: this.state.companyid,
+            devices: data
         })
-        if(JSON.parse(result).success === 'T'){
-            this.setState({prompt:1})
-        }else{
-            this.setState({tipState:true})
-            setTimeout(()=>{
-                this.setState({tipState:false})
-            },2000);
+        if (JSON.parse(result).success === 'T') {
+            this.setState({ prompt: 1 })
+        } else {
+            this.setState({ tipState: true })
+            setTimeout(() => {
+                this.setState({ tipState: false })
+            }, 2000);
         }
     }
     async getWX() {
@@ -428,7 +430,7 @@ class UserCenter extends Component {
     }
     async getOfficeList() {          //部门列表
         const result = await XHR.post(API.getOfficeList, { companyid: this.state.companyid });
-        const dataSource=JSON.parse(result).data || [];
+        const dataSource = JSON.parse(result).data || [];
         const sectionList = [];
         dataSource.forEach((item, index) => {
             sectionList.push({
@@ -443,7 +445,7 @@ class UserCenter extends Component {
     }
     async getUser() {              //获取用户信息
         const result = await XHR.post(API.getUser, { loginName: this.props.match.params.loginName });
-        this.setState({ dataSource: JSON.parse(result).data, roleid: JSON.parse(result).data.roleid,companyid: JSON.parse(result).data.companyid ,id:JSON.parse(result).data.id});
+        this.setState({ dataSource: JSON.parse(result).data, roleid: JSON.parse(result).data.roleid, companyid: JSON.parse(result).data.companyid, id: JSON.parse(result).data.id });
         // this.setState({ roleid: JSON.parse(result).data.roleid });
         // this.setState({ companyid: JSON.parse(result).data.companyid })
         // this.setState({id:JSON.parse(result).data.id})
@@ -457,16 +459,16 @@ class UserCenter extends Component {
     }
     render() {
 
-        const { roleid, dataSource,prompt, h, m, s, noticeState,noticeTitle,showUserCenter,showPunchClock,alertState,tipState} = this.state;
+        const { roleid, dataSource, prompt, h, m, s, noticeState, noticeTitle, showUserCenter, showPunchClock, alertState, tipState } = this.state;
         const user = [{ icon: record, name: '考勤记录' }, { icon: remind, name: '打卡提醒' }, { icon: revise, name: '修改部门' }];
         const superMan = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }, { icon: setUp, name: '设置考勤' }];
         const ordinary = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }];
         return (
-            <div className={showUserCenter === true ?styles.container:styles.container1}>
+            <div className={showUserCenter === true ? styles.container : styles.container1}>
                 <div>
-                    <div className={showUserCenter === true ? styles.moduleShow:styles.moduleHide}>
+                    <div className={showUserCenter === true ? styles.moduleShow : styles.moduleHide}>
                         <div className={styles.headerBox}>
-                            <Header roleid = {roleid} parent ={this}></Header>
+                            <Header roleid={roleid} parent={this}></Header>
                             <div className={styles.information}>
                                 <img className={styles.informationPhoto} src={headPortrait} alt="" />
                                 <div className={styles.personalInformation}>
@@ -494,25 +496,25 @@ class UserCenter extends Component {
                                 )
                             }
                         </div>
-                        <Module roleid ={roleid} superMan ={superMan} ordinary ={ordinary} parent ={this}></Module>
+                        <Module roleid={roleid} superMan={superMan} ordinary={ordinary} parent={this}></Module>
                     </div>
-                    <div className={showPunchClock === true ? styles.moduleShow:styles.moduleHide}>
+                    <div className={showPunchClock === true ? styles.moduleShow : styles.moduleHide}>
                         <Notice noticeState={noticeState} parent={this} title={noticeTitle}></Notice>
-                        <ClockPage prompt={prompt} parent={this} h={h} m ={m}s ={s}></ClockPage>
+                        <ClockPage prompt={prompt} parent={this} h={h} m={m} s={s}></ClockPage>
                     </div>
                 </div>
                 <div className={styles.tabBox}>
                     <div className={styles.tab} onClick={ev => this.punchClock(ev)}>
-                        <img className={styles.tabImg1} src={ showPunchClock === true ? clock2 :clock} alt="" />
-                        <div className={showPunchClock === true?styles.currenTabText:styles.tabText}>考勤打卡</div>
+                        <img className={styles.tabImg1} src={showPunchClock === true ? clock2 : clock} alt="" />
+                        <div className={showPunchClock === true ? styles.currenTabText : styles.tabText}>考勤打卡</div>
                     </div>
-                    <div className={styles.tab} onClick={ev =>this.personCenter(ev)}>
-                        <img className={styles.tabImg} src={ showUserCenter === true? person:person1} alt="" />
-                        <div className={showUserCenter === true?styles.currenTabText:styles.tabText}>个人中心</div>
+                    <div className={styles.tab} onClick={ev => this.personCenter(ev)}>
+                        <img className={styles.tabImg} src={showUserCenter === true ? person : person1} alt="" />
+                        <div className={showUserCenter === true ? styles.currenTabText : styles.tabText}>个人中心</div>
                     </div>
                 </div>
-                <Toast isShow={tipState} text="附近没有可打卡的考勤设备"/> 
-                <Alert text='解绑后您的资料与考勤记录将消失,确认解绑吗？' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
+                <Toast isShow={tipState} text="附近没有可打卡的考勤设备" />
+                <Alert text='解绑后您的资料与考勤记录将消失,确认解绑吗？' onSelect={ev => this.selectBtn(ev)} isShow={alertState} />
             </div>
         )
     }

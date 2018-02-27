@@ -10,8 +10,15 @@
     margin-bottom:80px;
     background:#fff;
 }
-.describe,.mailbox{
+.describe{
     padding:45px 0 25px;
+    margin:0 46px;
+    color:#5d5d69;
+    border-bottom:2px solid #c7c7c7;
+}
+.mailbox{
+    position:relative;
+    padding:84px 0 25px;
     margin:0 46px;
     color:#5d5d69;
     border-bottom:2px solid #c7c7c7;
@@ -27,9 +34,16 @@
     border:0;
     width:80%;
 }
-.dataDescribe,.receiveMail{
+.dataDescribe{
     font-size:24px;
     color:#5d5d69;
+}
+.receiveMail{
+    position:absolute;
+    left:0;
+    top:50px;
+    font-size:24px;
+    color:#5d5d69; 
 }
 .hideReceive{
     display:none;

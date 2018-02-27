@@ -81,6 +81,7 @@ class EmployeeInformation extends Component{
             ev.staff.forEach((e,N) =>{
                if(e.id === id) {
                    window.Person = {
+                       phone:e.phone,
                        name:e.name,
                        userid:e.id,
                        section:e.officeName || '其他',

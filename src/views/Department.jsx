@@ -27,8 +27,9 @@ class Department extends Component{
             userid:this.state.departmentStaff[i].id,
             loginN :this.state.departmentStaff[i].loginN,
             barState:false,
+            phone:this.state.departmentStaff[i].phone || '',
         };
-        console.log(window.Person);
+        console.log(this.state.departmentStaff[i]);
         // window.Person.name = this.state.departmentStaff[i].name;
         // window.Person.section = this.state.departmentStaff[i].officeName;
         // window.Person.userid = this.state.departmentStaff[i].id;
@@ -48,8 +49,8 @@ class Department extends Component{
                 id:ev.id,
                 name:ev.name,
                 officeName:ev.officeName,
-                loginN:ev.loginName
-
+                loginN:ev.loginName,
+                phone:ev.phone
             })
         })
         this.setState({departmentStaff:userList});

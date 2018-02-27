@@ -30,7 +30,7 @@ class PersonalInformation extends Component {
     constructor() {
         super();
         this.state = {
-            tipState:false,        //提示状态
+            tipState:false,             //提示状态
             dataSource:[],              //全部
             dataAbnormal:[],            //异常
             showState:true,             //默认展示全部
@@ -252,7 +252,7 @@ class PersonalInformation extends Component {
                 <div className={styles.content}>
                     <div className={styles.header}>
                         <div className={styles.information}>
-                            <div className={styles.phone}>{window.Person.name}</div>
+                            <div className={styles.phone}>{window.Person.name}<span className={styles.phoneClass}>{window.Person.phone}</span></div>
                             <div className={styles.department}>{window.Person.section?window.Person.section:'其他'}</div>
                         </div>
                         <div className={styles.tabBox}>

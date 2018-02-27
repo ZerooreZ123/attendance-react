@@ -269,10 +269,30 @@
     position:relative;
 }
 .ring{
-    z-index:1;
+    position:relative;
     width:276px;
     height:276px;
     border:20px solid transparent;
+    border-radius:50%;
+    background:-webkit-linear-gradient(top, #33b5fb,#0c6dd0);
+    background-clip:padding-box ;
+    -webkit-animation:circle 0.6s infinite linear;
+}
+.ring:after{
+    position:absolute;
+    top:-20px;
+    right:-20px;
+    bottom:-20px;
+    left:-20px;
+    background: -webkit-linear-gradient(0deg, #8cc2e8 10%, #b4dbf7 90%);
+    content:'';
+    border-radius:50%;
+}
+/* .ring{
+    z-index:1;
+    width:276px;
+    height:276px;
+    border:20px solid;
     border-left-color:#8cc2e8;
     border-right-color:#b4dbf7;
     border-top-color:#b4dbf7;
@@ -280,7 +300,7 @@
     border-radius:50%;
     -webkit-animation:circle 1s infinite linear;
     background-color:#b4dbf7;
-}
+} */
 .circular{
     z-index:1;
     width:276px;
@@ -290,8 +310,8 @@
 }
 .cardFinish{
     z-index:1;
-    width:276px;
-    height:276px;
+    width:316px;
+    height:316px;
 }
 .cardTime{
     display:flex;
@@ -299,11 +319,9 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    top:24px;
-    left:0;
+    top:175px;
+    left:90px;
     z-index:2;
-    width:276px;
-    height:276px;
     color:#6dbafe;
 }
 @-webkit-keyframes circle{
@@ -323,7 +341,7 @@
     height:276px;
     border-radius: 50%;
     color:#6dbafe;
-    background:-webkit-linear-gradient(top, #33b5fb 0%, #0c6dd0 100%)
+    background:-webkit-linear-gradient(top, #33b5fb, #0c6dd0)
 }
 .clockOn{
     height:42px;
@@ -337,6 +355,12 @@
 }
 .clockDate{
     margin-top:20px;
+    height:30px;
+    line-height:30px;
+    font-size:30px;
+    color:#6dbafe;
+}
+.clockDate1{
     height:30px;
     line-height:30px;
     font-size:30px;
