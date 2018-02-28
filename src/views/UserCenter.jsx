@@ -197,7 +197,8 @@ class UserCenter extends Component {
         this.showTime();
         this.getNewNotice();
         this.mainPage();
-        this.delaySearch();
+        this.firstSearch();
+        // this.delaySearch();
     }
     componentWillUnmount() {
         var main = {
@@ -224,9 +225,9 @@ class UserCenter extends Component {
             })
         }
     }
-    delaySearch() {
-        setTimeout(() => this.searchIbeacons(), 0)
-    }
+    // delaySearch() {
+    //     setTimeout(() => this.searchIbeacons(), 0)
+    // }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
         this.props.history.push('/AnnouncementDetails');
@@ -335,7 +336,7 @@ class UserCenter extends Component {
             }
         });
     }
-    async searchIbeacons() {
+    async firstSearch() {
         const result = await XHR.post(API.getSignature);
         if (JSON.parse(result).success === 'T') {
             window.wx.config({
@@ -349,34 +350,31 @@ class UserCenter extends Component {
             });
 
         }
-        window.wx.ready(function(){
+        window.wx.ready(()=>{
             window.wx.startSearchBeacons({       //开启ibeacons
                 ticket: "",
                 complete: (argv) => {
-                    // alert('1')
                     //开启查找完成后的回调函数
                     if (argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
-                        // alert('2')
                         window.wx.onSearchBeacons({
                             complete: (argv) => {
-
                                 //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if (argv.beacons.length > 0) {
                                     window.wx.stopSearchBeacons({
                                         complete: (res) => {
-                                            const backData = []
+                                            const backData = [];
                                             argv.beacons.forEach((ev, index) => {
                                                 backData.push({
                                                     major: ev.major,
                                                     minor: ev.minor
                                                 })
                                             })
-                                            this.backState(backData)
+                                            this.backState(backData);
                                         }
                                     });
                                 } else {
-                                    // alert('附近没有设备');
+                                    alert('附近没有设备');
                                     window.wx.stopSearchBeacons({
                                         complete: (res) => {
                                         }
@@ -396,12 +394,72 @@ class UserCenter extends Component {
                 }
 
             })
-        });
+        })
+    }
+    async searchIbeacons() {
+        const result = await XHR.post(API.getSignature);
+        if (JSON.parse(result).success === 'T') {
+            window.wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+                timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
+                signature: JSON.parse(result).data.signature,// 必填，签名
+                jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
+                // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
+            });
+
+        }
+        window.wx.startSearchBeacons({       //开启ibeacons
+            ticket: "",
+            complete: (argv) => {
+                // alert('1')
+                //开启查找完成后的回调函数
+                if (argv.errMsg === "startSearchBeacons:ok") {
+                    // 监听iBeacon信号
+                    // alert('2')
+                    window.wx.onSearchBeacons({
+                        complete: (argv) => {
+
+                            //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+                            if (argv.beacons.length > 0) {
+                                window.wx.stopSearchBeacons({
+                                    complete: (res) => {
+                                        const backData = []
+                                        argv.beacons.forEach((ev, index) => {
+                                            backData.push({
+                                                major: ev.major,
+                                                minor: ev.minor
+                                            })
+                                        })
+                                        this.backState(backData)
+                                    }
+                                });
+                            } else {
+                                alert('附近没有设备');
+                                window.wx.stopSearchBeacons({
+                                    complete: (res) => {
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    //停止搜索ibeacons
+                    window.wx.stopSearchBeacons({
+                        complete: (res) => {
+                            //关闭查找完成后的回调函数
+                            this.setState({ prompt: 2 })
+                        }
+                    });
+                }
+            }
+
+        })
     }
     unbindUser() {                  //解绑员工二次确认
         this.setState({ alertState: true })
     }
-
     async backState(data) {
         const result = await XHR.post(API.judgeDevice, {
             companyid: this.state.companyid,
