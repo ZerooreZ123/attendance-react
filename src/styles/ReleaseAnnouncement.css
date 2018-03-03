@@ -46,15 +46,18 @@
     font-weight: 700;
     color:#000;
     width:100%;
-    height:32px;
+    /* height:32px; */
     overflow: hidden;
     border:0;
     outline:none;
+    padding:0;
+    -webkit-appearance:none;
 }
 textarea{
     border:none;
     outline:none;
     resize:none;
+    padding:0;
 }
 .inputBlock{
     width:100%;
@@ -89,13 +92,16 @@ textarea{
     clip:rect(0px 223px 223px 0px);
     max-height:223px;    
 }
-.releaseTime{
-    position: fixed;
+.dateBox{
+    position:fixed;
     bottom:105px;
-    left:30px;
-    height:38px;
+    left:0;
     width:100%;
-    padding-bottom: 40px;
+}
+.releaseTime{
+    /* height:38px; */
+    padding:0 22px 40px;
+    /* text-indent: 30px; */
     font-size:24px;
     color:#000;
     background:#fff;
@@ -188,11 +194,15 @@ textarea{
     display:inline-block;
     padding-left:18px;
     color:#3d9fea;
+    font-size:26px;
+    text-indent:0;
 }
 .buttonSlect1{
     display:inline-block;
     padding-left:13px;
     color:#3d9fea;
+    font-size:26px;
+    text-indent:0;
 }
 .icon{
     display:inline-block;

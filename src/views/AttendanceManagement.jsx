@@ -47,7 +47,7 @@ class AttendanceManagement extends Component {
     }
 
     componentDidMount() {
-        // document.querySelector('title').innerText = '考勤管理';
+        document.querySelector('title').innerText = '考勤管理';
         this.getAttendanceManagement();
     }
     addZero(s) {                     //时间格式转化

@@ -43,7 +43,7 @@ class ReleaseAnnouncement extends Component{
         };
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '发布公告';
+        document.querySelector('title').innerText = '发布公告';
         this.startDate();
     }
     historyAnnouncement() {                    //跳转至历史记录
@@ -224,8 +224,10 @@ class ReleaseAnnouncement extends Component{
                             ))
                         }                   
                     </div>
-                    <div className={styles.releaseTime}>公告起止日期:<span onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</span><img className={styles.icon} src={down} alt=""/>-<span onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect1}>{this.state.chooseDay}</span><img className={styles.icon} src={down} alt=""/></div>
                 </div>
+                <div className={styles.dateBox}>
+                        <div className={styles.releaseTime}>公告起止日期:<span onClick={ev =>this.showMask1(ev)} className={styles.buttonSlect}>{this.state.selectedDay}</span><img className={styles.icon} src={down} alt=""/>-<span onClick={ev =>this.showMask2(ev)} className={styles.buttonSlect1}>{this.state.chooseDay}</span><img className={styles.icon} src={down} alt=""/></div>
+                    </div>
                 <div className={styles.footer}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
                         <div className={styles.photoBox}>

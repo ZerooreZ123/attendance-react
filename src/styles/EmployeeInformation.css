@@ -18,23 +18,26 @@
 }
 .searchBox{
     display:flex;
-    justify-content:center;
+    /* justify-content:center; */
     align-items:center;
     height:70px;
     margin:0 22px;
-    border-radius:38px;
+    border-radius:22px;
     background:#f5f5f5;
 }
 .searchBox>input{
-    width:704px;
+    display:inline-block;
+    width:580px;
     height:36px;
     font-size:34px;
     color:#000;
     background:transparent;
     outline:none;
     border: none;
+    -webkit-appearance:none;
 }
 .search{
+    display:inline-block;
     width:38px;
     height:38px;
     margin:0 15px 0 23px;

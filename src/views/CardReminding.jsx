@@ -71,7 +71,7 @@ class CardReminding extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '打卡提醒';
+        document.querySelector('title').innerText = '打卡提醒';
         this.getUserRemind();
     }
     showTimeList() {                       //显示1

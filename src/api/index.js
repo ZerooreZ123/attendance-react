@@ -1,12 +1,12 @@
 
-const server = 'http://192.168.1.41:8080';                      //company 
+const server = 'http://192.168.1.152:8080';                      //company 
 // const server = 'http://192.168.31.108:8080';                 //home
 // const server = 'http://www.junl.cn';                            //server
 
 
 // const admin ="http://www.junl.cn/AM/f/yk/api/"                  //serve   
 // const admin = 'http://192.168.31.108:8080/AM/f/yk/api/';     //home
-const admin = 'http://192.168.1.41:8080/AM/f/yk/api/';          //company
+const admin = 'http://192.168.1.152:8080/AM/f/yk/api/';          //company
 
 const API = {
   register: admin + 'register.do',                                 //登录注册

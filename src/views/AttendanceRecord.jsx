@@ -21,7 +21,7 @@ class AttendanceRecord extends Component{
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '考勤记录';
+        document.querySelector('title').innerText = '考勤记录';
         this.getRecords();
         this.showMonth();
         this.showAll();

@@ -11,7 +11,7 @@ class AddAttendanceMachine extends Component{
         this.state={}
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '添加考勤机';
+        document.querySelector('title').innerText = '添加考勤机';
     }
     backMove() {
         window.history.go(-1);

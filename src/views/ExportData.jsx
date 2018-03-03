@@ -16,7 +16,7 @@ class ExportData extends Component{
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '导出数据';
+        document.querySelector('title').innerText = '导出数据';
         // console.log(window.Data.time.length);
     }
     componentWillUnmount() {

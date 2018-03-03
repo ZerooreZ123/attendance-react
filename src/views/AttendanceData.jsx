@@ -170,7 +170,7 @@ class AttendanceData extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '员工考勤记录';
+        document.querySelector('title').innerText = '员工考勤记录';
         this.getOfficeList();
         this.selectState();
     }
@@ -484,7 +484,8 @@ class AttendanceData extends Component {
         this.setState({ maskToggle: 1 })
     }
     showMask1() {
-        this.setState({ maskToggle1: 1 })
+        this.setState({ maskToggle1: 1 });
+        this.setState({ toggleIndex: 0 });
     }
     hideMask() {                     //隐藏mask
         this.setState({ maskToggle: 0 });

@@ -30,7 +30,7 @@ class EditProfile extends Component{
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '修改资料';
+        document.querySelector('title').innerText = '修改资料';
         this.getOfficeList();
     }
     showDepartment() {

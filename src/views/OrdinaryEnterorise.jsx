@@ -25,7 +25,6 @@ class OrdinaryEnterorise extends Component {
         window.sessionStorage.setItem('test',this.state.currentIndex);
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '企业管理';
         this.getCompany();
         this.getOfficeList();
         this.getAttendanceMachineList();
@@ -47,18 +46,26 @@ class OrdinaryEnterorise extends Component {
     }
     goToDepartment(i) {
         window.officeId = this.state.section[i].id;
+        window.sectionName1 = this.state.section[i].name;
         this.props.history.push("/department");
     }
     getBase64(canvas){
-        var image = new Image();  
-        image.src = canvas.toDataURL("image/png");
-        console.log(image)
-        this.setState({imgBase64:image.getAttribute('src')})
-        // return image;      
+        // var image = new Image();  
+        // image.src = canvas.toDataURL("image/png");
+        // this.setState({imgBase64:image.getAttribute('src')})
+        // return image;  
+        if(this.state.currentIndex === 0) {
+            var image = new Image();  
+            image.src = canvas.toDataURL("image/png");
+            this.setState({imgBase64:image.getAttribute('src')})    
+        }else{
+            return false;
+        }    
     }
     async getCompany() {                   //获取公司信息
         const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
         const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+        document.querySelector('title').innerText = JSON.parse(result).data.name;
         this.setState({invitationCode:admin})
         this.getBase64(document.getElementsByTagName('canvas')[0])
     }

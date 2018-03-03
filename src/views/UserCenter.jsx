@@ -192,7 +192,7 @@ class UserCenter extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '个人中心';
+        document.querySelector('title').innerText = '考勤打卡';
         this.getUser();
         this.showTime();
         this.getNewNotice();
@@ -216,7 +216,11 @@ class UserCenter extends Component {
                 showPunchClock: test.showPunchClock,
                 prompt: test.prompt
             })
-
+            if(test.showUserCenter === true) {
+                document.querySelector('title').innerText = '个人中心';
+            }else{
+                document.querySelector('title').innerText = '考勤打卡';
+            }
         } else {
             this.setState({
                 showUserCenter: false,   //展示模块1
@@ -287,10 +291,12 @@ class UserCenter extends Component {
 
     }
     punchClock() {
+        document.querySelector('title').innerText = '考勤打卡';
         this.setState({ showUserCenter: false, showPunchClock: true, prompt: 0 });
         this.searchIbeacons();
     }
     personCenter() {
+        document.querySelector('title').innerText = '个人中心';
         this.setState({ showUserCenter: true, showPunchClock: false });
         // this.setState({showPunchClock:false});
         this.getWX();

@@ -59,7 +59,7 @@ class InviteCodeDetail extends Component {
     }
 }
 componentDidMount() {
-    // document.querySelector('title').innerText = '填写资料';
+    document.querySelector('title').innerText = '填写资料';
     this.getOfficeList();
 }
 hideMask() {

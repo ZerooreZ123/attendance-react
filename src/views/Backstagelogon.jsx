@@ -12,7 +12,7 @@ class Backstagelogon extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '后台登录';
+        document.querySelector('title').innerText = '后台登录';
     }
     cancel() {
         window.history.go(-1)

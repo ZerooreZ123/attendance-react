@@ -101,6 +101,7 @@ class EnterpriseManager extends Component {
     constructor() {
         super();
         this.state = {
+            companyName:'',              //公司名字
             tipState:false,              //提示状态
             alertState:false,            //alert状态
             selectState:true,            //底部栏展示
@@ -115,7 +116,6 @@ class EnterpriseManager extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '企业管理';
         this.getWX();
         this.selectIndex();
         this.getCompany();
@@ -138,7 +138,8 @@ class EnterpriseManager extends Component {
     //     this.props.history.push('/addAttendanceMachine')
     // }
     departmentPerson(i) {
-        window.officeId = this.state.section[i].officeId
+        window.officeId = this.state.section[i].officeId;
+        window.sectionName1 = this.state.section[i].officeName;
         this.props.history.push('/department')
     }
     editor() {                             //删除部门页面显示
@@ -155,6 +156,11 @@ class EnterpriseManager extends Component {
     }   
     selectTab(i) {                         //获取当前tab索引
         this.setState({ currentIndex: i });
+        if(i === 2) {
+            document.querySelector('title').innerText = '添加考勤机';
+        }else{
+            document.querySelector('title').innerText = this.state.companyName;
+        }
     }
     getInput(ev) {                         //获取输入的部门
         this.setState({inputText:ev.target.value});
@@ -241,7 +247,8 @@ class EnterpriseManager extends Component {
         if(this.state.currentIndex === 0){
             const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
             const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-            this.setState({invitationCode:admin});
+            this.setState({invitationCode:admin,companyName:JSON.parse(result).data.name});
+            document.querySelector('title').innerText = JSON.parse(result).data.name;
             this.getBase64(document.getElementsByTagName('canvas')[0]);
         }else{
             return false

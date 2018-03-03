@@ -7,6 +7,7 @@
     text-align: center;
     transform:translate(-50%,-50%);
     border-radius:56px;
+    /* border-radius: 50%; */
     color:#fff;
     font-size:34px;
     background:rgba(0,0,0,0.6);

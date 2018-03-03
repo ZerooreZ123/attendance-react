@@ -5,7 +5,7 @@ import styles from '../styles/EmployeeInformation.css';
 import XHR from '../utils/request';
 import API from '../api/index';
 
-import search from '../asset/manager/search1.png';
+import search from '../asset/manager/search3.png';
 import forward from '../asset/manager/go.png';
 import upBlue from '../asset/manager/triangle-top.png';
 import downBlue from '../asset/manager/downBlue.png';
@@ -62,7 +62,7 @@ class EmployeeInformation extends Component{
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '员工资料';
+        document.querySelector('title').innerText = '员工资料';
         this.getOfficeList();
         this.getOfficeUserList();
     }

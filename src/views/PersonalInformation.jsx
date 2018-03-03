@@ -41,7 +41,7 @@ class PersonalInformation extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '个人考勤记录';
+        document.querySelector('title').innerText = window.Person.name;
         this.showAll();
         this.getTime();
         this.canTip();

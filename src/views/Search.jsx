@@ -56,7 +56,7 @@ class Search extends Component {
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '搜索';
+        document.querySelector('title').innerText = '搜索';
         this.getOfficeUserList();
         this.searchHistory();
     }
@@ -179,13 +179,14 @@ class Search extends Component {
         const {searchHistory,inputValue,searchState,searchDate,tipState,tipState1} = this.state;
         return (
             <div className={styles.container}>
-                <div className={styles.header}>
-                    <div className={styles.searchBox}>
-                        <input className={styles.inputBox} onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
-                        {/* <img className={styles.cleanButton}src={cleanButton} alt=""/> */}
-                        <DeleteImg visible={inputValue} parent={this}/>
+                <div className={styles.headerBox}>
+                    <div className={styles.header}>
+                        <div className={styles.searchBox}>
+                            <input className={styles.inputBox} onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
+                            <DeleteImg visible={inputValue} parent={this}/>
+                        </div>
+                        <div onClick={ev =>this.search(ev)} className={styles.cancel}>搜索</div>
                     </div>
-                    <div onClick={ev =>this.search(ev)} className={styles.cancel}>搜索</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <div className={styles.content}>

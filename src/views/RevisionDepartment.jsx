@@ -45,7 +45,7 @@ class RevisionDepartment extends Component{
         }
     }
     componentDidMount() {
-        // document.querySelector('title').innerText = '修改部门';
+        document.querySelector('title').innerText = '修改部门';
         this.getOfficeList();
        
     }
