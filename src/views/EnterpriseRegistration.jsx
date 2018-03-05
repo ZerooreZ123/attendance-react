@@ -4,6 +4,7 @@ import styles from '../styles/EnterpriseRegistration.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 class EnterpriseRegistration extends Component {
   constructor() {
@@ -30,7 +31,7 @@ getPhone(ev) {
 async goToNextStep() {          //下一步
     if((this.state.inputPhone !== '') && (this.state.inputCode !== '')) {     
             if(this.state.code === this.state.inputCode){
-                const result = await XHR.post(API.judge,{serialNumber:this.props.match.params.serialNumber});
+                const result = await XHR.post(window.admin + API.judge,{serialNumber:this.props.match.params.serialNumber});
                 if(JSON.parse(result).data === true ) {   
                     this.props.history.push('/writeInformation');
                     window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
@@ -63,7 +64,7 @@ async sendSms() {                  //获取验证码
             }
         },1000)
         if(this.state.canState) {
-            const result = await XHR.post(API.sendSms,{phone:this.state.inputPhone});
+            const result = await XHR.post(window.admin + API.sendSms,{phone:this.state.inputPhone});
             if(JSON.parse(result).success === 'T') {
                 this.setState({code:JSON.parse(result).data});
             }

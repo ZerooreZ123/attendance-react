@@ -4,6 +4,7 @@ import styles from '../styles/EditProfile.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import upBlue from '../asset/manager/triangle-top.png';
 import downBlue from '../asset/manager/downBlue.png';
@@ -48,7 +49,7 @@ class EditProfile extends Component{
         this.setState({departmentId:this.state.section[i].id});
     }
     async getOfficeList() {                     //获取部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const sectionList = [];
         JSON.parse(result).data.forEach((item,index) =>{
             sectionList.push({
@@ -60,7 +61,7 @@ class EditProfile extends Component{
     }
     async determineDepartment() {             //更新用户资料
         if(this.state.departmentId){
-            const result = await XHR.post(API.update,{
+            const result = await XHR.post(window.admin + API.update,{
                 loginName:window.Person.loginN,
                 officeid:this.state.departmentId,
                 userName:this.state.valueName

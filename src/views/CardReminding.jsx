@@ -4,6 +4,7 @@ import styles from '../styles/CardReminding.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import blueTop from '../asset/manager/triangle-top.png';
 import grayDown from '../asset/ico/icon.png';
@@ -119,7 +120,7 @@ class CardReminding extends Component {
         this.preClockInRemind();
     }
     async getUserRemind() {              //初始化提醒设置
-        const result = await XHR.post(API.getUserRemind,{loginName:window.sessionStorage.getItem('loginName')});
+        const result = await XHR.post(window.admin + API.getUserRemind,{loginName:window.sessionStorage.getItem('loginName')});
         if(JSON.parse(result).data) {
             this.setState({upTime:JSON.parse(result).data.upTime});
             this.setState({downTime:JSON.parse(result).data.downTime});
@@ -138,7 +139,7 @@ class CardReminding extends Component {
         setTimeout(()=>this.clockInRemind(), 0);
     }
     async clockInRemind() {              //设置提醒设置
-        const result = await XHR.post(API.clockInRemind,{
+        const result = await XHR.post(window.admin + API.clockInRemind,{
             loginName:window.sessionStorage.getItem('loginName'),
             upTime:this.state.upTime,
             upSwitch:this.state.upSwitch,

@@ -7,7 +7,8 @@ import styles from '../styles/ReleaseAnnouncement.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
-import {server} from '../api/index';
+// import {server} from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import X from '../asset/ico/ClearButton.png';
 import addphoto from '../asset/ico/photo.png';
@@ -153,9 +154,9 @@ class ReleaseAnnouncement extends Component{
         this.setState({announcementContent: ev.target.value});
     }
     async upload(stringBase64) {               //选择图片
-        const result = await XHR.post(API.upload,{imgStr:stringBase64});
+        const result = await XHR.post(window.admin + API.upload,{imgStr:stringBase64});
         if(JSON.parse(result).success === 'T') {
-            const imgSrc = server + JSON.parse(result).data.slice(1);
+            const imgSrc = window.server + JSON.parse(result).data.slice(1);
             this.state.imgSrcConcat.push(JSON.parse(result).data)
             this.state.imgBox.push(imgSrc)
             this.setState({imgBox:this.state.imgBox});
@@ -167,7 +168,7 @@ class ReleaseAnnouncement extends Component{
     async announce() {                         //发布公告
         localStorage.clear();
         if(this.state.imgBox.length>0) {
-            const result = await XHR.post(API.announce,{
+            const result = await XHR.post(window.admin + API.announce,{
                 userid:window.sessionStorage.getItem('id'),
                 companyid:window.sessionStorage.getItem('companyid'),
                 title:this.state.announcementTitle,

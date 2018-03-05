@@ -17,7 +17,7 @@ class AddAttendanceMachine extends Component{
         window.history.go(-1);
     }
     async update() {
-        const result = await XHR.post(API.update,{
+        const result = await XHR.post(window.admin + API.update,{
             loginName:'',
             companyName:'',
             serialNumber:''

@@ -9,6 +9,7 @@ import styles from '../styles/EnterpriseManager.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import go from '../asset/manager/go.png';
 import deleteImg from '../asset/manager/delete.png';
@@ -190,7 +191,7 @@ class EnterpriseManager extends Component {
         });
     }
     async getWX() {                   //获取微信签名等信息
-        const result = await XHR.post(API.getSignature);
+        const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
             this.setState({
                 result: {
@@ -207,7 +208,7 @@ class EnterpriseManager extends Component {
     async addOrUpdateOfficce() {            //增加部门
         this.setState({ division: false });
         this.setState({selectState:true});
-        const result = await XHR.post(API.addOrUpdateOfficce,{
+        const result = await XHR.post(window.admin + API.addOrUpdateOfficce,{
             companyid:window.sessionStorage.getItem('companyid'),
             officeName:this.state.inputText
         })
@@ -224,7 +225,7 @@ class EnterpriseManager extends Component {
     }
     async deleteOfficce(i) {              //删除部门
         const Id = this.state.section[i].officeId;
-        const result = await XHR.post(API.deleteOfficce,{officeid:Id});
+        const result = await XHR.post(window.admin + API.deleteOfficce,{officeid:Id});
         if(JSON.parse(result).success === 'T') {
             this.state.section.splice(i,1);
             this.setState({section:this.state.section});
@@ -245,9 +246,9 @@ class EnterpriseManager extends Component {
     }
     async getCompany() {                   //获取公司信息
         if(this.state.currentIndex === 0){
-            const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
-            const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-            this.setState({invitationCode:admin,companyName:JSON.parse(result).data.name});
+            const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+            const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+            this.setState({invitationCode:admin1,companyName:JSON.parse(result).data.name});
             document.querySelector('title').innerText = JSON.parse(result).data.name;
             this.getBase64(document.getElementsByTagName('canvas')[0]);
         }else{
@@ -257,7 +258,7 @@ class EnterpriseManager extends Component {
       }
 
     async getOfficeList() {                //获取公司部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const officeList = [];
         dataSource.forEach((item, index) =>
@@ -274,7 +275,7 @@ class EnterpriseManager extends Component {
 
     }
     async getAttendanceMachineList() {     //获取考勤机列表
-        const result = await XHR.post(API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const machineList = [];
         dataSource.forEach((item, index) =>

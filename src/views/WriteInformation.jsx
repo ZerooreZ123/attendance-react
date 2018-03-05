@@ -4,6 +4,7 @@ import styles from '../styles/WriteInformation.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 class WriteInformation extends Component {
   constructor() {
@@ -17,7 +18,7 @@ componentDidMount() {
     document.querySelector('title').innerText = '填写资料'; 
 }
 async ShareInviteCode() {                //公司注册
-    const result = await XHR.post(API.register,{
+    const result = await XHR.post(window.admin + API.register,{
         serialNumber:window.sessionStorage.getItem('serialNumber'),
         loginName:window.sessionStorage.getItem('LoginName'),
         phone:window.sessionStorage.getItem("Phone"),

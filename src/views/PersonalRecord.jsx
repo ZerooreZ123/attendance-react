@@ -10,6 +10,7 @@ import styles from '../styles/PersonalRecord.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import data from '../asset/statePrompt/data.png';
 import top from '../asset/manager/triangle-top.png';
@@ -311,7 +312,7 @@ class PersonalRecord extends Component {
         }
     }
     async getPersonRecords(startTime,endTime,userId,abnormity) {            //获取个人打卡记录
-        const result = await XHR.post(API.getRecords,{
+        const result = await XHR.post(window.admin+ API.getRecords,{
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,    
             endDate:endTime,

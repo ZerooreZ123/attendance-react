@@ -5,6 +5,7 @@ import styles from '../styles/AttendanceRecord.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import data from '../asset/statePrompt/data.png';
 
@@ -67,7 +68,7 @@ class AttendanceRecord extends Component{
                 startTime = moment().startOf('month').format("YYYY-MM-DD");
                 endTime = moment().format("YYYY-MM-DD"); 
         }
-        const result = await XHR.post(API.getRecords,{
+        const result = await XHR.post(window.admin + API.getRecords,{
             companyid:this.props.match.params.companyid,
             beginDate:startTime,    
             endDate:endTime,
@@ -110,7 +111,7 @@ class AttendanceRecord extends Component{
                 endTime = moment().format("YYYY-MM-DD");     
                      
         }
-        const result = await XHR.post(API.getRecords,{
+        const result = await XHR.post(window.admin + API.getRecords,{
             companyid:this.props.match.params.companyid,
             beginDate:startTime, 
             endDate:endTime,

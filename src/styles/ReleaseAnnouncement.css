@@ -57,7 +57,6 @@ textarea{
     border:none;
     outline:none;
     resize:none;
-    padding:0;
 }
 .inputBlock{
     width:100%;
@@ -65,6 +64,7 @@ textarea{
     margin:30px 0;
     font-size:28px;
     line-height: 42px;
+    padding:0;
 }
 .imgBox{
     width:726px;

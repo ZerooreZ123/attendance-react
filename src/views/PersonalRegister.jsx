@@ -4,6 +4,7 @@ import styles from '../styles/PersonalRegister.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import headPortrait from '../asset/userCenter/headPortrait.png';
 
@@ -48,7 +49,7 @@ async sendSms() {                  //获取验证码
             }
         },1000)
         if(this.state.canState) {
-            const result = await XHR.post(API.sendSms,{phone:this.state.inputText});
+            const result = await XHR.post(window.admin + API.sendSms,{phone:this.state.inputText});
             if(JSON.parse(result).success === 'T') {
                 this.setState({code:JSON.parse(result).data});
             }

@@ -4,6 +4,7 @@ import Toast from '../components/Toast';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 
 const Revision = ({visible,section,departmentIndex,parent}) => {
@@ -68,7 +69,7 @@ class RevisionDepartment extends Component{
         this.update();
     }
     async getOfficeList() {                           //部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data || [];
         const sectionList = [];
         dataSource.forEach((item,index) =>{
@@ -80,7 +81,7 @@ class RevisionDepartment extends Component{
         this.setState({section:sectionList});   
     }
     async update() {                      //修改部门
-        const result = await XHR.post(API.update,{
+        const result = await XHR.post(window.admin + API.update,{
             loginName:window.sessionStorage.getItem('loginName'),
             officeName:this.state.departmentName,
             officeid:this.state.departmentId

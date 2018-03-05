@@ -3,7 +3,8 @@ import styles from '../styles/AnnouncementDetails.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
-import {server} from '../api/index';
+// import {server} from '../api/index';
+// import {admin ,server} from '../api/route';
 
 class AnnouncementDetails extends Component{
     constructor() {
@@ -18,7 +19,7 @@ class AnnouncementDetails extends Component{
         this.noticeDetails();
     }
     async noticeDetails() {
-        const result = await XHR.post(API.noticeDetails,{id:window.sessionStorage.getItem('listId')});
+        const result = await XHR.post(window.admin + API.noticeDetails,{id:window.sessionStorage.getItem('listId')});
         this.setState({dataSource:JSON.parse(result).data});
         if(JSON.parse(result).data.hasOwnProperty('image')){
             const ret = JSON.parse(result).data.image.slice(1).split('|');
@@ -35,7 +36,7 @@ class AnnouncementDetails extends Component{
                     <div className={styles.text}>{dataSource.content}</div>
                     <div className={styles.photoBox}>
                        {
-                          imgBox.map((item,index) => <img key={index} src={server+item} alt=""/>) 
+                          imgBox.map((item,index) => <img key={index} src={window.server+item} alt=""/>) 
                        }
                     </div>
                 </div>

@@ -6,6 +6,7 @@ import styles from '../styles/Search.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import cleanUp from '../asset/ico/cleanUp.png';
 import cleanButton from '../asset/ico/ClearButton.png';
@@ -164,7 +165,7 @@ class Search extends Component {
         this.setState({searchDate:dataResult || []});
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
-        const result = await XHR.post(API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const userList = [];
         for(var i in dataSource) {

@@ -4,6 +4,7 @@ import styles from '../styles/Backstagelogon.css';
 import computer from '../asset/computer.png';
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 class Backstagelogon extends Component {
     constructor() {
@@ -18,7 +19,7 @@ class Backstagelogon extends Component {
         window.history.go(-1)
     }
     async register() {
-        const result = await XHR.post(API.login,{
+        const result = await XHR.post(window.admin + API.login,{
             loginName:window.sessionStorage.getItem("loginName"),
             quickMark:window.sessionStorage.getItem("result")
         })

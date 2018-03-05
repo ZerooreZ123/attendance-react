@@ -5,6 +5,7 @@ import styles from '../styles/EnterpriseManager.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import go from '../asset/manager/go.png';
 
@@ -63,14 +64,14 @@ class OrdinaryEnterorise extends Component {
         }    
     }
     async getCompany() {                   //获取公司信息
-        const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
-        const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+        const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+        const admin1 =window.admin +  'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
         document.querySelector('title').innerText = JSON.parse(result).data.name;
-        this.setState({invitationCode:admin})
+        this.setState({invitationCode:admin1})
         this.getBase64(document.getElementsByTagName('canvas')[0])
     }
     async getOfficeList() {                //获取公司部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data || [];
         const officeList = [];
         dataSource.forEach((item, index) =>
@@ -87,7 +88,7 @@ class OrdinaryEnterorise extends Component {
 
     }
     async getAttendanceMachineList() {     //获取考勤机列表
-        const result = await XHR.post(API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getAttendanceMachineList, { companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data || [];
         const machineList = [];
         dataSource.forEach((item, index) =>

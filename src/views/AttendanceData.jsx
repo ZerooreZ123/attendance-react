@@ -10,6 +10,7 @@ import styles from '../styles/AttendanceData.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import data from '../asset/statePrompt/data.png';
 import top from '../asset/manager/triangle-top.png';
@@ -149,7 +150,7 @@ class AttendanceData extends Component {
             personData:[],                //个人打卡数据
             dataSource: [],               //月统计打卡记录
             yearSource: [],               //年统计打卡记录
-            toggleIndex: '',              //切换选择时间与部门的索引值
+            toggleIndex: 0,              //切换选择时间与部门的索引值
             maskToggle: 0,                //默认不展示mask
             selectDate: moment().format('YYYY-MM-DD'),   //日历选择
             selectMonth:moment().format("YYYY-MM"),      //月份选择
@@ -278,7 +279,7 @@ class AttendanceData extends Component {
                 personData:[],                //个人打卡数据
                 dataSource: [],               //月统计打卡记录
                 yearSource: [],               //年统计打卡记录
-                toggleIndex: '',              //切换选择时间与部门的索引值
+                toggleIndex: 0,              //切换选择时间与部门的索引值
                 maskToggle: 0,                //默认不展示mask
                 selectDate: moment().format('YYYY-MM-DD'),   //日历选择
                 selectMonth:moment().format("YYYY-MM"),      //月份选择
@@ -441,7 +442,8 @@ class AttendanceData extends Component {
         this.setState({personDetail:true});
         this.setState({departmentName:this.state.dataSource[i].name});
         this.setState({nameId:this.state.dataSource[i].userid})
-        this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid)
+        this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),this.state.dataSource[i].userid);
+        console.log(this.state.valueGroups.data);
     }
     personAbnormal(i) {                //个人异常打卡记录月
         this.setState({personDetail:true});
@@ -453,15 +455,26 @@ class AttendanceData extends Component {
         this.setState({personYearDetail:true});
         this.setState({selectYear:this.state.valueYears.data});
         this.setState({departmentName:this.state.yearSource[i].name});
-        this.setState({nameId:this.state.yearSource[i].userid})
-        this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
+        this.setState({nameId:this.state.yearSource[i].userid});
+
+        if((new Date()).getFullYear() == this.state.valueYears.data ){
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid);
+        }else{
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.yearSource[i].userid);
+        }
+        // this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
     }
     personAbnormalYear(i) {           //个人异常打卡记录年 
         this.setState({personYearDetail:true});
         this.setState({selectYear:this.state.valueYears.data});
         this.setState({departmentName:this.state.yearSource[i].name});
-        this.setState({nameId:this.state.yearSource[i].userid})
-        this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
+        this.setState({nameId:this.state.yearSource[i].userid});
+        if((new Date()).getFullYear == this.state.valueYears.data ){
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid,'abnormity');
+        }else{
+            this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.yearSource[i].userid,'abnormity');
+        }
+        // this.getPersonRecords(this.state.valueYears.data + '-1-1',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid)
     }
 
     // selectDay = (date) => {          //日历日期选择
@@ -558,7 +571,7 @@ class AttendanceData extends Component {
         this.setState({ departmentId: this.state.section[i].id });
     }
     async getOfficeList() {          //部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid:window.sessionStorage.getItem("companyid") });
+        const result = await XHR.post(window.admin + API.getOfficeList, { companyid:window.sessionStorage.getItem("companyid") });
         const dataSource=JSON.parse(result).data || [];
         const sectionList = [];
         dataSource.forEach((item, index) => {
@@ -599,12 +612,21 @@ class AttendanceData extends Component {
             }
         }else{                                    //年份
             if(this.state.showState === 0) {          //判断是否为全部
-                this.setState({selectYear:this.state.valueYears.data})
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId);
+                this.setState({selectYear:this.state.valueYears.data});
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId);
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId);
+                }
+               
                 this.hideMask1();
             }else{
                 this.setState({selectYear:this.state.valueYears.data})
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity');
+                if((new Date()).getFullYear == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity');
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity');
+                }
                 this.hideMask1();
             }
         }
@@ -638,7 +660,7 @@ class AttendanceData extends Component {
         }
     }
     async getPersonRecords(startTime,endTime,userId,abnormity) {            //获取个人打卡记录
-        const result = await XHR.post(API.getRecords,{
+        const result = await XHR.post(window.admin + API.getRecords,{
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,    
             endDate:endTime,
@@ -662,7 +684,7 @@ class AttendanceData extends Component {
         this.setState({personData:dataResult1 || []});
     }
     async Abnormal(startTime,endTime,officeId) {            //获取异常全部员工某日考勤记录
-        const result = await XHR.post(API.getRecords, {
+        const result = await XHR.post(window.admin + API.getRecords, {
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,
             endDate:endTime,
@@ -685,7 +707,7 @@ class AttendanceData extends Component {
     }
 
     async getRecords(startTime,endTime,officeId) {            //获取全部员工某日考勤记录
-        const result = await XHR.post(API.getRecords, {
+        const result = await XHR.post(window.admin + API.getRecords, {
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate:startTime,
             endDate:endTime,
@@ -706,7 +728,7 @@ class AttendanceData extends Component {
         this.setState({ record: dataResult || [] } );
     }
     async getStatisticalInfo(startTime,endTime,officeId) {     //获取全部员工考勤记录统计
-        const result = await XHR.post(API.getStatisticalInfo, {
+        const result = await XHR.post(window.admin + API.getStatisticalInfo, {
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate: startTime,
             endDate: endTime,
@@ -727,7 +749,7 @@ class AttendanceData extends Component {
         this.setState({ dataSource: list });
     }
     async getYarnInfomation(startTime,endTime,officeId) {     //获取某年全部员工考勤记录统计
-        const result = await XHR.post(API.getStatisticalInfo, {
+        const result = await XHR.post(window.admin + API.getStatisticalInfo, {
             companyid:window.sessionStorage.getItem("companyid"),
             beginDate: startTime,
             endDate: endTime,

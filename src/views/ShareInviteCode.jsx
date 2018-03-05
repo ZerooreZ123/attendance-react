@@ -4,6 +4,7 @@ import styles from '../styles/ShareInviteCode.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 class ShareInviteCode extends Component {
   constructor() {
@@ -20,9 +21,9 @@ class ShareInviteCode extends Component {
     this.props.history.push('/attendanceManagement');
   }
   async getCompany() {                   //获取公司信息
-    const result = await XHR.post(API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
-    const admin = 'http://www.junl.cn/AM/f/yk/api/oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-    this.setState({invitationCode:admin})
+    const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
+    const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
+    this.setState({invitationCode:admin1})
   }
   render() {
     return (

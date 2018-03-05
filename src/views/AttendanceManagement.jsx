@@ -8,6 +8,7 @@ import styles from '../styles/AttendanceManagement.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import icon from '../asset/ico/icon.png';
 import top from '../asset/manager/triangle-top.png';
@@ -73,7 +74,7 @@ class AttendanceManagement extends Component {
         this.setState({status:this.state.status});
     }
     async getAttendanceManagement() {       //公司考勤时间配置及数据渲染
-        const result = await XHR.post(API.getAttendanceManagement, { companyid: window.sessionStorage.getItem("companyid")});
+        const result = await XHR.post(window.admin + API.getAttendanceManagement, { companyid: window.sessionStorage.getItem("companyid")});
         if(JSON.parse(result).data.length>0) {
             const dataSource = JSON.parse(result).data[0];
             this.setState({ data: dataSource });
@@ -115,7 +116,7 @@ class AttendanceManagement extends Component {
             }
         })
 
-        const result = await XHR.post(API.attendanceManagement, {
+        const result = await XHR.post(window.admin + API.attendanceManagement, {
             companyid:window.sessionStorage.getItem("companyid"),
             forenoonLatest:morTime,
             afternoonFirst:aftTime,

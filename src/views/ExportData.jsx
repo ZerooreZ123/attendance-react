@@ -4,6 +4,7 @@ import Toast from '../components/Toast';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import moment from 'moment';
 
@@ -54,7 +55,7 @@ class ExportData extends Component{
 
 
     async getRecords(startTime,endTime,officeId,userId) {
-        const result = await XHR.post(API.getRecords,{
+        const result = await XHR.post(window.admin+ API.getRecords,{
             companyid:window.sessionStorage.getItem('companyid'),
             beginDate:startTime,
             endDate:endTime,

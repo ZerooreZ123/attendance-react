@@ -4,6 +4,7 @@ import styles from '../styles/Department.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import go from '../asset/manager/go.png';
 
@@ -37,7 +38,7 @@ class Department extends Component{
         this.props.history.push('/personalInformation');
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
-        const result = await XHR.post(API.getOfficeUserList,{
+        const result = await XHR.post(window.admin + API.getOfficeUserList,{
             companyid:window.sessionStorage.getItem('companyid'),
             officeid:window.officeId
             // officeid:this.state.departmentId    

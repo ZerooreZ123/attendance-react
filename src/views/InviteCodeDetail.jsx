@@ -4,6 +4,7 @@ import styles from '../styles/InviteCodeDetail.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import down from '../asset/userCenter/down_arrow.png';
 import up from '../asset/userCenter/down_up.png';
@@ -85,7 +86,7 @@ determineDepartment(){
 }
 async register() {
   if(this.state.InputText){
-    const result = await XHR.post(API.update,{
+    const result = await XHR.post(window.admin + API.update,{
       loginName:window.sessionStorage.getItem('ID'),
       companyid:window.sessionStorage.getItem('comID'),
       phone:window.sessionStorage.getItem("phone"),
@@ -99,7 +100,7 @@ async register() {
 }
 
 async getOfficeList() {                     //获取部门列表
-  const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('comID')});
+  const result = await XHR.post(window.admin + API.getOfficeList,{companyid:window.sessionStorage.getItem('comID')});
   const sectionList = [];
   JSON.parse(result).data.forEach((item,index) =>{
       sectionList.push({

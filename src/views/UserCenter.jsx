@@ -6,6 +6,7 @@ import Alert from '../components/Alert';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import headPortrait from '../asset/userCenter/headPortrait.png';
 import record from '../asset/userCenter/record.png';
@@ -260,7 +261,7 @@ class UserCenter extends Component {
         this.setState({ s: data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds() });
     }
     async getNewNotice() {
-        const result = await XHR.post(API.getNewNotice, { companyid: window.sessionStorage.getItem('companyid') });
+        const result = await XHR.post(window.admin + API.getNewNotice, { companyid: window.sessionStorage.getItem('companyid') });
         if (JSON.parse(result).data) {
             this.setState({ noticeTitle: JSON.parse(result).data.title });
             window.sessionStorage.setItem('listId', JSON.parse(result).data.id)
@@ -271,7 +272,7 @@ class UserCenter extends Component {
 
     }
     async clockIn() {                //员工打卡
-        const result = await XHR.post(API.clockIn, { loginName: this.props.match.params.loginName });
+        const result = await XHR.post(window.admin + API.clockIn, { loginName: this.props.match.params.loginName });
         if (JSON.parse(result).success === "T") {
             this.setState({ prompt: 3 })
         } else {
@@ -343,7 +344,7 @@ class UserCenter extends Component {
         });
     }
     async firstSearch() {
-        const result = await XHR.post(API.getSignature);
+        const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
             window.wx.config({
                 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -403,7 +404,7 @@ class UserCenter extends Component {
         })
     }
     async searchIbeacons() {
-        const result = await XHR.post(API.getSignature);
+        const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
             window.wx.config({
                 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -467,7 +468,7 @@ class UserCenter extends Component {
         this.setState({ alertState: true })
     }
     async backState(data) {
-        const result = await XHR.post(API.judgeDevice, {
+        const result = await XHR.post(window.admin + API.judgeDevice, {
             companyid: this.state.companyid,
             devices: data
         })
@@ -481,7 +482,7 @@ class UserCenter extends Component {
         }
     }
     async getWX() {
-        const result = await XHR.post(API.getSignature);
+        const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
             this.setState({
                 result: {
@@ -493,7 +494,7 @@ class UserCenter extends Component {
         }
     }
     async getOfficeList() {          //部门列表
-        const result = await XHR.post(API.getOfficeList, { companyid: this.state.companyid });
+        const result = await XHR.post(window.admin + API.getOfficeList, { companyid: this.state.companyid });
         const dataSource = JSON.parse(result).data || [];
         const sectionList = [];
         dataSource.forEach((item, index) => {
@@ -505,10 +506,10 @@ class UserCenter extends Component {
         window.sessionStorage.setItem("officeList", JSON.stringify(sectionList));
     }
     async unbind() {                //解绑员工   
-        const result = await XHR.post(API.unbindUser, { loginName: this.props.match.params.loginName });
+        const result = await XHR.post(window.admin + API.unbindUser, { loginName: this.props.match.params.loginName });
     }
     async getUser() {              //获取用户信息
-        const result = await XHR.post(API.getUser, { loginName: this.props.match.params.loginName });
+        const result = await XHR.post(window.admin + API.getUser, { loginName: this.props.match.params.loginName });
         this.setState({ dataSource: JSON.parse(result).data, roleid: JSON.parse(result).data.roleid, companyid: JSON.parse(result).data.companyid, id: JSON.parse(result).data.id });
         // this.setState({ roleid: JSON.parse(result).data.roleid });
         // this.setState({ companyid: JSON.parse(result).data.companyid })

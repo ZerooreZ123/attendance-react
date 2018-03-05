@@ -4,6 +4,7 @@ import styles from '../styles/EmployeeInformation.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import search from '../asset/manager/search3.png';
 import forward from '../asset/manager/go.png';
@@ -146,7 +147,7 @@ class EmployeeInformation extends Component{
         // this.setState({departmentId:this.state.section[i].id});
     }
     async getOfficeList() {                     //获取部门列表
-        const result = await XHR.post(API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeList,{companyid:window.sessionStorage.getItem('companyid')});
         const dataSource=JSON.parse(result).data || [];
         const sectionList = [];
         dataSource.forEach((item,index) =>{
@@ -165,7 +166,7 @@ class EmployeeInformation extends Component{
         this.setState({section:sectionList});   
     }
     async getOfficeUserList() {                //获取全部部门及部门人员列表
-        const result = await XHR.post(API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.getOfficeUserList,{companyid:window.sessionStorage.getItem('companyid')});
         const dataSource = JSON.parse(result).data;
         const userList = [];
         for(var i in dataSource) {
@@ -179,7 +180,7 @@ class EmployeeInformation extends Component{
     async determineDepartment() {             //确认选定部门
         this.hideMask();
         if(this.state.departmentId){
-            const result = await XHR.post(API.getOfficeUserList,{
+            const result = await XHR.post(window.admin + API.getOfficeUserList,{
                 companyid:window.sessionStorage.getItem('companyid'),
                 officeid:this.state.departmentId    
             });

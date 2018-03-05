@@ -37,7 +37,7 @@
       -ms-user-select: none;
           user-select: none;
   margin: 0 1rem;
-  margin-top: 1rem;
+  margin-top:0.6rem;
 }
 
 .DayPicker-NavBar {
@@ -98,7 +98,7 @@
 
 .DayPicker-Weekday {
   display: table-cell;
-  padding: 0.5rem;
+  /* padding: 0.5rem; */
   font-size: 0.875em;
   text-align: center;
   color: #8b9898;
@@ -160,7 +160,7 @@
 /* Default modifiers */
 
 .DayPicker-Day--today {
-  color: #d0021b;
+  color: #2295e8;
   font-weight: 700;
 }
 

@@ -5,7 +5,8 @@ import styles from '../styles/HistoryAnnouncement.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
-import {server} from '../api/index';
+// import {server} from '../api/index';
+// import {admin ,server} from '../api/route';
 
 import dataImg from '../asset/statePrompt/data.png';
 
@@ -82,7 +83,7 @@ class HistoryAnnouncement extends Component{
         this.props.history.push('/releaseAnnouncement');
     }
     async noticeList() {
-        const result = await XHR.post(API.noticeList,{companyid:window.sessionStorage.getItem('companyid')});
+        const result = await XHR.post(window.admin + API.noticeList,{companyid:window.sessionStorage.getItem('companyid')});
         const data = JSON.parse(result).data || [];
         const ret = [];
         data.forEach((item,index) =>{
@@ -94,7 +95,7 @@ class HistoryAnnouncement extends Component{
             })
             if(item.hasOwnProperty('image')) {
                 this.setState({img:true})
-               ret[index].image = server + item.image.slice(1).split('|')[0];
+               ret[index].image = window.server + item.image.slice(1).split('|')[0];
             }
         })
         this.setState({dataSource:ret});
