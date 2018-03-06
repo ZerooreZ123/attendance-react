@@ -184,7 +184,7 @@ class ReleaseAnnouncement extends Component{
                 alert(JSON.parse(result).msg)
             }
         }else{
-            const result = await XHR.post(API.announce,{
+            const result = await XHR.post(window.admin + API.announce,{
                 userid:window.sessionStorage.getItem('id'),
                 companyid:window.sessionStorage.getItem('companyid'),
                 title:this.state.announcementTitle,

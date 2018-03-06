@@ -469,7 +469,7 @@ class AttendanceData extends Component {
         this.setState({selectYear:this.state.valueYears.data});
         this.setState({departmentName:this.state.yearSource[i].name});
         this.setState({nameId:this.state.yearSource[i].userid});
-        if((new Date()).getFullYear == this.state.valueYears.data ){
+        if((new Date()).getFullYear() == this.state.valueYears.data ){
             this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.yearSource[i].userid,'abnormity');
         }else{
             this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.yearSource[i].userid,'abnormity');
@@ -522,7 +522,12 @@ class AttendanceData extends Component {
             if(this.state.personYearDetail === false) {
                 this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
             }else{
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId)
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId);
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId);
+                }
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId)
             }
            
         }
@@ -544,7 +549,12 @@ class AttendanceData extends Component {
             if(this.state.personYearDetail === false) {
                 this.getYarnInfomation(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.departmentId )
             }else{
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity')
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity');
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity');
+                }
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity')
             }
            
         }
@@ -622,7 +632,7 @@ class AttendanceData extends Component {
                 this.hideMask1();
             }else{
                 this.setState({selectYear:this.state.valueYears.data})
-                if((new Date()).getFullYear == this.state.valueYears.data ){
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
                     this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),this.state.nameId,'abnormity');
                 }else{
                     this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',this.state.nameId,'abnormity');

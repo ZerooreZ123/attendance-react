@@ -207,10 +207,20 @@ class PersonalRecord extends Component {
         }else{                      //年
             this.setState({selectYear:this.state.selectYear});
             if(this.state.tabIndex === 0){    //全部
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+                }
                 this.getYear();
             }else{                           //异常
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+                }     
                 this.getYear(); 
             }  
         }
@@ -259,7 +269,12 @@ class PersonalRecord extends Component {
         }else if(this.state.currentIndex === 1) {           //月
             this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid)
         }else{                                              //年
-            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid) 
+            if((new Date()).getFullYear() == this.state.valueYears.data ){
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
+            }else{
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+            }
+            // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid) 
         }
     }
     showAbnormal() {                 //展示异常
@@ -270,8 +285,12 @@ class PersonalRecord extends Component {
         }else if(this.state.currentIndex === 1){            //月
             this.getPersonRecords(this.state.valueGroups.data + '-1',moment(this.state.valueGroups.data).endOf('month').format('YYYY-MM-DD'),window.Person.userid,'abnormity')
         }else{                                              //年
-            this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity')
-           
+            if((new Date()).getFullYear() == this.state.valueYears.data ){
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
+            }else{
+                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+            }           
+            // this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity')
         }
         
     }
@@ -303,10 +322,20 @@ class PersonalRecord extends Component {
         }else{                                    //年份
             this.setState({selectYear:this.state.valueYears.data})
             if(this.state.tabIndex === 0){       //全部
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid);
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
+                }
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid);
                 this.hideMask();
-            }else{                               //异常
-                this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+            }else{   
+                if((new Date()).getFullYear() == this.state.valueYears.data ){
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',moment().format("YYYY-MM-DD"),window.Person.userid,'abnormity');
+                }else{
+                    this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
+                }                            //异常
+                // this.getPersonRecords(this.state.valueYears.data +'-01-01',this.state.valueYears.data + '-12-31',window.Person.userid,'abnormity');
                 this.hideMask();
             } 
         }
