@@ -251,7 +251,7 @@ class AttendanceData extends Component {
                 currentIndex:+test.currentIndex,
                 departmentName:test.departmentName})
             // debugger
-            this.getRecords(test.selectDate,test.selectDate,test.departmentId);
+            // this.getRecords(test.selectDate,test.selectDate,test.departmentId);
             
         }else{
             this.setState({

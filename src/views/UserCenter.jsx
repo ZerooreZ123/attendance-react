@@ -339,7 +339,7 @@ class UserCenter extends Component {
             success: function (res) {
                 var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
                 window.sessionStorage.setItem("result", result);
-                window.location.href = 'http://www.junl.cn/AttendanceFront/index.html#/backstagelogon';
+                window.location.href = window.server + '/AttendanceFront/index.html#/backstagelogon';
             }
         });
     }
@@ -364,9 +364,11 @@ class UserCenter extends Component {
                     //开启查找完成后的回调函数
                     if (argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
+                        // alert(JSON.stringify(argv.errMsg));
                         window.wx.onSearchBeacons({
                             complete: (argv) => {
                                 //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+                                // alert(argv.beacons.length);
                                 if (argv.beacons.length > 0) {
                                     window.wx.stopSearchBeacons({
                                         complete: (res) => {
@@ -381,9 +383,12 @@ class UserCenter extends Component {
                                         }
                                     });
                                 } else {
-                                    alert('附近没有设备');
                                     window.wx.stopSearchBeacons({
                                         complete: (res) => {
+                                            this.setState({ tipState: true })
+                                            setTimeout(() => {
+                                                this.setState({ tipState: false })
+                                            }, 2000);
                                         }
                                     });
                                 }
@@ -420,16 +425,16 @@ class UserCenter extends Component {
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
-                // alert('1')
                 //开启查找完成后的回调函数
                 if (argv.errMsg === "startSearchBeacons:ok") {
                     // 监听iBeacon信号
-                    // alert('2')
+                    // alert(JSON.stringify(argv.errMsg));
                     window.wx.onSearchBeacons({
                         complete: (argv) => {
-
+                            // alert('3');
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                             if (argv.beacons.length > 0) {
+                                // alert('4');
                                 window.wx.stopSearchBeacons({
                                     complete: (res) => {
                                         const backData = []
@@ -443,9 +448,14 @@ class UserCenter extends Component {
                                     }
                                 });
                             } else {
-                                alert('附近没有设备');
                                 window.wx.stopSearchBeacons({
                                     complete: (res) => {
+                                        // alert('附近没有设备'); 
+                                        // alert('5');
+                                        this.setState({ tipState: true })
+                                        setTimeout(() => {
+                                            this.setState({ tipState: false })
+                                        }, 2000);
                                     }
                                 });
                             }

@@ -124,7 +124,101 @@ class PersonalRecord extends Component {
     }
     componentDidMount() {
         document.querySelector('title').innerText = '个人考勤记录';
-        this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid);
+        this.selectState();
+        // this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid);
+    }
+    componentWillUnmount(){
+        var Result = {
+            tipState1:this.state.tipState1,
+            tipState:this.state.tipState,   
+            secondTime:this.state.secondTime,
+            Value:this.state.Value,
+            date:this.state.date,
+            nameId:this.state.nameId,
+            maskDate:this.state.maskDate,
+            currentIndex:this.state.currentIndex,
+            tabIndex:this.state.tabIndex,
+            startTime:this.state.startTime,
+            endTime:this.state.endTime,
+            record:this.state.record,
+            abnormalRecord:this.state.abnormalRecord,
+            personData:this.state.personData,
+            maskToggle:this.state.maskToggle,
+            selectDate:this.state.selectDate,
+            selectMonth:this.state.selectMonth,
+            selectYear:this.state.selectYear,
+            optionGroups:{data:this.state.optionGroups.data},
+            optionYears:{data:this.state.optionYears.data},
+            valueGroups:{data:this.state.valueGroups.data},
+            valueYears:{data:this.state.valueYears.data},
+        };
+        window.sessionStorage.setItem('personResult',JSON.stringify(Result));
+    }
+
+    selectState() {
+        var test=JSON.parse(window.sessionStorage.getItem('personResult'));
+        if(test){
+            this.setState({
+                tipState1:test.tipState1,
+                tipState:test.tipState,   
+                secondTime:test.secondTime,
+                Value:test.Value,
+                date:test.date,
+                nameId:test.nameId,
+                maskDate:test.maskDate,
+                currentIndex:test.currentIndex,
+                tabIndex:test.tabIndex,
+                startTime:test.startTime,
+                endTime:test.endTime,
+                record:test.record,
+                abnormalRecord:test.abnormalRecord,
+                personData:test.personData,
+                maskToggle:test.maskToggle,
+                selectDate:test.selectDate,
+                selectMonth:test.selectMonth,
+                selectYear:test.selectYear,
+                optionGroups:{data:test.optionGroups.data},
+                optionYears:{data:test.optionYears.data},
+                valueGroups:{data:test.valueGroups.data},
+                valueYears:{data:test.valueYears.data},
+            })
+            // this.getPersonRecords(test.selectDate,test.selectDate,test.nameId);
+            
+        }else{
+            this.setState({
+                tipState1:false,
+                tipState:false,        //提示状态
+                secondTime:(new Date()).getTime(),
+                Value: '',
+                date: new Date(),
+                nameId:window.Person.userid,                   //用户Id
+                maskDate: false,             //默认不显示日历
+                currentIndex: 0,             //日月年展示模块索引
+                tabIndex: 0,                 //选择tab的索引
+                startTime: moment().format('YYYY-MM-DD'),     //开始时间(传参)
+                endTime: moment().format('YYYY-MM-DD'),       //结束时间(传参)
+                record: [],                  //展示打卡记录
+                abnormalRecord:[],           //异常打卡记录
+                personData:[],                //个人打卡数据
+                maskToggle: 0,                //默认不展示mask
+                selectDate: moment().format('YYYY-MM-DD'),   //日历选择
+                selectMonth:moment().format("YYYY-MM"),                //月份选择
+                selectYear:moment().format("YYYY"),                 //年份选择
+                valueGroups: {                //月组件
+                    data: moment().format('YYYY-MM')
+                },
+                optionGroups: {
+                    data: []
+                },
+                valueYears:{                 //年组件
+                    data:moment().format('YYYY')
+                },
+                optionYears:{
+                    data:[]
+                }
+           })
+           this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid);
+        }
     }
     getYear() {                           //获取年份
         var myDate = new Date();
@@ -477,7 +571,7 @@ class PersonalRecord extends Component {
                         <div onClick={ev => this.showAll(ev)} className={tabIndex === 0 ? styles.currentTab : styles.tab}>全部</div>
                         <div onClick={ev => this.showAbnormal(ev)} className={tabIndex === 1 ? styles.currentTab : styles.tab}>异常</div>
                     </div>
-                    <img onClick={ev => this.search(ev)} className={styles.searchImg} src={search} alt="" />
+                    {/* <img onClick={ev => this.search(ev)} className={styles.searchImg} src={search} alt="" /> */}
                 </div>
                 <div className={styles.timetable}>
                     {

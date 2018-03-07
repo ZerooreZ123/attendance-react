@@ -133,6 +133,7 @@ class PersonalInformation extends Component {
         this.setState({dataSource:dataResult1 || []});
     }
     getMore() {
+        window.sessionStorage.removeItem('personResult');
         this.props.history.push('/personalRecord');
     }
     async getAbnormal(i) {            //获取异常打卡记录
