@@ -91,7 +91,7 @@ const TabContent = ({currentIndex,deleteSection,division,inputText,section, mach
                         <img className={styles.imgSize} src={imgClick} alt=""/>
                     </div>
                     <div className={styles.codetext}>邀请码</div>
-                    <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+                    <div className={styles.text}>长按二维码,分享邀请码即可让员工注册</div>
                 </div>
             </div>
         )
@@ -238,7 +238,7 @@ class EnterpriseManager extends Component {
         if(this.state.currentIndex === 0) {
             var image = new Image();  
             image.src = canvas.toDataURL("image/png");
-            this.setState({imgBase64:image.getAttribute('src')})    
+            this.setState({imgBase64:image.getAttribute('src')});
         }else{
             return false;
         }

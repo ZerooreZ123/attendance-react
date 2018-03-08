@@ -14,6 +14,13 @@
   flex-direction: column;
   align-items: center;
 }
+.hideCode{
+  display:none;
+}
+.imgSize{
+  width:256px;
+  height: 256px;
+}
 .code{
   display:flex;
   justify-content: center;

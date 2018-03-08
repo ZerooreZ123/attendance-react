@@ -133,14 +133,15 @@ class OrdinaryEnterorise extends Component {
                                 <QRCode value={this.state.invitationCode} />
                                 <img src={this.state.imgBase64} alt=""/>
                             </div> */}
-                            <div className={this.state.imgBase64?styles.hideCode:styles.code}>
+                            {/* <div className={this.state.imgBase64?styles.hideCode:styles.code}> */}
+                            <div className={styles.hideCode}>
                                 <QRCode value={this.state.invitationCode} />
                             </div>
                             <div className={styles.code}> 
                                 <img className={styles.imgSize} src={this.state.imgBase64} alt=""/>
                             </div>
                             <div className={styles.codetext}>邀请码</div>
-                            <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+                            <div className={styles.text}>长按二维码,分享邀请码即可让员工注册</div>
                         </div>
                     </div>
                 )

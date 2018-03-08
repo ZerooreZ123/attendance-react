@@ -364,11 +364,9 @@ class UserCenter extends Component {
                     //开启查找完成后的回调函数
                     if (argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
-                        // alert(JSON.stringify(argv.errMsg));
                         window.wx.onSearchBeacons({
                             complete: (argv) => {
                                 //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                                // alert(argv.beacons.length);
                                 if (argv.beacons.length > 0) {
                                     window.wx.stopSearchBeacons({
                                         complete: (res) => {
@@ -428,13 +426,10 @@ class UserCenter extends Component {
                 //开启查找完成后的回调函数
                 if (argv.errMsg === "startSearchBeacons:ok") {
                     // 监听iBeacon信号
-                    // alert(JSON.stringify(argv.errMsg));
                     window.wx.onSearchBeacons({
                         complete: (argv) => {
-                            // alert('3');
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                             if (argv.beacons.length > 0) {
-                                // alert('4');
                                 window.wx.stopSearchBeacons({
                                     complete: (res) => {
                                         const backData = []
@@ -450,8 +445,6 @@ class UserCenter extends Component {
                             } else {
                                 window.wx.stopSearchBeacons({
                                     complete: (res) => {
-                                        // alert('附近没有设备'); 
-                                        // alert('5');
                                         this.setState({ tipState: true })
                                         setTimeout(() => {
                                             this.setState({ tipState: false })
@@ -554,8 +547,8 @@ class UserCenter extends Component {
                                     </div>
                                     <div className={styles.phone}>{dataSource.phone}</div>
                                     <div className={styles.company}>
-                                        <span>{dataSource.companyName}</span>/
-                                        <span>{dataSource.officeName}</span>
+                                        <span>{dataSource.companyName}</span>
+                                        <span>{dataSource.officeName?'/'+dataSource.officeName:''}</span>
                                     </div>
                                 </div>
                             </div>

@@ -69,7 +69,7 @@ class App extends Component {
                   <Route location={props.location} exact path="/announcementDetails" component={AnnouncementDetails}/>
                   <Route location={props.location} exact path="/shareInviteCode" component={ShareInviteCode}/>
                   <Route location={props.location} exact path="/releaseAnnouncement" component={ReleaseAnnouncement}/>
-                  <Route location={props.location} exact path="/addAttendanceMachine" component={AddAttendanceMachine}/>
+                  <Route location={props.location} exact path="/addAttendanceMachine/:machineNum/:company/:name/:phone/:loginName" component={AddAttendanceMachine}/>
                   <Route location={props.location} exact path="/search" component={Search}/>
                   <Route location={props.location} exact path="/attendanceData" component={AttendanceData}/>
                   <Route location={props.location} exact path="/department" component={Department}/>

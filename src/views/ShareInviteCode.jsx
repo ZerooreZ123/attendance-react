@@ -10,7 +10,8 @@ class ShareInviteCode extends Component {
   constructor() {
     super();
     this.state = {
-      invitationCode:'' 
+      invitationCode:'',
+      imgBase64:''
     }
   } 
   componentDidMount() {
@@ -20,21 +21,30 @@ class ShareInviteCode extends Component {
   goToManagement() {
     this.props.history.push('/attendanceManagement');
   }
-  async getCompany() {                   //获取公司信息
+  getBase64(canvas){ 
+        var image = new Image();  
+        image.src = canvas.toDataURL("image/png");
+        this.setState({imgBase64:image.getAttribute('src')});
+}
+ async getCompany() {                   //获取公司信息
     const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
-    const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-    this.setState({invitationCode:admin1})
+    const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + window.sessionStorage.getItem('companyid') + '"}';
+    this.setState({invitationCode:admin1});
+    this.getBase64(document.getElementsByTagName('canvas')[0]);
   }
   render() {
     return (
       <div className={styles.container}>
         <div className={styles.content}>
             <div className={styles.codeWrap}>
-                <div className={styles.code}>
+                <div className={this.state.imgBase64?styles.hideCode:styles.code}>
                     <QRCode value={this.state.invitationCode} />
                 </div>
+                <div className={this.state.imgBase64?styles.code:styles.hideCode}> 
+                    <img className={styles.imgSize} src={this.state.imgBase64} alt=""/>
+                </div>
                 <div className={styles.codetext}>邀请码</div>
-                <div className={styles.text}>点击右上角,分享邀请码即可让员工注册</div>
+                <div className={styles.text}>长按二维码,分享邀请码即可让员工注册</div>
             </div>    
         </div>
         <div onClick={ev =>this.goToManagement(ev)} className={styles.footer}>完成并设置考勤时间</div>

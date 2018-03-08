@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
-import Switch from 'react-ios-switch';
+// import Switch from 'react-ios-switch';
+import Switch from 'rc-switch';
 import styles from '../styles/CardReminding.css';
 
 import XHR from '../utils/request';
@@ -128,8 +129,8 @@ class CardReminding extends Component {
             this.setState({downSwitch:JSON.parse(result).data.downSwitch});
             this.setState({dataSource:JSON.parse(result).data}); 
         }else{
-            this.setState({upTime:'几'});
-            this.setState({downTime:'几'});
+            this.setState({upTime:'5'});
+            this.setState({downTime:'5'});
             this.setState({upSwitch:'1'});
             this.setState({downSwitch:'1'});
             this.setState({dataSource:{}});

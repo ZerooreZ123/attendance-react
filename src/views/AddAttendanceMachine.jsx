@@ -8,23 +8,30 @@ import API from '../api/index';
 class AddAttendanceMachine extends Component{
     constructor() {
         super();
-        this.state={}
+        this.state={
+            // machineNum:this.props.match.params.machineNum,
+            // company:this.props.match.params.company,
+            // name:this.props.match.params.name,
+            // phone:this.props.match.params.phone,
+            // loginName:this.props.match.params.loginName,
+        }
     }
     componentDidMount() {
         document.querySelector('title').innerText = '添加考勤机';
+        console.log(this.props.match.params);
     }
-    backMove() {
-        window.history.go(-1);
-    }
+    // backMove() {
+    //     window.history.go(-1);
+    // }
     async update() {
         const result = await XHR.post(window.admin + API.update,{
-            loginName:'',
-            companyName:'',
-            serialNumber:''
+            loginName:this.props.match.params.loginName,
+            serialNumber:this.props.match.params.machineNum
         });
-        if(JSON.parse(result).data.success === "T") {
-            alert("绑定成功");
-        }
+        alert(JSON.parse(result).msg)
+        // if(JSON.parse(result).success === "T") {
+        //     alert("绑定成功");
+        // }
     }
     render() {
         return(
@@ -32,16 +39,16 @@ class AddAttendanceMachine extends Component{
                 <div className={styles.content}>
                      <div className={styles.item}>
                        <div className={styles.machineNum}>考勤机编号</div>
-                       <input className={styles.num}/>
+                       <div className={styles.num}>{this.props.match.params.machineNum}</div>
                      </div>
                      <div className={styles.item}>
                        <div className={styles.companyInfo}>企业信息</div>
-                       <input className={styles.company}/>
+                       <div className={styles.company}>{this.props.match.params.company}</div>
                      </div>
                      <div className={styles.item}>
                        <div className={styles.superManage}>超级管理员信息</div>
-                       <input className={styles.name}/>
-                       <input className={styles.phone}/>
+                       <div className={styles.name}>{this.props.match.params.name}</div>
+                       <div className={styles.phone}>{this.props.match.params.phone}</div>
                      </div>
                 </div>
                 <div className={styles.binding} onClick={ev =>this.update(ev)}>确认绑定</div>

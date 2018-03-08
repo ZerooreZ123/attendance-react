@@ -93,7 +93,7 @@ async register() {
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
-    this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID'));   
+    this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID') +'/6');   
   }else{
       return null;
   }
@@ -101,8 +101,9 @@ async register() {
 
 async getOfficeList() {                     //获取部门列表
   const result = await XHR.post(window.admin + API.getOfficeList,{companyid:window.sessionStorage.getItem('comID')});
+  const dataRourse = JSON.parse(result).data || [];
   const sectionList = [];
-  JSON.parse(result).data.forEach((item,index) =>{
+  dataRourse.forEach((item,index) =>{
       sectionList.push({
           name:item.name,
           id:item.id
