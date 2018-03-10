@@ -29,7 +29,8 @@ class ShareInviteCode extends Component {
  async getCompany() {                   //获取公司信息
     const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
     const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + window.sessionStorage.getItem('companyid') + '"}';
-    this.setState({invitationCode:admin1});
+    // console.log(admin1.encodeURI());
+    this.setState({invitationCode:encodeURI(admin1)});
     this.getBase64(document.getElementsByTagName('canvas')[0]);
   }
   render() {

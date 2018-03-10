@@ -174,7 +174,7 @@ class EnterpriseManager extends Component {
     scan() {                         //扫一扫
         window.wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+            appId: this.state.result.appId, // 必填，公众号的唯一标识
             timestamp: this.state.result.timestamp, // 必填，生成签名的时间戳
             nonceStr: this.state.result.nonceStr, // 必填，生成签名的随机串
             signature: this.state.result.signature,// 必填，签名
@@ -195,6 +195,7 @@ class EnterpriseManager extends Component {
         if (JSON.parse(result).success === 'T') {
             this.setState({
                 result: {
+                    appId:JSON.parse(result).data.appId,
                     timestamp: JSON.parse(result).data.timestamp,
                     nonceStr: JSON.parse(result).data.noncestr,
                     signature: JSON.parse(result).data.signature
@@ -248,7 +249,9 @@ class EnterpriseManager extends Component {
         if(this.state.currentIndex === 0){
             const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
             const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
-            this.setState({invitationCode:admin1,companyName:JSON.parse(result).data.name});
+            // console.log(encodeURI(admin1));
+            this.setState({invitationCode:encodeURI(admin1),companyName:JSON.parse(result).data.name});
+            console.log(this.state.invitationCode);
             document.querySelector('title').innerText = JSON.parse(result).data.name;
             this.getBase64(document.getElementsByTagName('canvas')[0]);
         }else{

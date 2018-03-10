@@ -96,7 +96,7 @@ class AttendanceManagement extends Component {
                     this.setState({ status: weekSelect });
                 }
             })
-            this.setState({status: [true,true,true,true,true] });
+            // this.setState({status: [true,true,true,true,true] });
 
 
     }

@@ -67,7 +67,7 @@ class OrdinaryEnterorise extends Component {
         const result = await XHR.post(window.admin + API.getCompany,{companyid:window.sessionStorage.getItem('companyid')});
         const admin1 =window.admin +  'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
         document.querySelector('title').innerText = JSON.parse(result).data.name;
-        this.setState({invitationCode:admin1})
+        this.setState({invitationCode:encodeURI(admin1)})
         this.getBase64(document.getElementsByTagName('canvas')[0])
     }
     async getOfficeList() {                //获取公司部门列表

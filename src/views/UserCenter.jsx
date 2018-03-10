@@ -178,6 +178,7 @@ class UserCenter extends Component {
         window.temp = {};
         this.state = {
             tipState: false,        //提示状态
+            tipState1: false,
             alertState: false,      //alert状态
             id: '',                 //用户Id
             showUserCenter: false,   //展示模块1
@@ -327,7 +328,7 @@ class UserCenter extends Component {
     scan() {                         //扫一扫
         window.wx.config({
             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+            appId: this.state.result.appId, // 必填，公众号的唯一标识
             timestamp: this.state.result.timestamp, // 必填，生成签名的时间戳
             nonceStr: this.state.result.nonceStr, // 必填，生成签名的随机串
             signature: this.state.result.signature,// 必填，签名
@@ -346,9 +347,10 @@ class UserCenter extends Component {
     async firstSearch() {
         const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
+            // alert(JSON.stringify(result));
             window.wx.config({
                 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+                appId: JSON.parse(result).data.appId,//'wx361547ce36eb2185', // 必填，公众号的唯一标识
                 timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
                 nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
                 signature: JSON.parse(result).data.signature,// 必填，签名
@@ -362,10 +364,12 @@ class UserCenter extends Component {
                 ticket: "",
                 complete: (argv) => {
                     //开启查找完成后的回调函数
+                    // alert(JSON.stringify(argv));
                     if (argv.errMsg === "startSearchBeacons:ok") {
                         // 监听iBeacon信号
                         window.wx.onSearchBeacons({
                             complete: (argv) => {
+                                // alert(JSON.stringify(argv));
                                 //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if (argv.beacons.length > 0) {
                                     window.wx.stopSearchBeacons({
@@ -409,9 +413,10 @@ class UserCenter extends Component {
     async searchIbeacons() {
         const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
+            // alert(JSON.stringify(result));
             window.wx.config({
                 debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: 'wx361547ce36eb2185', // 必填，公众号的唯一标识
+                appId:JSON.parse(result).data.appId, // 必填，公众号的唯一标识
                 timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
                 nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
                 signature: JSON.parse(result).data.signature,// 必填，签名
@@ -423,11 +428,13 @@ class UserCenter extends Component {
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
+                // alert(JSON.stringify(argv));
                 //开启查找完成后的回调函数
                 if (argv.errMsg === "startSearchBeacons:ok") {
                     // 监听iBeacon信号
                     window.wx.onSearchBeacons({
                         complete: (argv) => {
+                            // alert(JSON.stringify(argv));
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                             if (argv.beacons.length > 0) {
                                 window.wx.stopSearchBeacons({
@@ -489,6 +496,7 @@ class UserCenter extends Component {
         if (JSON.parse(result).success === 'T') {
             this.setState({
                 result: {
+                    appId:JSON.parse(result).data.appId,
                     timestamp: JSON.parse(result).data.timestamp,
                     nonceStr: JSON.parse(result).data.noncestr,
                     signature: JSON.parse(result).data.signature
@@ -510,6 +518,14 @@ class UserCenter extends Component {
     }
     async unbind() {                //解绑员工   
         const result = await XHR.post(window.admin + API.unbindUser, { loginName: this.props.match.params.loginName });
+        if(JSON.parse(result).success === 'T') {
+            this.setState({ tipState1: true })
+            setTimeout(() => {
+                this.setState({ tipState: false })
+            }, 2000);
+        }else{
+            alert(JSON.stringify(result).msg);
+        }
     }
     async getUser() {              //获取用户信息
         const result = await XHR.post(window.admin + API.getUser, { loginName: this.props.match.params.loginName });
@@ -527,7 +543,7 @@ class UserCenter extends Component {
     }
     render() {
 
-        const { roleid, dataSource, prompt, h, m, s, noticeState, noticeTitle, showUserCenter, showPunchClock, alertState, tipState } = this.state;
+        const { roleid, dataSource, prompt, h, m, s, noticeState, noticeTitle, showUserCenter, showPunchClock, alertState, tipState,tipState1 } = this.state;
         const user = [{ icon: record, name: '考勤记录' }, { icon: remind, name: '打卡提醒' }, { icon: revise, name: '修改部门' }];
         const superMan = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }, { icon: setUp, name: '设置考勤' }];
         const ordinary = [{ icon: attendanceRecord, name: '员工考勤记录' }, { icon: administration, name: '企业管理' }, { icon: staff, name: '员工资料' }, { icon: release, name: '发布公告' }];
@@ -582,6 +598,7 @@ class UserCenter extends Component {
                     </div>
                 </div>
                 <Toast isShow={tipState} text="附近没有可打卡的考勤设备" />
+                <Toast isShow={tipState1} text="解绑成功" />
                 <Alert text='解绑后您的资料与考勤记录将消失,确认解绑吗？' onSelect={ev => this.selectBtn(ev)} isShow={alertState} />
             </div>
         )
