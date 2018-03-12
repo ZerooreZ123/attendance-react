@@ -56,6 +56,7 @@
     outline:medium;
     width:60%;
     display: inline-block;
+    padding:0;
   }
   .sendCode{
       display:inline-block;
@@ -96,6 +97,7 @@
     border:none;
     outline:medium;
     width: 90%;
+    padding:0;
     display: inline-block;
   }
   .showPhone{
@@ -127,22 +129,30 @@
     margin: 82px auto 0;
   }
   .nextStep{
-    height:94px;
+    /* height:94px; */
     width: 87%;
+    padding:30px 0;
+    border-radius:4px;
+    /* border:3px solid transparent; */
     text-align: center;
-    line-height: 94px;
+    /* line-height: 94px; */
     background: #4eaded;
     color: #147dd9;
-    font-size:32px;  
+    font-size:32px; 
+    overflow: hidden; 
   }
   .nextCan{
-    height:94px;
+    /* height:94px; */
     width: 87%;
+    padding:30px 0;
+    border-radius:4px;
+    /* border:3px solid transparent; */
     text-align: center;
-    line-height: 94px;
+    /* line-height: 94px; */
     background: #b2d3ed;
     color: #147dd9;
-    font-size:28px;  
+    font-size:28px; 
+    overflow: hidden; 
   }
   .informationPhoto{
     display:inline-block;

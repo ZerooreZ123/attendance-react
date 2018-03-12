@@ -262,7 +262,7 @@ class UserCenter extends Component {
         this.setState({ s: data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds() });
     }
     async getNewNotice() {
-        const result = await XHR.post(window.admin + API.getNewNotice, { companyid: window.sessionStorage.getItem('companyid') });
+        const result = await XHR.post(window.admin + API.getNewNotice, { companyid: this.props.match.params.companyId });
         if (JSON.parse(result).data) {
             this.setState({ noticeTitle: JSON.parse(result).data.title });
             window.sessionStorage.setItem('listId', JSON.parse(result).data.id)
@@ -270,7 +270,6 @@ class UserCenter extends Component {
             this.setState({ noticeState: false })
             return false;
         }
-
     }
     async clockIn() {                //员工打卡
         const result = await XHR.post(window.admin + API.clockIn, { loginName: this.props.match.params.loginName });
@@ -296,6 +295,7 @@ class UserCenter extends Component {
         document.querySelector('title').innerText = '考勤打卡';
         this.setState({ showUserCenter: false, showPunchClock: true, prompt: 0 });
         this.searchIbeacons();
+        this.getNewNotice();
     }
     personCenter() {
         document.querySelector('title').innerText = '个人中心';
@@ -326,23 +326,25 @@ class UserCenter extends Component {
         this.props.history.push(superUrl[i]);
     }
     scan() {                         //扫一扫
-        window.wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: this.state.result.appId, // 必填，公众号的唯一标识
-            timestamp: this.state.result.timestamp, // 必填，生成签名的时间戳
-            nonceStr: this.state.result.nonceStr, // 必填，生成签名的随机串
-            signature: this.state.result.signature,// 必填，签名
-            jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
-        });
-        window.wx.scanQRCode({
-            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-            scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-            success: function (res) {
-                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
-                window.sessionStorage.setItem("result", result);
-                window.location.href = window.server + '/AttendanceFront/index.html#/backstagelogon';
-            }
-        });
+        // window.wx.config({
+        //     debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //     appId: this.state.result.appId, // 必填，公众号的唯一标识
+        //     timestamp: this.state.result.timestamp, // 必填，生成签名的时间戳
+        //     nonceStr: this.state.result.nonceStr, // 必填，生成签名的随机串
+        //     signature: this.state.result.signature,// 必填，签名
+        //     jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
+        // });
+        window.wx.ready(()=>{
+            window.wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
+                    window.sessionStorage.setItem("result", result);
+                    window.location.href = window.server + '/AttendanceFront/index.html#/backstagelogon';
+                }
+            });
+        })
     }
     async firstSearch() {
         const result = await XHR.post(window.admin + API.getSignature);
@@ -494,14 +496,22 @@ class UserCenter extends Component {
     async getWX() {
         const result = await XHR.post(window.admin + API.getSignature);
         if (JSON.parse(result).success === 'T') {
-            this.setState({
-                result: {
-                    appId:JSON.parse(result).data.appId,
-                    timestamp: JSON.parse(result).data.timestamp,
-                    nonceStr: JSON.parse(result).data.noncestr,
-                    signature: JSON.parse(result).data.signature
-                }
-            })
+            // this.setState({
+            //     result: {
+            //         appId:JSON.parse(result).data.appId,
+            //         timestamp: JSON.parse(result).data.timestamp,
+            //         nonceStr: JSON.parse(result).data.noncestr,
+            //         signature: JSON.parse(result).data.signature
+            //     }
+            // })
+            window.wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: JSON.parse(result).data.appId, // 必填，公众号的唯一标识
+                timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+                nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
+                signature: JSON.parse(result).data.signature,// 必填，签名
+                jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
+            });
         }
     }
     async getOfficeList() {          //部门列表

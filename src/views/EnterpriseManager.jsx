@@ -157,11 +157,8 @@ class EnterpriseManager extends Component {
     }   
     selectTab(i) {                         //获取当前tab索引
         this.setState({ currentIndex: i });
-        if(i === 2) {
-            document.querySelector('title').innerText = '添加考勤机';
-        }else{
-            document.querySelector('title').innerText = this.state.companyName;
-        }
+       
+        // document.querySelector('title').innerText = this.state.companyName;
     }
     getInput(ev) {                         //获取输入的部门
         this.setState({inputText:ev.target.value});
@@ -180,15 +177,17 @@ class EnterpriseManager extends Component {
             signature: this.state.result.signature,// 必填，签名
             jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
         });
-        window.wx.scanQRCode({
-            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-            scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-            success: function (res) {
-                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
-                // window.sessionStorage.setItem("result", result);
-                // window.location.href = 'http://www.junl.cn/AttendanceFront/index.html#/backstagelogon';
-            }
-        });
+        window.wx.ready(()=>{
+            window.wx.scanQRCode({
+                needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结
+                    // window.sessionStorage.setItem("result", result);
+                    // window.location.href = 'http://www.junl.cn/AttendanceFront/index.html#/backstagelogon';
+                }
+            });
+        })
     }
     async getWX() {                   //获取微信签名等信息
         const result = await XHR.post(window.admin + API.getSignature);
@@ -251,7 +250,7 @@ class EnterpriseManager extends Component {
             const admin1 = window.admin + 'oauthLogin.do?targetUrl={"name":"machine1","code":"' + JSON.parse(result).data.id + '"}';
             // console.log(encodeURI(admin1));
             this.setState({invitationCode:encodeURI(admin1),companyName:JSON.parse(result).data.name});
-            console.log(this.state.invitationCode);
+            // console.log(this.state.invitationCode);
             document.querySelector('title').innerText = JSON.parse(result).data.name;
             this.getBase64(document.getElementsByTagName('canvas')[0]);
         }else{

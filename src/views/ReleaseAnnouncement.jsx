@@ -46,19 +46,16 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
+        // this.backAlert();
+    }
+    componentWillUnmount() {
     }
     historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
+        // this.cancelRelease();
     }
     cancelRelease() {
-        this.setState({alertState:true})
-        // if(window.confirm(mes) === true) {
-        //     window.localStorage.setItem('title',this.state.announcementTitle);
-        //     window.localStorage.setItem('content',this.state.announcementContent);
-        //    window.history.go(-1);
-        // }else{
-        //     window.history.go(-1);
-        // }
+        this.setState({alertState:true});
     }
     selectBtn(dataState) {
         if(dataState){
@@ -68,12 +65,21 @@ class ReleaseAnnouncement extends Component{
         }else{
             window.history.go(-1);
         }
-
     }
     startDate() {
         var date = new Date();
         this.setState({selectedDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
         this.setState({chooseDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
+    }
+    backAlert(){
+        const current = window.location.href; 
+        window.addEventListener("popstate", (e)=> {
+            this.setState({alertState:true});
+            if (current !== window.location.href) {
+                window.location.href = current;
+                // this.setState({alertState:true});
+            }
+        }, false);
     }
     handleDayClick(day) {
         var myDate = new Date(day);
@@ -158,7 +164,7 @@ class ReleaseAnnouncement extends Component{
         if(JSON.parse(result).success === 'T') {
             const imgSrc = window.server + JSON.parse(result).data.slice(1);
             this.state.imgSrcConcat.push(JSON.parse(result).data)
-            this.state.imgBox.push(imgSrc)
+            this.state.imgBox.push(imgSrc);
             this.setState({imgBox:this.state.imgBox});
             this.setState({imgSrcConcat:this.state.imgSrcConcat});
         }else{

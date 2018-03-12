@@ -33,6 +33,7 @@
     width:60%;
     display: inline-block;
     font-size:36px;
+    padding:0;
   }
   .getCode1 input[type="text"] {
     background: transparent;
@@ -41,6 +42,7 @@
     width:60%;
     display: inline-block;
     font-size:36px;
+    padding:0;
   }
   .prompt{
     font-size:24px;
@@ -67,22 +69,28 @@
     margin: 82px auto 0;
   }
   .nextStep{
-    height:94px;
+    /* height:94px; */
     width: 87%;
+    padding:30px 0;
+    border-radius:4px;
     text-align: center;
-    line-height: 94px;
+    /* line-height: 94px; */
     background: #4eaded;
     color: #147dd9;
-    font-size:28px;  
+    font-size:28px;
+    overflow: hidden;  
   }
   .nextCan{
-    height:94px;
+    /* height:94px; */
     width: 87%;
+    padding:30px 0;
+    border-radius:4px;
     text-align: center;
-    line-height: 94px;
+    /* line-height: 94px; */
     background: #b2d3ed;
     color: #147dd9;
-    font-size:28px;  
+    font-size:28px; 
+    overflow: hidden; 
   }
   .inputClass::-webkit-input-placeholder {
     color:#fff;

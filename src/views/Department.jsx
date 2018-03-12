@@ -2,6 +2,8 @@
 import React,{Component} from 'react';
 import styles from '../styles/Department.css';
 
+import Toast from '../components/Toast';
+
 import XHR from '../utils/request';
 import API from '../api/index';
 // import {admin ,server} from '../api/route';
@@ -13,7 +15,8 @@ class Department extends Component{
     constructor() {
         super();
         this.state={
-            departmentStaff:[]
+            departmentStaff:[],
+            tipState:false
 
         }
     }
@@ -43,21 +46,28 @@ class Department extends Component{
             officeid:window.officeId
             // officeid:this.state.departmentId    
         });
-        const dataSource = JSON.parse(result).data || [];
-        const userList = [];
-        dataSource.forEach((ev,i) =>{
-            userList.push({
-                id:ev.id,
-                name:ev.name,
-                officeName:ev.officeName,
-                loginN:ev.loginName,
-                phone:ev.phone
+        const dataSource = JSON.parse(result).data;
+        if(dataSource.length>0){
+            const userList = [];
+            dataSource.forEach((ev,i) =>{
+                userList.push({
+                    id:ev.id,
+                    name:ev.name,
+                    officeName:ev.officeName,
+                    loginN:ev.loginName,
+                    phone:ev.phone
+                })
             })
-        })
-        this.setState({departmentStaff:userList});
+            this.setState({departmentStaff:userList});
+        }else{
+            this.setState({departmentStaff:[],tipState:true});
+            setTimeout(()=>{
+                this.setState({tipState:false})
+            },2000)
+        }
     }
     render() {
-        const {departmentStaff} = this.state;
+        const {departmentStaff,tipState} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.content}>
@@ -70,6 +80,7 @@ class Department extends Component{
                         )
                     }
                 </div>
+                <Toast isShow={tipState} text="暂无数据"/>
             </div>
         )
     }
