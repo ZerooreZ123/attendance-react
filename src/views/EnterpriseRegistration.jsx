@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-
+import Toast from '../components/Toast';
 import styles from '../styles/EnterpriseRegistration.css';
 
 import XHR from '../utils/request';
@@ -10,6 +10,8 @@ class EnterpriseRegistration extends Component {
   constructor() {
     super();
     this.state = {
+        msg:'',
+        tipState:false,
         canState:true,            //可点击
         sendState:'发送验证码',   //发送状态
         inputCode:'',             //输入验证码
@@ -67,6 +69,11 @@ async sendSms() {                  //获取验证码
             const result = await XHR.post(window.admin + API.sendSms,{phone:this.state.inputPhone});
             if(JSON.parse(result).success === 'T') {
                 this.setState({code:JSON.parse(result).data});
+            }else{
+                this.setState({msg:JSON.parse(result).data,tipState:true});
+                setTimeout(()=>{
+                    this.setState({tipState:false})
+                },2000)
             }
         }else{
             return false
@@ -84,7 +91,7 @@ async sendSms() {                  //获取验证码
 //     }
 // }
 render() {
-    const {inputCode,inputPhone,sendState,canState} = this.state;
+    const {inputCode,inputPhone,sendState,canState,tipState,msg} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -104,6 +111,7 @@ render() {
         <div className={styles.next}>
           <div className = {(inputCode && inputPhone) ? styles.nextCan:styles.nextStep} onClick={ev =>this.goToNextStep(ev)}>下一步</div>
         </div>
+        <Toast isShow={tipState} text={msg}/>
       </div>
     );
   }

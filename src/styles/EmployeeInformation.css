@@ -27,8 +27,8 @@
 }
 .searchBox>input{
     display:inline-block;
-    width:580px;
-    height:36px;
+    width:70%;
+    /* height:36px; */
     padding:0;
     font-size:34px;
     color:#000;

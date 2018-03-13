@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-
+import Toast from '../components/Toast';
 import styles from '../styles/PersonalRegister.css';
 
 import XHR from '../utils/request';
@@ -13,6 +13,8 @@ class PersonalRegister extends Component {
   constructor() {
     super();
     this.state = {
+        msg:'',
+        tipState:false,
         canState:true,            //可点击
         sendState:'发送验证码',   //发送状态
         inputText:'',            //输入的手机号
@@ -52,6 +54,11 @@ async sendSms() {                  //获取验证码
             const result = await XHR.post(window.admin + API.sendSms,{phone:this.state.inputText});
             if(JSON.parse(result).success === 'T') {
                 this.setState({code:JSON.parse(result).data});
+            }else{
+                this.setState({msg:JSON.parse(result).data,tipState:true});
+                setTimeout(()=>{
+                    this.setState({tipState:false})
+                },2000)
             }
         }else{
             return false
@@ -71,7 +78,7 @@ goToNextStep() {
    }
 }
 render() {
-    const {inputValue,inputText,sendState,canState} = this.state;
+    const {inputValue,inputText,sendState,canState,tipState,msg} = this.state;
     return (
       <div className = {styles.container}>
         <div className = {styles.headImage}>
@@ -95,6 +102,7 @@ render() {
         <div className={styles.next}>
           <div className = {(inputText && inputValue) ? styles.nextCan:styles.nextStep} onClick={ev =>this.goToNextStep(ev)}>下一步</div>
         </div>
+        <Toast isShow={tipState} text={msg}/>
       </div>
     );
   }

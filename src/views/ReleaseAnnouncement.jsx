@@ -46,7 +46,7 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
-        // this.backAlert();
+        this.backAlert();
     }
     componentWillUnmount() {
     }
@@ -61,9 +61,13 @@ class ReleaseAnnouncement extends Component{
         if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-            window.history.go(-1);
+            window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
+            // this.props.history.push('/attendanceData')
+            // window.history.go(-1);
         }else{
-            window.history.go(-1);
+            window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
+            // this.props.history.push('/attendanceData')
+            // window.history.go(-1);
         }
     }
     startDate() {
@@ -75,6 +79,7 @@ class ReleaseAnnouncement extends Component{
         const current = window.location.href; 
         window.addEventListener("popstate", (e)=> {
             this.setState({alertState:true});
+            console.log(window.location.href);
             if (current !== window.location.href) {
                 window.location.href = current;
                 // this.setState({alertState:true});

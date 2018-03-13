@@ -188,7 +188,7 @@ class UserCenter extends Component {
             dataSource: {},        //用户信息
             result: {},            //签名内容
             prompt: 0,            //考勤机状态
-            noticeState: true,    //通知显示
+            noticeState: false,    //通知显示
             noticeTitle: '',       //公告标题
             normalDay: ''
         }
@@ -264,7 +264,7 @@ class UserCenter extends Component {
     async getNewNotice() {
         const result = await XHR.post(window.admin + API.getNewNotice, { companyid: this.props.match.params.companyId });
         if (JSON.parse(result).data) {
-            this.setState({ noticeTitle: JSON.parse(result).data.title });
+            this.setState({noticeState: true, noticeTitle: JSON.parse(result).data.title });
             window.sessionStorage.setItem('listId', JSON.parse(result).data.id)
         } else {
             this.setState({ noticeState: false })

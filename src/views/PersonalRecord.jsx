@@ -123,7 +123,7 @@ class PersonalRecord extends Component {
         }
     }
     componentDidMount() {
-        document.querySelector('title').innerText = '个人考勤记录';
+        document.querySelector('title').innerText = window.Person.name;
         this.selectState();
         // this.getPersonRecords(this.state.selectDate,this.state.selectDate,window.Person.userid);
     }

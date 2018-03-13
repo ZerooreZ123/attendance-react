@@ -97,20 +97,37 @@ class Search extends Component {
         if(this.state.searchHistory.indexOf(this.state.inputValue) === -1){
             this.state.searchHistory.push(this.state.inputValue);
         }else{
-            return false
         }
         const list = this.state.departmentStaff;
+        var dataName = [];
+        var dataPhone = [];
         list.forEach(el=>{
             el.staff.forEach(item =>{
-                if(this.state.inputValue && (item.name.match(this.state.inputValue)) || this.state.inputValue && item.phone.match(this.state.inputValue)){
-                }else{
-                    this.setState({tipState1:true});
-                    setTimeout(()=>{
-                        this.setState({tipState1:false});
-                    },2000)
-                }
+                dataName.push(item.name);
+                dataPhone.push(item.phone)
+                // console.log((item.name.indexOf(this.state.inputValue) !== -1) ||(item.phone.indexOf(this.state.inputValue) !== -1))
+                // if(item.name.indexOf(this.state.inputValue) === -1){
+                //     alert('5');
+                // }else{
+                //     this.setState({tipState1:true});
+                //     setTimeout(()=>{
+                //         this.setState({tipState1:false});
+                //     },2000)
+                // }
             })
-        })  
+        }) 
+        var dataString = this.state.inputValue+'';
+        if(dataName.indexOf(dataString)>=0 || dataPhone.indexOf(dataString)>=0) {
+
+        }else{
+            this.setState({tipState1:true});
+            setTimeout(()=>{
+                this.setState({tipState1:false});
+            },2000)
+        }
+
+
+
     }
     pushSearch(i) {
         this.setState({inputValue:this.state.searchHistory[i]});

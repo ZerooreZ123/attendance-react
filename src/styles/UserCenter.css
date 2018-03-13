@@ -286,7 +286,7 @@
     right:-20px;
     bottom:-20px;
     left:-20px;
-    background: -webkit-linear-gradient(0deg, #8cc2e8 10%, #b4dbf7 90%);
+    background: -webkit-linear-gradient(180deg,#b4dbf7 86% ,#8dc3e8 90% );
     content:'';
     border-radius:50%;
 }
