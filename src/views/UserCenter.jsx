@@ -29,6 +29,9 @@ import load from '../asset/punchClock/load.png';
 import successMin from '../asset/punchClock/successMin.png';
 import success from '../asset/punchClock/success.png';
 import redX from '../asset/punchClock/redX.png';
+import yuanHuan from '../asset/punchClock/yuanHuan.png';
+import yuanHuan1 from '../asset/punchClock/yuanHuan1.png';
+
 
 
 const Notice = ({ noticeState, parent, title }) => {   //打卡顶部通告
@@ -108,7 +111,7 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
         return (
             <div className={styles.content}>
                 <div className={styles.clickClock}>
-                    <div className={styles.ring}></div>
+                    <img className={styles.ring} src={yuanHuan} alt=""/>
                     <div className={styles.clickButton}>
                         <div className={styles.clockOn}>打卡</div>
                         <div className={styles.clockDate}>{h}:{m}:{s}</div>
@@ -125,7 +128,8 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
         return (
             <div className={styles.content}>
                 <div className={styles.clickClock}>
-                    <div className={styles.circular}></div>
+                    {/* <div className={styles.circular}></div> */}
+                    <img className={styles.circular} src={yuanHuan1} alt=""/>
                     <div onClick={ev => parent.clockIn(ev)} className={styles.clickButton}>
                         <div className={styles.clockCan}>打卡</div>
                         <div className={styles.clockDate}>{h}:{m}:{s}</div>
@@ -140,7 +144,8 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
         return (
             <div className={styles.content}>
                 <div className={styles.clickClock}>
-                    <div className={styles.circular}></div>
+                    {/* <div className={styles.circular}></div> */}
+                     <img className={styles.circular} src={yuanHuan1} alt=""/>
                     <div className={styles.clickButton}>
                         <div className={styles.clockOn}>打卡</div>
                         <div className={styles.clockDate}>{h}:{m}:{s}</div>
@@ -199,7 +204,9 @@ class UserCenter extends Component {
         this.showTime();
         this.getNewNotice();
         this.mainPage();
-        this.firstSearch();
+        this.getWX();
+        // this.firstSearch();
+        this.delaySearch()
         // this.delaySearch();
     }
     componentWillUnmount() {
@@ -231,9 +238,9 @@ class UserCenter extends Component {
             })
         }
     }
-    // delaySearch() {
-    //     setTimeout(() => this.searchIbeacons(), 0)
-    // }
+    delaySearch() {
+        setTimeout(() => this.firstSearch(), 0)
+    }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
         this.props.history.push('/AnnouncementDetails');
@@ -294,14 +301,15 @@ class UserCenter extends Component {
     punchClock() {
         document.querySelector('title').innerText = '考勤打卡';
         this.setState({ showUserCenter: false, showPunchClock: true, prompt: 0 });
-        this.searchIbeacons();
+        // this.searchIbeacons();
+        this.firstSearch();
         this.getNewNotice();
     }
     personCenter() {
         document.querySelector('title').innerText = '个人中心';
         this.setState({ showUserCenter: true, showPunchClock: false });
         // this.setState({showPunchClock:false});
-        this.getWX();
+        // this.getWX();
     }
     attendanceData() {
         this.props.history.push('/attendanceData')
@@ -347,20 +355,20 @@ class UserCenter extends Component {
         })
     }
     async firstSearch() {
-        const result = await XHR.post(window.admin + API.getSignature);
-        if (JSON.parse(result).success === 'T') {
-            // alert(JSON.stringify(result));
-            window.wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: JSON.parse(result).data.appId,//'wx361547ce36eb2185', // 必填，公众号的唯一标识
-                timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
-                nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
-                signature: JSON.parse(result).data.signature,// 必填，签名
-                jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
-                // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
-            });
+        // const result = await XHR.post(window.admin + API.getSignature);
+        // if (JSON.parse(result).success === 'T') {
+        //     // alert(JSON.stringify(result));
+        //     window.wx.config({
+        //         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //         appId: JSON.parse(result).data.appId,//'wx361547ce36eb2185', // 必填，公众号的唯一标识
+        //         timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+        //         nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
+        //         signature: JSON.parse(result).data.signature,// 必填，签名
+        //         jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
+        //         // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
+        //     });
 
-        }
+        // }
         window.wx.ready(()=>{
             window.wx.startSearchBeacons({       //开启ibeacons
                 ticket: "",
@@ -413,20 +421,20 @@ class UserCenter extends Component {
         })
     }
     async searchIbeacons() {
-        const result = await XHR.post(window.admin + API.getSignature);
-        if (JSON.parse(result).success === 'T') {
-            // alert(JSON.stringify(result));
-            window.wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId:JSON.parse(result).data.appId, // 必填，公众号的唯一标识
-                timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
-                nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
-                signature: JSON.parse(result).data.signature,// 必填，签名
-                jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
-                // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
-            });
+        // const result = await XHR.post(window.admin + API.getSignature);
+        // if (JSON.parse(result).success === 'T') {
+        //     // alert(JSON.stringify(result));
+        //     window.wx.config({
+        //         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //         appId:JSON.parse(result).data.appId, // 必填，公众号的唯一标识
+        //         timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
+        //         nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
+        //         signature: JSON.parse(result).data.signature,// 必填，签名
+        //         jsApiList: ['startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons']
+        //         // jsApiList: ['startMonitoringBeacons','stopMonitoringBeacons','onBeaconsInRange'] // 必填，需要使用的JS接口列表
+        //     });
 
-        }
+        // }
         window.wx.startSearchBeacons({       //开启ibeacons
             ticket: "",
             complete: (argv) => {
@@ -510,7 +518,7 @@ class UserCenter extends Component {
                 timestamp: JSON.parse(result).data.timestamp, // 必填，生成签名的时间戳
                 nonceStr: JSON.parse(result).data.noncestr, // 必填，生成签名的随机串
                 signature: JSON.parse(result).data.signature,// 必填，签名
-                jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表
+                jsApiList: ['scanQRCode','startSearchBeacons', 'stopSearchBeacons', 'onSearchBeacons'] // 必填，需要使用的JS接口列表
             });
         }
     }

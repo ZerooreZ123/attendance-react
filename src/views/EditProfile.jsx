@@ -64,7 +64,8 @@ class EditProfile extends Component{
             const result = await XHR.post(window.admin + API.update,{
                 loginName:window.Person.loginN,
                 officeid:this.state.departmentId,
-                userName:this.state.valueName
+                userName:this.state.valueName,
+                oneselfLoginName:window.sessionStorage.getItem('loginName')
             });
             if(JSON.parse(result).success === 'T') {
                 window.sessionStorage.setItem('editState',true)

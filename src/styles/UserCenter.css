@@ -271,25 +271,28 @@
     position:relative;
 }
 .ring{
+    display:inline-block;
     position:relative;
-    width:276px;
+    width:311px;
+    height:311px;
+    /* width:276px;
     height:276px;
     border:20px solid transparent;
     border-radius:50%;
-    background:-webkit-linear-gradient(top, #33b5fb,#0c6dd0);
-    background-clip:padding-box ;
-    -webkit-animation:circle 0.6s infinite linear;
+    background:linear-gradient(top, #33b5fb,#0c6dd0);
+    background-clip:padding-box ; */
+    -webkit-animation:circle 1s infinite linear;
 }
-.ring:after{
+/* .ring:after{
     position:absolute;
     top:-20px;
     right:-20px;
     bottom:-20px;
     left:-20px;
-    background: -webkit-linear-gradient(180deg,#b4dbf7 86% ,#8dc3e8 90% );
+    background: linear-gradient(180deg,#b4dbf7 86% ,#8dc3e8 90% );
     content:'';
     border-radius:50%;
-}
+} */
 /* .ring{
     z-index:1;
     width:276px;
@@ -305,10 +308,13 @@
 } */
 .circular{
     z-index:1;
-    width:276px;
+    display:inline-block;
+    width:311px;
+    height:311px;
+    /* width:276px;
     height:276px;
     border:20px solid #b4dbf7;
-    border-radius:50%;
+    border-radius:50%; */
 }
 .cardFinish{
     z-index:1;
@@ -336,11 +342,11 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    top:19px;
-    left:19.5px;
+    top:16px;
+    left:16px;
     z-index:2;
-    width:276px;
-    height:276px;
+    width:279px;
+    height:279px;
     border-radius: 50%;
     color:#6dbafe;
     background:-webkit-linear-gradient(top, #33b5fb, #0c6dd0)

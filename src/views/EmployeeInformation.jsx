@@ -271,7 +271,7 @@ class EmployeeInformation extends Component{
                                 }
                                 <div className={styles.clearBoth}></div>
                             </div>
-                            <div className={styles.footer}>{departmentName}<Direction checked={true}/></div>
+                            <div className={styles.footer}>{departmentName}<Direction checked={this.state.mask}/></div>
                         </div>
                     </div>
                 );
@@ -289,7 +289,7 @@ class EmployeeInformation extends Component{
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <Content></Content>
-                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={iconState1}/></div>
+                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={this.state.mask}/></div>
                     <Mask></Mask>
                 </div>
                 <SearchList visible={searchState} parent={this} allPerson={searchDate}/>

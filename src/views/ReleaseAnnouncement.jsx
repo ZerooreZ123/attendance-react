@@ -46,7 +46,7 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
-        this.backAlert();
+        // this.backAlert();
     }
     componentWillUnmount() {
     }
@@ -61,13 +61,13 @@ class ReleaseAnnouncement extends Component{
         if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-            window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
+            // window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
             // this.props.history.push('/attendanceData')
-            // window.history.go(-1);
+            window.history.go(-1);
         }else{
-            window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
+            // window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
             // this.props.history.push('/attendanceData')
-            // window.history.go(-1);
+            window.history.go(-1);
         }
     }
     startDate() {
@@ -170,8 +170,15 @@ class ReleaseAnnouncement extends Component{
             const imgSrc = window.server + JSON.parse(result).data.slice(1);
             this.state.imgSrcConcat.push(JSON.parse(result).data)
             this.state.imgBox.push(imgSrc);
-            this.setState({imgBox:this.state.imgBox});
-            this.setState({imgSrcConcat:this.state.imgSrcConcat});
+
+            if(this.state.imgBox.length>9){
+                this.setState({imgBox:this.state.imgBox.slice(0,9)});
+                this.setState({imgSrcConcat:this.state.imgSrcConcat.slice(0,9)});
+
+            }else{
+                this.setState({imgBox:this.state.imgBox});
+                this.setState({imgSrcConcat:this.state.imgSrcConcat});
+            }
         }else{
             alert(JSON.parse(result).msg)
         }
@@ -186,7 +193,7 @@ class ReleaseAnnouncement extends Component{
                 content:this.state.announcementContent,
                 image:this.state.imgSrcConcat.join(''),
                 startDate:this.state.selectedDay + " 00:00:00",
-                endDate: this.state.chooseDay+  " 00:00:00"    
+                endDate: this.state.chooseDay + " 23:59:59" 
             })
             if(JSON.parse(result).success === 'T'){
                 window.sessionStorage.setItem('backTip',true)

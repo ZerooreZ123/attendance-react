@@ -21,7 +21,8 @@ class AnnouncementDetails extends Component{
     async noticeDetails() {
         const result = await XHR.post(window.admin + API.noticeDetails,{id:window.sessionStorage.getItem('listId')});
         this.setState({dataSource:JSON.parse(result).data});
-        if(JSON.parse(result).data.hasOwnProperty('image')){
+        // if(JSON.parse(result).data.hasOwnProperty('image')){
+        if(JSON.parse(result).data.image){
             const ret = JSON.parse(result).data.image.slice(1).split('|');
             this.setState({imgBox:ret});   
         }

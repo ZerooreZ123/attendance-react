@@ -11,14 +11,14 @@
     top:0;
     left:0;
     width:100%;
-    padding:40px 0 10px;
+    padding:40px 0 26px;
     color:#000;
     background: #fff;
 }
 .searchImg{
     display:inline-block;
     position: absolute;
-    top:48px;
+    top:53px;
     right:24px;
     width:40px;
     height:40px;
@@ -55,7 +55,7 @@
 }
 .timetable{
     position:fixed;
-    top:113px;
+    top:118px;
     left:0;
     display:flex;
     justify-content: space-around;
@@ -82,7 +82,7 @@
 .detailsList{
     background:#fff;
     padding-bottom:102px;
-    padding-top:212px;
+    padding-top:222px;
 }
 .item{
     border-bottom:1px solid #ddd;
@@ -90,7 +90,7 @@
 }
 .name{
     padding-left:22px;
-    font-size:22px;
+    font-size:26px;
     color:#999;
 }
 .work{
@@ -101,6 +101,7 @@
     display:inline-block;
     margin-top:26px;
     width:50%;
+    font-size:34px;
 }
 .gotoWork,.gooffWork{
     padding-left:48px;

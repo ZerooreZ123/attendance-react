@@ -22,7 +22,8 @@ const Module =({imgHave,data,parent}) =>{
                                 <div className={styles.itemContent}>{ev.content}</div>
                                 <div className={styles.itemDate}>{ev.createDate}</div>
                             </div>
-                            <div className={ev.hasOwnProperty('image')?styles.itemImg:styles.hideImg}>
+                            <div className={ev.image?styles.itemImg:styles.hideImg}>
+                            {/* <div className={ev.hasOwnProperty('image')?styles.itemImg:styles.hideImg}> */}
                                 <img className={styles.imgClass} src={ev.image} alt=""/>
                             </div>
                         </div>
@@ -48,7 +49,7 @@ class HistoryAnnouncement extends Component{
         super();
         this.state = {
             tipState:false,        //提示状态
-            dataSource:[],
+            dataSource:[1],
             img:''
         }
     }
@@ -93,7 +94,7 @@ class HistoryAnnouncement extends Component{
                 content:item.content,
                 createDate:item.createDate.slice(0,10).replace(/-/g,'.'),
             })
-            if(item.hasOwnProperty('image')) {
+            if(item.image) {
                 this.setState({img:true})
                ret[index].image = window.server + item.image.slice(1).split('|')[0];
             }

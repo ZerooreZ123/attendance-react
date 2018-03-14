@@ -31,11 +31,12 @@
 .itemList,.selectItem{
     float:left;
     width:28.2%;
-    height:94px;
+    /* height:94px; */
     margin:16px;
+    padding:30px 0;
     border:2px solid #ddd;
     border-radius:2px;
-    line-height:94px;
+    /* line-height:94px; */
     text-align: center;
     font-size:28px;
     color:#000;
@@ -56,19 +57,21 @@
 }
 .edit{
     width:100%;
+    padding:34px 0;
     font-size:30px;
     text-align: center;
-    height: 100px;
-    line-height: 100px;
+    /* height: 100px; */
+    /* line-height: 100px; */
     color:#2295e8;
     background:#fff;
 }
 .cancel,.confirm{
     width:50%;
-    height:100px;
+    padding:34px 0;
+    /* height:100px; */
     font-size:30px;
     text-align: center;
-    line-height: 100px;
+    /* line-height: 100px; */
    
 }
 .cancel{

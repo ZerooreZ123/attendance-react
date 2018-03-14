@@ -60,11 +60,11 @@
   }
   .sendCode{
       display:inline-block;
-      height:54px;
+      /* height:54px; */
       width:184px;
       padding:0;
       border:2px solid #fff;
-      border-radius:3px;
+      border-radius:5px;
       line-height:54px;
       text-align: center;
       font-size:28px;
@@ -73,11 +73,11 @@
   }
   .noSendCode{
     display:inline-block;
-      height:54px;
+      /* height:54px; */
       width:184px;
       padding:0;
-      border:2px solid #fff;
-      border-radius:3px;
+      border:2px solid #6bb7ef;
+      border-radius:5px;
       line-height:54px;
       text-align: center;
       font-size:28px;
@@ -87,7 +87,7 @@
       pointer-events: none;
       cursor: not-allowed;
       box-shadow: none;
-      opacity:0.5;
+      /* opacity:0.5; */
   }
   .box{
     position: relative;
