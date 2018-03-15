@@ -93,7 +93,8 @@ async register() {
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
-    this.props.history.push('./userCenter/'+ window.sessionStorage.getItem('ID') +'/6');   
+    // window.location.replace(window.server + '/AttendanceFront/index.html#//userCenter/'+ window.sessionStorage.getItem('ID')+'/'+window.sessionStorage.getItem('comID'))
+    this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('ID') +'/'+ window.sessionStorage.getItem('comID'));   
   }else{
       return null;
   }

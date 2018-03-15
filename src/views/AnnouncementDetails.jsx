@@ -10,6 +10,8 @@ class AnnouncementDetails extends Component{
     constructor() {
         super();
         this.state={
+           startDate:'',
+           endDate:'',
            dataSource:{},
            imgBox:[]
         }
@@ -20,8 +22,11 @@ class AnnouncementDetails extends Component{
     }
     async noticeDetails() {
         const result = await XHR.post(window.admin + API.noticeDetails,{id:window.sessionStorage.getItem('listId')});
-        this.setState({dataSource:JSON.parse(result).data});
-        // if(JSON.parse(result).data.hasOwnProperty('image')){
+        this.setState({
+            dataSource:JSON.parse(result).data,
+            startDate:JSON.parse(result).data.startDate.slice(0,10),
+            endDate:JSON.parse(result).data.endDate.slice(0,10)
+        });
         if(JSON.parse(result).data.image){
             const ret = JSON.parse(result).data.image.slice(1).split('|');
             this.setState({imgBox:ret});   
@@ -29,7 +34,7 @@ class AnnouncementDetails extends Component{
          
     }
     render(){
-        const {dataSource,imgBox} = this.state;
+        const {dataSource,imgBox,startDate,endDate} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.content}>
@@ -40,6 +45,7 @@ class AnnouncementDetails extends Component{
                           imgBox.map((item,index) => <img key={index} src={window.server+item} alt=""/>) 
                        }
                     </div>
+                    <div className={styles.timeShow}><span>{startDate}</span>至<span>{endDate}</span></div>
                 </div>
             </div>
         )

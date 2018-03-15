@@ -35,7 +35,7 @@ async goToNextStep() {          //下一步
             if(this.state.code === this.state.inputCode){
                 const result = await XHR.post(window.admin + API.judge,{serialNumber:this.props.match.params.serialNumber});
                 if(JSON.parse(result).data === true ) {   
-                    this.props.history.push('/writeInformation');
+                    this.props.history.replace('/writeInformation');
                     window.sessionStorage.setItem('serialNumber',this.props.match.params.serialNumber);
                     window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
                     window.sessionStorage.setItem("Phone",this.state.inputPhone);

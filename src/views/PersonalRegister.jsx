@@ -69,7 +69,9 @@ async sendSms() {                  //获取验证码
 goToNextStep() {
    if((this.state.inputText !== '') && (this.state.inputValue !== '')) {
         if(this.state.inputValue === this.state.code) {
-            this.props.history.push('/inviteCodeDetail')
+            // this.props.history.push('/inviteCodeDetail')
+            this.props.history.replace('/inviteCodeDetail')
+            // window.location.replace(window.server + '/AttendanceFront/index.html#/inviteCodeDetail')
         }else{
             alert("请输入正确的验证码")
         }

@@ -21,9 +21,11 @@
 }
 .caption{
     margin:46px 0 26px;
+    height:36px;
     font-size:32px;
     font-weight: 600;
     color:#000;
+    overflow: hidden;
 }
 .itemContent{
     height:86px;

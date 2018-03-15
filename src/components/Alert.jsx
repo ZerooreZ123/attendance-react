@@ -23,7 +23,7 @@ class Toast extends Component {
                 <div className={styles.box}>
                     <div className={styles.text}> {this.props.text}</div>
                     <div className={styles.selectTab}>
-                        <span onClick={(ev) =>this.confirm(ev)}>确认</span><span onClick={(ev)=>this.cancel(ev)}>取消</span>
+                        <span onClick={(ev)=>this.cancel(ev)}>取消</span><span onClick={(ev) =>this.confirm(ev)}>确认</span>
                     </div>
                 </div>
             </div>:null

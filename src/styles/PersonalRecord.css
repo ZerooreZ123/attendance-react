@@ -177,6 +177,15 @@
     left: 0;
     right: 0;
 }
+.makeHide{
+    background: rgba(0, 0, 0, 0);
+    position:absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
 .hideMask{
     display:none;
 }
@@ -187,6 +196,7 @@
     background:#fff;
     width:100%;
     padding-bottom:60px;
+    z-index: 3;
 }
 .operation{
     display:flex;
@@ -273,7 +283,7 @@
     color:#000;
 }
 .redColor{
-    color:rgb(248, 29, 29);
+    color:#e76948;
 }
 .blankBox{
     display:flex;

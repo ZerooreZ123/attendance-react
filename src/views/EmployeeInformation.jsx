@@ -258,6 +258,7 @@ class EmployeeInformation extends Component{
             if (this.state.mask) {
                 return (
                     <div className={styles.mask}>
+                        <div className={styles.makeHide} onClick={ev=>this.hideMask(ev)}></div>
                         <div className={styles.maskBox}>
                             <div className={styles.operation}>
                                 <img  onClick={ev =>this.hideMask(ev)} className={styles.spread} src={spread} alt=""/>

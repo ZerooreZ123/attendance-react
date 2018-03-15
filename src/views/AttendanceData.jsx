@@ -346,9 +346,15 @@ class AttendanceData extends Component {
                 result.push(ev + '-' + el )
             })
         )
+        var r = []
+        result.forEach(e =>{
+            if(this.state.secondTime>new Date(e).getTime()){
+                r.push(e)
+            }
+        })
         this.setState({
             optionGroups: {
-                data: result
+                data: r
             }
         })
     }
@@ -1093,6 +1099,7 @@ class AttendanceData extends Component {
                 </div>
                 <DateChange></DateChange>
                 <div className={maskToggle === 0 ? styles.hideMask : styles.mask}>
+                    <div className={styles.makeHide} onClick={ev=>this.hideMask(ev)}></div>
                     <div className={styles.maskBox}>
                         <div className={styles.operation}>
                             <img onClick={ev => this.hideMask(ev)} className={styles.spread} src={spread} alt="" />
@@ -1120,6 +1127,7 @@ class AttendanceData extends Component {
                     </div>
                 </div>
                 <div className={maskToggle1 === 0 ? styles.hideMask : styles.mask}>
+                    <div className={styles.makeHide} onClick={ev=>this.hideMask1(ev)}></div>
                     <div className={styles.maskBox}>
                         <div className={styles.operation}>
                             <img onClick={ev => this.hideMask1(ev)} className={styles.spread} src={spread} alt="" />

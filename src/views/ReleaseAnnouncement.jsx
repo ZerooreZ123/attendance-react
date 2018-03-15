@@ -29,6 +29,7 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
+            tipState1:false,
             tipState:false,           //tip状态
             secondTime:(new Date()).getTime(),             //秒
             alertState:false,            //alert状态
@@ -46,7 +47,7 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
-        // this.backAlert();
+        this.backAlert();
     }
     componentWillUnmount() {
     }
@@ -55,19 +56,27 @@ class ReleaseAnnouncement extends Component{
         // this.cancelRelease();
     }
     cancelRelease() {
-        this.setState({alertState:true});
+        if(this.state.announcementTitle!==''&& this.state.announcementContent !==''){
+            this.setState({alertState:true});
+        }else{
+            window.localStorage.removeItem('title',this.state.announcementTitle);
+            window.localStorage.removeItem('content',this.state.announcementContent);
+            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            // window.history.go(-1);
+            // this.setState({alertState:false});
+        }
     }
     selectBtn(dataState) {
         if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-            // window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
-            // this.props.history.push('/attendanceData')
-            window.history.go(-1);
+            // window.history.go(-1);
+            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
         }else{
-            // window.location.href = window.server + '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid');
-            // this.props.history.push('/attendanceData')
-            window.history.go(-1);
+            window.localStorage.removeItem('title',this.state.announcementTitle);
+            window.localStorage.removeItem('content',this.state.announcementContent);
+            // window.history.go(-1);
+            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
         }
     }
     startDate() {
@@ -76,15 +85,32 @@ class ReleaseAnnouncement extends Component{
         this.setState({chooseDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
     }
     backAlert(){
-        const current = window.location.href; 
-        window.addEventListener("popstate", (e)=> {
-            this.setState({alertState:true});
-            console.log(window.location.href);
-            if (current !== window.location.href) {
-                window.location.href = current;
-                // this.setState({alertState:true});
-            }
-        }, false);
+        // const current = window.location.href; 
+        // window.addEventListener("popstate", (e)=> {
+        //     this.setState({alertState:true});
+        //     console.log(window.location.href);
+        //     if (current !== window.location.href) {
+        //         window.location.href = current;
+        //     }
+        // }, false);
+
+        pushHistory(); 
+        window.addEventListener("popstate", (e)=>{
+            if(this.state.announcementTitle!==''&& this.state.announcementContent !== ''){
+                this.setState({alertState:true});
+            }else{
+                // window.localStorage.removeItem('title',this.state.announcementTitle);
+                // window.localStorage.removeItem('content',this.state.announcementContent);
+                // this.props.history.replace('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            } 
+        }, false); 
+        function pushHistory() { 
+            var state = { 
+            title: "title", 
+            url: '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid')
+        }; 
+        window.history.pushState(state, "title", '/AttendanceFront/index.html#/releaseAnnouncement')
+        } 
     }
     handleDayClick(day) {
         var myDate = new Date(day);
@@ -120,7 +146,7 @@ class ReleaseAnnouncement extends Component{
     hideMask1() {
         this.setState({mask:false});
         // this.setState({iconState:true});
-        setTimeout(()=>this.showMask2(),500)
+        // setTimeout(()=>this.showMask2(),500)
     }
     showMask2() {
         this.setState({copyMask:true})
@@ -130,6 +156,9 @@ class ReleaseAnnouncement extends Component{
         this.setState({copyMask:false});
         // this.setState({iconState:true});
     }
+    allMask() {
+        this.setState({copyMask:false,mask:false})
+    }
     delete(i) {
         this.state.imgBox.splice(i,1);
         this.state.imgSrcConcat.splice(i,1);
@@ -137,7 +166,9 @@ class ReleaseAnnouncement extends Component{
         this.setState({imgSrcConcat:this.state.imgSrcConcat});
     }
     getBase64(callback) {            //获取图片
-
+        debugger;
+        this.hideMask1();
+        this.hideMask2();
         var data = this.refs.files.files;
         var file =[];
         for(var i in data){
@@ -172,8 +203,12 @@ class ReleaseAnnouncement extends Component{
             this.state.imgBox.push(imgSrc);
 
             if(this.state.imgBox.length>9){
-                this.setState({imgBox:this.state.imgBox.slice(0,9)});
-                this.setState({imgSrcConcat:this.state.imgSrcConcat.slice(0,9)});
+                
+                this.setState({imgBox:this.state.imgBox.slice(0,9),imgSrcConcat:this.state.imgSrcConcat.slice(0,9),tipState1:true});
+                setTimeout(()=>{
+                    this.setState({tipState1:false})
+                },2000)
+                // this.setState({imgSrcConcat:this.state.imgSrcConcat.slice(0,9)});
 
             }else{
                 this.setState({imgBox:this.state.imgBox});
@@ -208,7 +243,7 @@ class ReleaseAnnouncement extends Component{
                 title:this.state.announcementTitle,
                 content:this.state.announcementContent,
                 startDate:this.state.selectedDay + " 00:00:00",
-                endDate: this.state.chooseDay+  " 00:00:00"    
+                endDate: this.state.chooseDay+  " 23:59:59"    
             })
             if(JSON.parse(result).success === 'T'){
                 // alert("发布成功");
@@ -220,7 +255,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox,alertState,tipState} = this.state;
+        const {mask,copyMask,imgBox,alertState,tipState,tipState1} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -249,24 +284,27 @@ class ReleaseAnnouncement extends Component{
                     </div>
                 <div className={styles.footer}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
-                        <div className={styles.photoBox}>
+                        <div className={styles.photoBox} onClick={ev=>this.allMask()}>
                            <img className={styles.addphoto} src={addphoto} alt=""/>
                            <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     {/* <div onClick={ev =>this.showMask2(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div> */}
                 </div>
                 <div className={mask === false? styles.hideMask:styles.showMask}>
+                   <div className={styles.maskHide} onClick={ev=>this.hideMask1(ev)}></div>
                    <div className={styles.maskBox}>
                      <DayPicker onDayClick={ev =>this.preClockInRemind(ev)} />
                     </div>
                 </div>
                 <div className={copyMask === false? styles.hideMask:styles.showMask}>
+                   <div className={styles.maskHide} onClick={ev=>this.hideMask2(ev)}></div>
                    <div className={styles.maskBox}>
                      <DayPicker onDayClick={ev =>this.selectTime(ev)} />
                     </div>
                 </div>
                 <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
                 <Toast isShow={tipState} text="结束日期必须在开始日期之后或同一天"/>
+                <Toast isShow={tipState1} text="上传最多9张照片"/>
             </div>
         )
     }

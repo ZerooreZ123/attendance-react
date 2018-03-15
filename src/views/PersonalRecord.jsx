@@ -250,11 +250,22 @@ class PersonalRecord extends Component {
                 result.push(ev + '-' + el )
             })
         )
-        this.setState({
-            optionGroups: {
-                data: result
+        var r = []
+        result.forEach(e =>{
+            if(this.state.secondTime>new Date(e).getTime()){
+                r.push(e)
             }
         })
+        this.setState({
+            optionGroups: {
+                data: r
+            }
+        })
+        // this.setState({
+        //     optionGroups: {
+        //         data: result
+        //     }
+        // })
     }
     search() {                     //跳转至搜索页面
         this.props.history.push('/search');
@@ -580,6 +591,7 @@ class PersonalRecord extends Component {
                 </div>
                 <DateChange></DateChange>
                 <div className={maskToggle === 0 ? styles.hideMask : styles.mask}>
+                    <div className={styles.makeHide} onClick={ev=>this.hideMask(ev)}></div>
                     <div className={styles.maskBox}>
                         <div className={styles.operation}>
                             <img onClick={ev => this.hideMask(ev)} className={styles.spread} src={spread} alt="" />

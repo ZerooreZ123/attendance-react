@@ -158,7 +158,7 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
                 <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
         )
-    } else {                      //打卡成功
+    } else if(prompt === 3) {                      //打卡成功
         return (
             <div className={styles.content}>
                 <div className={styles.clickClock}>
@@ -171,6 +171,24 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
                     <img className={styles.promptImg} src={successMin} alt="" /><span className={styles.text}>打卡成功!</span>
                 </div>
                 <div className={styles.refreshHide}>刷新页面</div>
+                <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
+            </div>
+        )
+    } else {                      //附近无设备
+        return (
+            <div className={styles.content}>
+                <div className={styles.clickClock}>
+                    {/* <div className={styles.circular}></div> */}
+                     <img className={styles.circular} src={yuanHuan1} alt=""/>
+                    <div className={styles.clickButton}>
+                        <div className={styles.clockOn}>打卡</div>
+                        <div className={styles.clockDate}>{h}:{m}:{s}</div>
+                    </div>
+                </div>
+                <div className={styles.prompt}>
+                    <img className={styles.promptImg} src={warn} alt="" /><span className={styles.text}>未搜索到目标iBeacon设备！</span>
+                </div>
+                <div onClick={ev => parent.refresh(ev)} className={styles.refreshShow}>刷新页面</div>
                 <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>
             </div>
         )
@@ -241,6 +259,9 @@ class UserCenter extends Component {
     delaySearch() {
         setTimeout(() => this.firstSearch(), 0)
     }
+    stopBeacons() {
+        setTimeout(() => this.stopSearch(), 0)
+    }
     AnnouncementDetails(ev) {         //切换至公告详情
         ev.stopPropagation();
         this.props.history.push('/AnnouncementDetails');
@@ -302,12 +323,13 @@ class UserCenter extends Component {
         document.querySelector('title').innerText = '考勤打卡';
         this.setState({ showUserCenter: false, showPunchClock: true, prompt: 0 });
         // this.searchIbeacons();
-        this.firstSearch();
+        this.delaySearch();
         this.getNewNotice();
     }
     personCenter() {
         document.querySelector('title').innerText = '个人中心';
         this.setState({ showUserCenter: true, showPunchClock: false });
+        this.stopBeacons();
         // this.setState({showPunchClock:false});
         // this.getWX();
     }
@@ -354,7 +376,13 @@ class UserCenter extends Component {
             });
         })
     }
-    async firstSearch() {
+    stopSearch() {
+        window.wx.stopSearchBeacons({
+            complete: (res) => {
+            }
+        });
+    }
+    firstSearch() {
         // const result = await XHR.post(window.admin + API.getSignature);
         // if (JSON.parse(result).success === 'T') {
         //     // alert(JSON.stringify(result));
@@ -376,51 +404,45 @@ class UserCenter extends Component {
                     //开启查找完成后的回调函数
                     // alert(JSON.stringify(argv));
                     if (argv.errMsg === "startSearchBeacons:ok") {
+                        const timeout = setTimeout(() => {
+                            this.setState({ prompt: 4 });
+                            window.wx.stopSearchBeacons();
+                        }, 15000);
                         // 监听iBeacon信号
                         window.wx.onSearchBeacons({
                             complete: (argv) => {
+                                clearTimeout(timeout);
                                 // alert(JSON.stringify(argv));
                                 //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                                 if (argv.beacons.length > 0) {
-                                    window.wx.stopSearchBeacons({
-                                        complete: (res) => {
-                                            const backData = [];
-                                            argv.beacons.forEach((ev, index) => {
-                                                backData.push({
-                                                    major: ev.major,
-                                                    minor: ev.minor
-                                                })
-                                            })
-                                            this.backState(backData);
-                                        }
-                                    });
+                                    const backData = [];
+                                    argv.beacons.forEach((ev, index) => {
+                                        backData.push({
+                                            major: ev.major,
+                                            minor: ev.minor
+                                        })
+                                    })
+                                    this.backState(backData);
                                 } else {
-                                    window.wx.stopSearchBeacons({
-                                        complete: (res) => {
-                                            this.setState({ tipState: true })
+                                    this.setState({ tipState: true })
                                             setTimeout(() => {
                                                 this.setState({ tipState: false })
                                             }, 2000);
-                                        }
-                                    });
                                 }
+                                window.wx.stopSearchBeacons();
                             }
                         });
                     } else {
                         //停止搜索ibeacons
-                        window.wx.stopSearchBeacons({
-                            complete: (res) => {
-                                //关闭查找完成后的回调函数
-                                this.setState({ prompt: 2 })
-                            }
-                        });
+                        this.setState({ prompt: 2 })
+                        window.wx.stopSearchBeacons();
                     }
                 }
 
             })
         })
     }
-    async searchIbeacons() {
+    searchIbeacons() {
         // const result = await XHR.post(window.admin + API.getSignature);
         // if (JSON.parse(result).success === 'T') {
         //     // alert(JSON.stringify(result));
@@ -442,43 +464,38 @@ class UserCenter extends Component {
                 //开启查找完成后的回调函数
                 if (argv.errMsg === "startSearchBeacons:ok") {
                     // 监听iBeacon信号
+                    const timeout = setTimeout(() => {
+                        this.setState({ prompt: 4 });
+                        window.wx.stopSearchBeacons();
+                    }, 15000);
+
                     window.wx.onSearchBeacons({
                         complete: (argv) => {
+                            clearTimeout(timeout);
                             // alert(JSON.stringify(argv));
                             //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
                             if (argv.beacons.length > 0) {
-                                window.wx.stopSearchBeacons({
-                                    complete: (res) => {
-                                        const backData = []
-                                        argv.beacons.forEach((ev, index) => {
-                                            backData.push({
-                                                major: ev.major,
-                                                minor: ev.minor
-                                            })
-                                        })
-                                        this.backState(backData)
-                                    }
-                                });
+                                const backData = []
+                                argv.beacons.forEach((ev, index) => {
+                                    backData.push({
+                                        major: ev.major,
+                                        minor: ev.minor
+                                    })
+                                })
+                                this.backState(backData)
                             } else {
-                                window.wx.stopSearchBeacons({
-                                    complete: (res) => {
-                                        this.setState({ tipState: true })
-                                        setTimeout(() => {
-                                            this.setState({ tipState: false })
-                                        }, 2000);
-                                    }
-                                });
+                                this.setState({ prompt: 4 })
+                                // this.setState({ tipState: true,prompt: 4 })
+                                // setTimeout(() => {
+                                //     this.setState({ tipState: false })
+                                // }, 2000);
                             }
+                            window.wx.stopSearchBeacons();
                         }
                     });
                 } else {
                     //停止搜索ibeacons
-                    window.wx.stopSearchBeacons({
-                        complete: (res) => {
-                            //关闭查找完成后的回调函数
-                            this.setState({ prompt: 2 })
-                        }
-                    });
+                    this.setState({ prompt: 2 })
                 }
             }
 
@@ -495,10 +512,11 @@ class UserCenter extends Component {
         if (JSON.parse(result).success === 'T') {
             this.setState({ prompt: 1 })
         } else {
-            this.setState({ tipState: true })
-            setTimeout(() => {
-                this.setState({ tipState: false })
-            }, 2000);
+            this.setState({ prompt: 4  })
+            // this.setState({ tipState: true,prompt: 4  })
+            // setTimeout(() => {
+            //     this.setState({ tipState: false })
+            // }, 2000);
         }
     }
     async getWX() {

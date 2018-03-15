@@ -112,7 +112,7 @@
 }
 .unusual{
     display:inline-block;
-    color:#ed8363;
+    color:#e76948;
 }
 .punchTime{
     color:#999;
@@ -153,7 +153,7 @@
     color:#000;
 }
 .redColor{
-    color:rgb(248, 29, 29);
+    color:#e76948;
 }
 .blankBox{
     display:flex;
