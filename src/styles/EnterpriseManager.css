@@ -181,7 +181,7 @@
     justify-content: space-between;
     align-items:center;
     height:102px;
-    border-bottom:3px solid #ddd;
+    border-bottom:3px solid #f6f6f6;
 }
 .deleteItem>div{
     flex: 1;

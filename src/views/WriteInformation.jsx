@@ -45,11 +45,13 @@ render() {
     return (
       <div className = {styles.container}>
         <div className = { inputText?styles.getCode1:styles.getCode}>
+          <div className={inputText?styles.showCompany:styles.hideCompany}>公司名</div>
           <input className={styles.inputClass} onChange={ev =>this.getCompany(ev)} type="text" placeholder = "公司名" value={inputText}/>
           <div className={styles.prompt}>必填</div>
         </div>
 
         <div className = {inputValue?styles.getCode1:styles.getCode}>
+          <div className={inputValue?styles.showName:styles.hideName}>姓名</div>
           <input className={styles.inputClass} onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={inputValue}/>
           <div className={styles.prompt}>必填</div>
         </div>

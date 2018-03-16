@@ -100,10 +100,12 @@ render() {
         </div>
 
         <div className = {styles.invite}>
+          <div className={inputPhone?styles.showPhone:styles.hidePhone}>手机号</div>
           <input className={styles.inputClass} onChange={ev =>this.getPhone(ev)} type="text" placeholder = "手机号" value={inputPhone}/>
         </div>
 
         <div className = {styles.getCode}>
+          <div className={inputCode?styles.showCode:styles.hideCode}>验证码</div>
           <input className={styles.inputClass} onChange={ev =>this.getCode(ev)} type="text" placeholder = "验证码" value={inputCode}/>
           <input onClick={ev =>this.sendSms(ev)} type="button" className={canState === false?styles.noSendCode:styles.sendCode} value={sendState}/>
         </div>

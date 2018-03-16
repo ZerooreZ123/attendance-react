@@ -121,10 +121,12 @@ render() {
         </div>
 
         <div className = {InputText?styles.getCode1:styles.getCode}>
+          <div className={InputText?styles.showName:styles.hideName}>姓名</div>
           <input className={styles.nameShow} onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
           <div className={styles.must}>必填</div>
         </div>
         <div onClick={ev =>this.showMask(ev)} className = {InputValue?styles.getCode1:styles.getCode}>
+          <div className={InputValue?styles.showBumen:styles.hideBumen}>部门</div>
           <div>{InputValue?InputValue:'部门'}</div>
           <Icon direction={iconDirection}/>
         </div>

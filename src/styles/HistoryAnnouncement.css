@@ -13,7 +13,7 @@
 .item{
     display:flex;
     justify-content: space-between;
-    align-items: center;
+    /* align-items: center; */
     border-bottom:2px solid #fbfbfb;
 }
 .itemText{
@@ -22,10 +22,12 @@
 .caption{
     margin:46px 0 26px;
     height:36px;
+    line-height: 36px;
     font-size:32px;
     font-weight: 600;
     color:#000;
     overflow: hidden;
+    word-break:break-all
 }
 .itemContent{
     height:86px;
@@ -33,6 +35,7 @@
     line-height: 42px;
     color:#444;
     overflow: hidden;
+    word-break:break-all
 }
 .itemDate{
     margin:28px 0 34px;
@@ -42,6 +45,7 @@
 .itemImg{
     width:136px;
     height:136px;
+    margin-top:46px;
     overflow: hidden;
 }
 .release{

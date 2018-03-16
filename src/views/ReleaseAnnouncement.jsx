@@ -32,6 +32,7 @@ class ReleaseAnnouncement extends Component{
             tipState1:false,
             tipState:false,           //tip状态
             secondTime:(new Date()).getTime(),             //秒
+            alertState1:false,
             alertState:false,            //alert状态
             // iconState:false,           //图标状态
             chooseDay:'',             //结束选择时间
@@ -47,36 +48,44 @@ class ReleaseAnnouncement extends Component{
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
-        this.backAlert();
+        // this.backAlert();
     }
     componentWillUnmount() {
     }
     historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
-        // this.cancelRelease();
     }
     cancelRelease() {
-        if(this.state.announcementTitle!==''&& this.state.announcementContent !==''){
+        if(this.state.announcementTitle!=='' || this.state.announcementContent !==''){
             this.setState({alertState:true});
         }else{
-            window.localStorage.removeItem('title',this.state.announcementTitle);
-            window.localStorage.removeItem('content',this.state.announcementContent);
-            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-            // window.history.go(-1);
-            // this.setState({alertState:false});
+            window.history.go(-1);
         }
     }
     selectBtn(dataState) {
         if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-            // window.history.go(-1);
-            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            window.history.go(-1);
+            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
         }else{
             window.localStorage.removeItem('title',this.state.announcementTitle);
             window.localStorage.removeItem('content',this.state.announcementContent);
-            // window.history.go(-1);
-            this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            window.history.go(-1);
+            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+        }
+    }
+    selectBtn1(dataState) {
+        if(dataState){
+            window.localStorage.setItem('title',this.state.announcementTitle);
+            window.localStorage.setItem('content',this.state.announcementContent);
+            window.history.go(-1);
+            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+        }else{
+            window.localStorage.removeItem('title',this.state.announcementTitle);
+            window.localStorage.removeItem('content',this.state.announcementContent);
+            window.history.go(-1);
+            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
         }
     }
     startDate() {
@@ -84,34 +93,24 @@ class ReleaseAnnouncement extends Component{
         this.setState({selectedDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
         this.setState({chooseDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
     }
-    backAlert(){
-        // const current = window.location.href; 
-        // window.addEventListener("popstate", (e)=> {
-        //     this.setState({alertState:true});
-        //     console.log(window.location.href);
-        //     if (current !== window.location.href) {
-        //         window.location.href = current;
-        //     }
-        // }, false);
-
-        pushHistory(); 
-        window.addEventListener("popstate", (e)=>{
-            if(this.state.announcementTitle!==''&& this.state.announcementContent !== ''){
-                this.setState({alertState:true});
-            }else{
-                // window.localStorage.removeItem('title',this.state.announcementTitle);
-                // window.localStorage.removeItem('content',this.state.announcementContent);
-                // this.props.history.replace('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-            } 
-        }, false); 
-        function pushHistory() { 
-            var state = { 
-            title: "title", 
-            url: '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid')
-        }; 
-        window.history.pushState(state, "title", '/AttendanceFront/index.html#/releaseAnnouncement')
-        } 
-    }
+    // backAlert(){
+    //     pushHistory(); 
+    //     window.addEventListener("popstate", (e)=>{
+    //         if(this.state.announcementTitle!=='' || this.state.announcementContent!== ''){
+    //             this.setState({alertState1:true});
+    //         }else{
+    //             this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+    //         } 
+    //     }, false); 
+    //     function pushHistory() { 
+    //         var state = { 
+    //         title: "title", 
+    //         url: '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid')
+    //     }; 
+    //     window.history.pushState(state, "title", '/AttendanceFront/index.html#/releaseAnnouncement')
+        
+    //     } 
+    // }
     handleDayClick(day) {
         var myDate = new Date(day);
         this.setState({secondTime:myDate.getTime()})
@@ -166,7 +165,6 @@ class ReleaseAnnouncement extends Component{
         this.setState({imgSrcConcat:this.state.imgSrcConcat});
     }
     getBase64(callback) {            //获取图片
-        debugger;
         this.hideMask1();
         this.hideMask2();
         var data = this.refs.files.files;
@@ -255,7 +253,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox,alertState,tipState,tipState1} = this.state;
+        const {mask,copyMask,imgBox,alertState,tipState,tipState1,alertState1} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -302,9 +300,10 @@ class ReleaseAnnouncement extends Component{
                      <DayPicker onDayClick={ev =>this.selectTime(ev)} />
                     </div>
                 </div>
+                <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn1(ev)} isShow={alertState1}/>
                 <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
                 <Toast isShow={tipState} text="结束日期必须在开始日期之后或同一天"/>
-                <Toast isShow={tipState1} text="上传最多9张照片"/>
+                <Toast isShow={tipState1} text="只可上传前9张图片哦"/>
             </div>
         )
     }

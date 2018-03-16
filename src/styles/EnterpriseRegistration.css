@@ -24,6 +24,7 @@
     color:#fff;
   }
   .invite{
+    position: relative;
     padding:82px 0 23px;
     margin:0 50px;
     border-bottom:2px solid #68b3ea;
@@ -31,6 +32,7 @@
     color: #fff;
   }
   .getCode{
+    position: relative;
     display:flex;
     justify-content:space-between;
     align-items: center;
@@ -121,4 +123,24 @@
   }
   .inputClass::-webkit-input-placeholder{
     color: #fff;
+  }
+  .showPhone{
+    display:block;
+    position: absolute;
+    top:23px;
+    left:0;
+    font-size:26px;
+  }
+  .hidePhone{
+    display:none;
+  }
+  .showCode{
+    position:absolute;
+    top:30px;
+    left:0;
+    font-size:26px;
+    color: #fff;
+  }
+  .hideCode{
+    display:none;
   }

@@ -16,10 +16,12 @@
     font-size:34px;
     font-weight:700;
     color:#000;
+    word-break:break-all
 }
 .text{
     font-size:28px;
     line-height:42px;
+    word-break:break-all
 }
 .photoBox{
     width:700px;

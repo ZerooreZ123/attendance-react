@@ -14,6 +14,7 @@ import API from '../api/index';
 
 import data from '../asset/statePrompt/data.png';
 import top from '../asset/manager/triangle-top.png';
+import down from '../asset/manager/downBlue.png'
 import spread from '../asset/manager/spread.png'
 import search from '../asset/manager/search.png';
 
@@ -28,7 +29,7 @@ const NoData =({parent,selectDate,departmentName,maskState}) =>{
              <div className={styles.footer}>
                 <div className={styles.brief} onClick={ev => parent.showMask(ev)}>
                     <span>{selectDate}</span>/<span>{window.Person.name}</span>
-                    <img className={styles.top} src={top} alt="" />
+                    <img className={styles.top} src={maskState === 1?down:top} alt="" />
                 </div>
                 <div onClick={ev => parent.export(ev)} className={maskState === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
              </div>
@@ -495,7 +496,7 @@ class PersonalRecord extends Component {
                                  <div className={styles.footer}>
                                     <div className={styles.brief} onClick={ev => this.showMask(ev)}>
                                         <span>{selectDate}</span>/<span>{window.Person.name}</span>
-                                        <img className={styles.top} src={top} alt="" />
+                                        <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                     </div>
                                     <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
@@ -529,7 +530,7 @@ class PersonalRecord extends Component {
                              <div className={styles.footer}>
                                 <div className={styles.brief} onClick={ev => this.showMask(ev)}>
                                     <span>{selectMonth}</span>/<span>{window.Person.name}</span>
-                                    <img className={styles.top} src={top} alt="" />
+                                    <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
@@ -562,7 +563,7 @@ class PersonalRecord extends Component {
                              <div className={styles.footer}>
                                 <div className={styles.brief} onClick={ev => this.showMask(ev)}>
                                     <span>{selectYear}</span>/<span>{window.Person.name}</span>
-                                    <img className={styles.top} src={top} alt="" />
+                                    <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>

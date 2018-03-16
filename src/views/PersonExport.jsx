@@ -62,7 +62,7 @@ class PersonExport extends Component{
             <div className={styles.container}>
                 <div className={styles.content}>
                     <div className={styles.describe}>
-                        <div>数据描述</div>
+                        <div className={styles.dataDescribe}>数据描述</div>
                         <div><span>{window.Data.time}</span>/<span>{window.Person.name}</span></div>
                     </div>
                     <div className={inputMail === ''?styles.mailbox1:styles.mailbox}>

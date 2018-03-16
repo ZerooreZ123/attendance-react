@@ -186,7 +186,7 @@ const ClockPage = ({ prompt, parent, h, m, s }) => {
                     </div>
                 </div>
                 <div className={styles.prompt}>
-                    <img className={styles.promptImg} src={warn} alt="" /><span className={styles.text}>未搜索到目标iBeacon设备！</span>
+                    <img className={styles.promptImg} src={warn} alt="" /><span className={styles.text}>您不在考勤范围内</span>
                 </div>
                 <div onClick={ev => parent.refresh(ev)} className={styles.refreshShow}>刷新页面</div>
                 <div className={styles.promptText}>搜索考勤机时请保证网络连接正常,蓝牙为开启状态哦!</div>

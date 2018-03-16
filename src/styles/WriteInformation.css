@@ -17,6 +17,7 @@
     color: #fff;
   }
   .getCode1{
+    position: relative;
     display:flex;
     justify-content:space-between;
     align-items: center;
@@ -94,4 +95,24 @@
   }
   .inputClass::-webkit-input-placeholder {
     color:#fff;
+  }
+  .showCompany{
+    display:block;
+    position: absolute;
+    top:23px;
+    left:0;
+    font-size:26px;
+  }
+  .hideCompany{
+    display:none;
+  }
+  .showName{
+    position:absolute;
+    top:30px;
+    left:0;
+    font-size:26px;
+    color: #fff;
+  }
+  .hideName{
+    display:none;
   }

@@ -24,6 +24,7 @@
   color: #fff;
 }
 .getCode1{
+  position: relative;
   display:flex;
   justify-content:space-between;
   align-items: center;
@@ -150,4 +151,24 @@
 }
 .nameShow::-webkit-input-placeholder{
   color: #fff;
+}
+.showName{
+  display:block;
+  position: absolute;
+  top:23px;
+  left:0;
+  font-size:26px;
+}
+.hideName{
+  display:none;
+}
+.showBumen{
+  position:absolute;
+  top:30px;
+  left:0;
+  font-size:26px;
+  color: #fff;
+}
+.hideBumen{
+  display:none;
 }
