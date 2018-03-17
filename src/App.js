@@ -33,6 +33,7 @@ import Prompt from './views/Prompt';
 import PersonalRecord from './views/PersonalRecord';
 import PersonExport from './views/PersonExport';
 import Alert from './components/Alert';
+import QrCode from './views/QrCode';
 
 
 
@@ -87,6 +88,7 @@ class App extends Component {
                   <Route location={props.location} exact path="/personalRecord" component={PersonalRecord}/>
                   <Route location={props.location} exact path="/personExport" component={PersonExport}/>
                   <Route location={props.location} exact path="/alert" component={Alert}/>
+                  <Route location={props.location} exact path="/qrCode/:code" component={QrCode}/>
                 </div>
               </CSSTransitionGroup>
             )

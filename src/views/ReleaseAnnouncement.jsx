@@ -29,6 +29,7 @@ class ReleaseAnnouncement extends Component{
         super();
         window.temp = {};               
         this.state = {
+            tipState2:false,
             tipState1:false,
             tipState:false,           //tip状态
             secondTime:(new Date()).getTime(),             //秒
@@ -39,55 +40,56 @@ class ReleaseAnnouncement extends Component{
             selectedDay:'',           //开始选择时间
             mask:false,               //日历开始遮罩
             copyMask:false,
-            imgBox:[],                //图片盒子
+            imgBox:JSON.parse(window.localStorage.getItem('img')) || [],                                              //图片盒子
             imgSrcConcat:[],          //拼接字符串
             announcementTitle:window.localStorage.getItem('title') || '',
             announcementContent:window.localStorage.getItem('content') || ''
         };
+        this.isBack=false;
     }
     componentDidMount() {
         document.querySelector('title').innerText = '发布公告';
         this.startDate();
-        // this.backAlert();
+        
+        window.addEventListener("popstate", ()=>{
+            if(!this.isBack){
+                window.localStorage.removeItem('title',this.state.announcementTitle);
+                window.localStorage.removeItem('content',this.state.announcementContent);
+                window.localStorage.removeItem('img',JSON.stringify(this.state.imgBox))
+                this.props.history.push(null,null,document.URL);
+                this.cancelRelease();
+
+            }
+        },false); 
     }
     componentWillUnmount() {
+        window.removeEventListener('popstate',this);
     }
     historyAnnouncement() {                    //跳转至历史记录
         this.props.history.push('/historyAnnouncement');
     }
     cancelRelease() {
-        if(this.state.announcementTitle!=='' || this.state.announcementContent !==''){
+        if(this.state.announcementTitle!=='' || this.state.announcementContent !=='' || this.state.imgBox.length>0){
             this.setState({alertState:true});
         }else{
-            window.history.go(-1);
+            this.isBack=true;
+            this.props.history.goBack();
         }
     }
     selectBtn(dataState) {
         if(dataState){
             window.localStorage.setItem('title',this.state.announcementTitle);
             window.localStorage.setItem('content',this.state.announcementContent);
-            window.history.go(-1);
-            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            window.localStorage.setItem('img',JSON.stringify(this.state.imgBox))
         }else{
             window.localStorage.removeItem('title',this.state.announcementTitle);
             window.localStorage.removeItem('content',this.state.announcementContent);
-            window.history.go(-1);
-            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            window.localStorage.removeItem('img',JSON.stringify(this.state.imgBox))
         }
+        this.isBack=true;
+        this.props.history.goBack();
     }
-    selectBtn1(dataState) {
-        if(dataState){
-            window.localStorage.setItem('title',this.state.announcementTitle);
-            window.localStorage.setItem('content',this.state.announcementContent);
-            window.history.go(-1);
-            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-        }else{
-            window.localStorage.removeItem('title',this.state.announcementTitle);
-            window.localStorage.removeItem('content',this.state.announcementContent);
-            window.history.go(-1);
-            // this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-        }
-    }
+
     startDate() {
         var date = new Date();
         this.setState({selectedDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
@@ -95,13 +97,13 @@ class ReleaseAnnouncement extends Component{
     }
     // backAlert(){
     //     pushHistory(); 
-    //     window.addEventListener("popstate", (e)=>{
-    //         if(this.state.announcementTitle!=='' || this.state.announcementContent!== ''){
-    //             this.setState({alertState1:true});
-    //         }else{
-    //             this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-    //         } 
-    //     }, false); 
+            // window.addEventListener("popstate", (e)=>{
+            //     if(this.state.announcementTitle!=='' || this.state.announcementContent!== ''){
+            //         this.setState({alertState1:true});
+            //     }else{
+            //         this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
+            //     } 
+            // }, false); 
     //     function pushHistory() { 
     //         var state = { 
     //         title: "title", 
@@ -111,11 +113,26 @@ class ReleaseAnnouncement extends Component{
         
     //     } 
     // }
+    // handleDayClick(day) {
+    //     var myDate = new Date(day);
+    //     this.setState({secondTime:myDate.getTime()})
+    //     this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+    //     this.hideMask1();
+    // }
     handleDayClick(day) {
         var myDate = new Date(day);
-        this.setState({secondTime:myDate.getTime()})
-        this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
-        this.hideMask1();
+        var R1 = myDate.getFullYear()+''+myDate.getMonth()+''+myDate.getDate()+'';
+        var R2 = (new Date().getFullYear())+''+(new Date().getMonth())+''+(new Date().getDate())+'';
+        if(parseInt(R2) <= parseInt(R1)) {
+            this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+            this.setState({copyMask:false});
+            this.hideMask1();
+        }else{
+            this.setState({tipState2:true})
+            setTimeout(()=>{
+                this.setState({tipState2:false})
+            },1500)
+        }
     }
     selectDayClick(day) {
         var myDate = new Date(day);
@@ -253,7 +270,7 @@ class ReleaseAnnouncement extends Component{
         }
     }
     render() {
-        const {mask,copyMask,imgBox,alertState,tipState,tipState1,alertState1} = this.state;
+        const {mask,copyMask,imgBox,alertState,tipState,tipState1,tipState2} = this.state;
         return(
             <div className={styles.container}>
                 <div className={styles.header}>
@@ -300,9 +317,9 @@ class ReleaseAnnouncement extends Component{
                      <DayPicker onDayClick={ev =>this.selectTime(ev)} />
                     </div>
                 </div>
-                <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn1(ev)} isShow={alertState1}/>
                 <Alert text='是否保存草稿' onSelect={ev =>this.selectBtn(ev)} isShow={alertState}/>
                 <Toast isShow={tipState} text="结束日期必须在开始日期之后或同一天"/>
+                <Toast isShow={tipState2} text="请勿选择当日之前日期"/>
                 <Toast isShow={tipState1} text="只可上传前9张图片哦"/>
             </div>
         )

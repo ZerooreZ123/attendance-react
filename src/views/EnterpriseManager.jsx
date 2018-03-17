@@ -19,7 +19,8 @@ const BottomBar = ({add,parent,deleteState}) => {           //底部选择栏组
         return(
             <div className={styles.bottomBar}>
                 <div onClick={ev => parent.addDivision(ev)} className={ deleteState === true?styles.hideAdd:styles.add}>添加部门</div>
-                <div onClick={ev =>parent.editor(ev)} className={styles.editor}>编辑</div>
+                <div onClick={ev =>parent.editor(ev)} className={deleteState === true?styles.hideEditor:styles.editor}>编辑</div>
+                <div onClick={ev =>parent.backState(ev)} className={deleteState === true?styles.editor:styles.hideEditor}>完成</div>
             </div>
         )
     }else{
@@ -146,8 +147,16 @@ class EnterpriseManager extends Component {
     editor() {                             //删除部门页面显示
         this.setState({deleteSection:true})
     }
+    backState() {
+        this.setState({deleteSection:false})
+    }
     addDivision() {                        //添加部门
-        this.setState({inputText:'',division: true,selectState:false})
+        if(this.state.deleteSection){
+            return false;
+        }else{
+            this.setState({inputText:'',division: true,selectState:false})
+        }
+       
         // this.setState({ division: true });
         // this.setState({selectState:false});
     }

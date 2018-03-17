@@ -48,11 +48,17 @@ const Notice = ({ noticeState, parent, title }) => {   //打卡顶部通告
     }
 }
 const Header = ({ roleid, parent }) => {           //个人中心头部
-    if (roleid === '2' || roleid === '3') {
+    if (roleid === '3') {
         return (
             <div className={styles.header}>
                 <div onClick={ev => parent.scan(ev)} className={styles.scanBox}><img className={styles.scanImg} src={scan} alt='' /><span className={styles.scanText}>后台登录</span></div>
                 <div onClick={ev => parent.unbindUser(ev)} className={styles.unbindButton}>解绑企业</div>
+            </div>
+        )
+    }else if( roleid === '2'){
+        return(
+            <div className={styles.header}>
+                <div onClick={ev => parent.scan(ev)} className={styles.scanBox}><img className={styles.scanImg} src={scan} alt='' /><span className={styles.scanText}>后台登录</span></div>
             </div>
         )
     } else {
@@ -555,10 +561,13 @@ class UserCenter extends Component {
     async unbind() {                //解绑员工   
         const result = await XHR.post(window.admin + API.unbindUser, { loginName: this.props.match.params.loginName });
         if(JSON.parse(result).success === 'T') {
-            this.setState({ tipState1: true })
-            setTimeout(() => {
-                this.setState({ tipState: false })
-            }, 2000);
+            // this.setState({ tipState1: true })
+            // window.history.go(-1);
+            this.props.history.replace('/personalRegister/'+ this.props.match.params.companyId +'/' + this.props.match.params.loginName)
+            // this.props.history.goBack();
+            // setTimeout(() => {
+            //     this.setState({ tipState: false })
+            // }, 2000);
         }else{
             alert(JSON.stringify(result).msg);
         }

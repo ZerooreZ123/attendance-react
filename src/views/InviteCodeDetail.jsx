@@ -25,6 +25,7 @@ const Mask = ({visible,parent,List,Index}) => {               //部门列表
   if (visible) {
       return (
           <div className={styles.mask}>
+               <div className={styles.makeHide} onClick={ev=>parent.hideMask(ev)}></div>
               <div className={styles.maskBox}>
                   <div className={styles.operation}>
                       <img onClick={ev =>parent.hideMask(ev)} className={styles.spread} src={spread} alt=""/>
@@ -67,6 +68,7 @@ hideMask() {
   this.setState({ mask:false,iconDirection:false});
 }
 showMask() {
+  this.refs.nameInput.blur();
   this.setState({ mask: true,iconDirection:true});
 }
 // getValue(ev) {          //获取部门的输入值
@@ -93,8 +95,9 @@ async register() {
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
+    this.props.history.replace('./qrCode/'+JSON.parse(result).data.codeStr);
     // window.location.replace(window.server + '/AttendanceFront/index.html#//userCenter/'+ window.sessionStorage.getItem('ID')+'/'+window.sessionStorage.getItem('comID'))
-    this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('ID') +'/'+ window.sessionStorage.getItem('comID'));   
+    // this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('ID') +'/'+ window.sessionStorage.getItem('comID'));   
   }else{
       return null;
   }
@@ -122,7 +125,7 @@ render() {
 
         <div className = {InputText?styles.getCode1:styles.getCode}>
           <div className={InputText?styles.showName:styles.hideName}>姓名</div>
-          <input className={styles.nameShow} onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
+          <input ref='nameInput' className={styles.nameShow} onChange={ev =>this.getName(ev)} type="text" placeholder = "姓名" value={InputText}/>
           <div className={styles.must}>必填</div>
         </div>
         <div onClick={ev =>this.showMask(ev)} className = {InputValue?styles.getCode1:styles.getCode}>

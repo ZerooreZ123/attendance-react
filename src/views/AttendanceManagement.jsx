@@ -25,7 +25,7 @@ const CheckBtn = (props) => {
 }
 const Icon = (props) => {
     if (props.checked === true) {
-        return <img className={styles.icon} src={top} alt="" />;
+        return <img className={styles.icon} src={icon} alt="" />;
     } else {
         return <img className={styles.icon} src={icon} alt="" />;
     }
@@ -128,6 +128,7 @@ class AttendanceManagement extends Component {
         }else{
             alert(JSON.parse(result).msg);
         }
+        this.props.history.goBack();
     }
     render() {
         const { status,iconState1,iconState2,tipState} = this.state;
@@ -178,7 +179,7 @@ class AttendanceManagement extends Component {
                             }
                         </div>
                     </div>
-                    <div onClick={ev => this.attendanceManagement(ev)} className={styles.determine}>确认</div>
+                    <div onClick={ev => this.attendanceManagement(ev)} className={styles.determine}>确定</div>
                 </div>
                 <Toast isShow={tipState} text="考勤设置成功"/>   
             </div>

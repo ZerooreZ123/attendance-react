@@ -65,6 +65,7 @@
 }
 
 .designation{
+    padding:0;
     border:none;
     outline:none;
     width:80%;
@@ -137,6 +138,9 @@
     color:#fff;
     background:#389fe9; 
 
+}
+.hideEditor{
+    display:none;
 }
 .codeWrap{
     display: flex;

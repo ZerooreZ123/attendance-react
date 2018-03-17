@@ -22,7 +22,7 @@
 .caption{
     margin:46px 0 26px;
     height:36px;
-    line-height: 36px;
+    line-height:40px;
     font-size:32px;
     font-weight: 600;
     color:#000;
@@ -45,7 +45,7 @@
 .itemImg{
     width:136px;
     height:136px;
-    margin-top:46px;
+    margin-top:50px;
     overflow: hidden;
 }
 .release{
