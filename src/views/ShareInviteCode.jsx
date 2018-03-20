@@ -18,11 +18,12 @@ class ShareInviteCode extends Component {
     document.querySelector('title').innerText = '分享邀请码';
     this.getCompany();
   }
-  goToManagement() {
-    this.props.history.push('/attendanceManagement');
-  }
+  // goToManagement() {
+  //   this.props.history.push('/attendanceManagement');
+  // }
   enterCode(){
-    window.location.href = window.server + '/AttendanceFront/index.html#/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName');
+    this.props.history.replace('/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName'));
+    // window.location.href = window.server + '/AttendanceFront/index.html#/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName');
   }
   getBase64(canvas){ 
         var image = new Image();  
@@ -51,8 +52,8 @@ class ShareInviteCode extends Component {
                 <div className={styles.text}>长按二维码,分享邀请码即可让员工注册</div>
             </div>    
         </div>
-        <div onClick={ev =>this.enterCode(ev)} className={styles.enterCode}>进入公众号</div>
-        <div onClick={ev =>this.goToManagement(ev)} className={styles.footer}>完成并设置考勤时间</div>
+        {/* <div onClick={ev =>this.enterCode(ev)} className={styles.enterCode}>进入公众号</div> */}
+        <div onClick={ev =>this.enterCode(ev)} className={styles.footer}>完成并设置考勤时间</div>
       </div>
     );
   }

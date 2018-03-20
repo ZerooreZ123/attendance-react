@@ -95,9 +95,9 @@ async register() {
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
-    this.props.history.replace('/qrCode/'+JSON.parse(result).data.codeStr+'/'+window.sessionStorage.getItem('LoginName'));
+    // this.props.history.replace('/qrCode/'+JSON.parse(result).data.codeStr+'/'+window.sessionStorage.getItem('LoginName'));
     // window.location.replace(window.server + '/AttendanceFront/index.html#//userCenter/'+ window.sessionStorage.getItem('ID')+'/'+window.sessionStorage.getItem('comID'))
-    // this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('ID') +'/'+ window.sessionStorage.getItem('comID'));   
+    this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('LoginName') +'/'+ window.sessionStorage.getItem('comID'));   
   }else{
       return null;
   }
