@@ -27,9 +27,9 @@ const NoData =({parent,selectDate,departmentName,maskState}) =>{
                 <div className={styles.font}>暂无考勤记录</div>
              </div>
              <div className={styles.footer}>
-                <div className={styles.brief} onClick={ev => parent.showMask(ev)}>
-                    <span>{selectDate}</span>/<span>{departmentName}</span>
-                    <img className={styles.top} src={maskState === 1?down:top} alt="" />
+                <div className={styles.brief}>
+                    <div className={styles.selectBox} onClick={ev => parent.showMask(ev)}><span>{selectDate}</span>/<span>{departmentName}</span></div>
+                    <img onClick={maskState === 1?ev => parent.hideMask(ev):ev => parent.showMask(ev)} className={styles.top} src={maskState === 1?down:top} alt="" />
                 </div>
                 <div onClick={ev => parent.export(ev)} className={maskState === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
              </div>
@@ -45,9 +45,9 @@ const NoRecord =({parent,selectDate,departmentName,maskState1}) =>{
                 <div className={styles.font}>暂无考勤记录</div>
              </div>
              <div className={styles.footer}>
-                <div className={styles.brief} onClick={ev => parent.showMask1(ev)}>
-                    <span>{selectDate}</span>/<span>{departmentName}</span>
-                    <img className={styles.top} src={maskState1 === 1?down:top} alt="" />
+                <div className={styles.brief}>
+                    <div className={styles.selectBox} onClick={ev => parent.showMask1(ev)}><span>{selectDate}</span>/<span>{departmentName}</span></div>
+                    <img onClick={maskState1 === 1?ev => parent.hideMask1(ev):ev => parent.showMask1(ev)} className={styles.top} src={maskState1 === 1?down:top} alt="" />
                 </div>
                 <div onClick={ev => parent.export(ev)} className={maskState1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
              </div>
@@ -812,9 +812,9 @@ class AttendanceData extends Component {
                                     )
                                 }
                                  <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectDate}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                    <div className={styles.brief}>
+                                        <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectDate}</span>/<span>{departmentName}</span></div>
+                                        <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                     </div>
                                     <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
@@ -846,9 +846,9 @@ class AttendanceData extends Component {
                                     )
                                 }
                                  <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectDate}</span>/<span>{departmentName}</span>
-                                        <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                    <div className={styles.brief}>
+                                        <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectDate}</span>/<span>{departmentName}</span></div>
+                                        <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                     </div>
                                     <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
@@ -887,9 +887,9 @@ class AttendanceData extends Component {
                                         )
                                     }
                                      <div className={styles.footer}>
-                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                            <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                            <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                        <div className={styles.brief}>
+                                            <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectMonth}</span>/<span>{departmentName}</span></div>
+                                            <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                         </div>
                                         <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
@@ -923,9 +923,9 @@ class AttendanceData extends Component {
                                         )
                                     }
                                      <div className={styles.footer}>
-                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                            <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                            <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                        <div className={styles.brief}>
+                                            <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectMonth}</span>/<span>{departmentName}</span></div>
+                                            <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                         </div>
                                         <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
@@ -957,9 +957,9 @@ class AttendanceData extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask1(ev)}>
-                                    <span>{selectMonth}</span>/<span>{departmentName}</span>
-                                    <img className={styles.top} src={maskToggle1 === 1?down:top} alt="" />
+                                <div className={styles.brief}>
+                                    <div className={styles.selectBox} onClick={ev => this.showMask1(ev)}><span>{selectMonth}</span>/<span>{departmentName}</span></div>
+                                    <img onClick={maskToggle1 === 1?ev => this.hideMask1(ev):ev => this.showMask1(ev)} className={styles.top} src={maskToggle1 === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
@@ -996,9 +996,9 @@ class AttendanceData extends Component {
                                         )
                                     }
                                     <div className={styles.footer}>
-                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                            <span>{selectYear}</span>/<span>{departmentName}</span>
-                                            <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                        <div className={styles.brief}>
+                                            <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectYear}</span>/<span>{departmentName}</span></div>
+                                            <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                         </div>
                                         <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
@@ -1031,9 +1031,9 @@ class AttendanceData extends Component {
                                         )
                                     }
                                     <div className={styles.footer}>
-                                        <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                            <span>{selectYear}</span>/<span>{departmentName}</span>
-                                            <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                        <div className={styles.brief}>
+                                            <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectYear}</span>/<span>{departmentName}</span></div>
+                                            <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                         </div>
                                         <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                     </div>
@@ -1065,9 +1065,9 @@ class AttendanceData extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask1(ev)}>
-                                    <span>{selectYear}</span>/<span>{departmentName}</span>
-                                    <img className={styles.top} src={maskToggle1 === 1?down:top} alt="" />
+                                <div className={styles.brief}>
+                                    <div className={styles.selectBox} onClick={ev => this.showMask1(ev)}><span>{selectYear}</span>/<span>{departmentName}</span></div>
+                                    <img onClick={maskToggle1 === 1?ev => this.hideMask1(ev):ev => this.showMask1(ev)} className={styles.top} src={maskToggle1 === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle1 === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>

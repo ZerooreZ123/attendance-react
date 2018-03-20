@@ -154,6 +154,9 @@
     margin-left:25px;
     vertical-align: middle;
 }
+.selectBox{
+    display:inline-block;
+}
 .exportData{
     height:102px;
     width:186px;

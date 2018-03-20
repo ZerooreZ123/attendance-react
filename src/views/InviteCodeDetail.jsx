@@ -89,13 +89,13 @@ determineDepartment(){
 async register() {
   if(this.state.InputText){
     const result = await XHR.post(window.admin + API.update,{
-      loginName:window.sessionStorage.getItem('ID'),
+      loginName:window.sessionStorage.getItem('LoginName'),
       companyid:window.sessionStorage.getItem('comID'),
       phone:window.sessionStorage.getItem("phone"),
       officeid:this.state.departmentId,
       userName:this.state.InputText
     });
-    this.props.history.replace('./qrCode/'+JSON.parse(result).data.codeStr);
+    this.props.history.replace('/qrCode/'+JSON.parse(result).data.codeStr+'/'+window.sessionStorage.getItem('LoginName'));
     // window.location.replace(window.server + '/AttendanceFront/index.html#//userCenter/'+ window.sessionStorage.getItem('ID')+'/'+window.sessionStorage.getItem('comID'))
     // this.props.history.replace('./userCenter/'+ window.sessionStorage.getItem('ID') +'/'+ window.sessionStorage.getItem('comID'));   
   }else{

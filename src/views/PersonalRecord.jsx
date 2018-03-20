@@ -27,9 +27,9 @@ const NoData =({parent,selectDate,departmentName,maskState}) =>{
                 <div className={styles.font}>暂无考勤记录</div>
              </div>
              <div className={styles.footer}>
-                <div className={styles.brief} onClick={ev => parent.showMask(ev)}>
-                    <span>{selectDate}</span>/<span>{window.Person.name}</span>
-                    <img className={styles.top} src={maskState === 1?down:top} alt="" />
+                <div className={styles.brief}>
+                    <div className={styles.selectBox} onClick={ev => parent.showMask(ev)}><span>{selectDate}</span>/<span>{window.Person.name}</span></div>
+                    <img onClick={maskState === 1?ev => parent.hideMask(ev):ev => parent.showMask(ev)} className={styles.top} src={maskState === 1?down:top} alt="" />
                 </div>
                 <div onClick={ev => parent.export(ev)} className={maskState === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
              </div>
@@ -494,9 +494,9 @@ class PersonalRecord extends Component {
                                     )
                                 }
                                  <div className={styles.footer}>
-                                    <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                        <span>{selectDate}</span>/<span>{window.Person.name}</span>
-                                        <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                    <div className={styles.brief}>
+                                        <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectDate}</span>/<span>{window.Person.name}</span></div>
+                                        <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                     </div>
                                     <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                                 </div>
@@ -528,9 +528,9 @@ class PersonalRecord extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                    <span>{selectMonth}</span>/<span>{window.Person.name}</span>
-                                    <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                <div className={styles.brief}>
+                                    <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectMonth}</span>/<span>{window.Person.name}</span></div>
+                                    <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>
@@ -561,9 +561,9 @@ class PersonalRecord extends Component {
                                 )
                             }
                              <div className={styles.footer}>
-                                <div className={styles.brief} onClick={ev => this.showMask(ev)}>
-                                    <span>{selectYear}</span>/<span>{window.Person.name}</span>
-                                    <img className={styles.top} src={maskToggle === 1?down:top} alt="" />
+                                <div className={styles.brief}>
+                                    <div className={styles.selectBox} onClick={ev => this.showMask(ev)}><span>{selectYear}</span>/<span>{window.Person.name}</span></div>
+                                    <img onClick={maskToggle === 1?ev => this.hideMask(ev):ev => this.showMask(ev)} className={styles.top} src={maskToggle === 1?down:top} alt="" />
                                 </div>
                                 <div onClick={ev => this.export(ev)} className={maskToggle === 1?styles.exportProhibit:styles.exportData}>导出数据</div>
                             </div>

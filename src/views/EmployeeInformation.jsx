@@ -4,6 +4,7 @@ import styles from '../styles/EmployeeInformation.css';
 
 import XHR from '../utils/request';
 import API from '../api/index';
+import Toast from '../components/Toast';
 // import {admin ,server} from '../api/route';
 
 import search from '../asset/manager/search3.png';
@@ -12,11 +13,11 @@ import upBlue from '../asset/manager/triangle-top.png';
 import downBlue from '../asset/manager/downBlue.png';
 import spread from '../asset/manager/spread.png';
 
-const Direction = (props) => {
-    if (props.checked === true) {
-      return <img  className={styles.top} src={downBlue} alt=""/>;
+const Direction = ({checked,parent}) => {
+    if (checked === true) {
+      return <img  onClick={ev=>parent.hideMask()} className={styles.top} src={downBlue} alt=""/>;
     } else {
-      return <img  className={styles.top} src={upBlue} alt=""/>;
+      return <img  onClick={ev=>parent.showMask()} className={styles.top} src={upBlue} alt=""/>;
     }
 }
 const SearchList =({visible,parent,allPerson}) =>{
@@ -47,6 +48,7 @@ class EmployeeInformation extends Component{
         super();
         window.Person = {};
         this.state={
+            tipState1:false,
             departmentStaff:[],         //部门及所属员工列表
             departmentPart:[],          //部门人员列表
             section:[],                 //部门列表
@@ -138,8 +140,25 @@ class EmployeeInformation extends Component{
         })
         this.setState({searchDate:dataResult});
     }
-    search() {
-        
+    makeSearch() {           //搜索
+        const list = this.state.departmentStaff;
+        var dataName = [];
+        var dataPhone = [];
+        list.forEach(el=>{
+            el.staff.forEach(item =>{
+                dataName.push(item.name);
+                dataPhone.push(item.phone)
+            })
+        }) 
+        var dataString = this.state.inputValue+'';
+        if(dataName.indexOf(dataString)>=0 || dataPhone.indexOf(dataString)>=0) {
+
+        }else{
+            this.setState({tipState1:true});
+            setTimeout(()=>{
+                this.setState({tipState1:false});
+            },2000)
+        }   
     }
     clickTerm(i) {                              //设置部门索引、名字、Id  
         this.setState({departmentIndex:i,departmentName:this.state.section[i].name,departmentId:this.state.section[i].id})
@@ -204,7 +223,7 @@ class EmployeeInformation extends Component{
         }
     }
     render() {
-        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue,searchState,searchDate,iconState1,iconState2} = this.state;
+        const {departmentStaff,section,departmentIndex, departmentName,exhibition,departmentPart,inputValue,searchState,searchDate,iconState1,iconState2,tipState1} = this.state;
         const Content = props =>{              //展示员工
             if(exhibition === 0) {             //全部
             return (
@@ -272,7 +291,7 @@ class EmployeeInformation extends Component{
                                 }
                                 <div className={styles.clearBoth}></div>
                             </div>
-                            <div className={styles.footer}>{departmentName}<Direction checked={this.state.mask}/></div>
+                            <div className={styles.footer}>{departmentName}<Direction checked={this.state.mask} parent={this}/></div>
                         </div>
                     </div>
                 );
@@ -287,13 +306,15 @@ class EmployeeInformation extends Component{
                         <img className={styles.search}src={search} alt=""/>
                         <input className={styles.inputBox} onChange={ev =>this.getInputValue(ev)} type="text" placeholder="搜索姓名或手机号" value={inputValue}  />
                     </div>
+                    <div onClick={ev=>this.makeSearch(ev)} className={styles.searchText}>搜索</div>
                 </div>
                 <div className={searchState === false? styles.showContent:styles.hideContent}>
                     <Content></Content>
-                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={this.state.mask}/></div>
+                    <div className={styles.footer} onClick={ev =>this.showMask(ev)}>{departmentName}<Direction checked={this.state.mask} parent={this}/></div>
                     <Mask></Mask>
                 </div>
                 <SearchList visible={searchState} parent={this} allPerson={searchDate}/>
+                <Toast isShow={tipState1} text="暂无此员工"/>
             </div>
         )
     }

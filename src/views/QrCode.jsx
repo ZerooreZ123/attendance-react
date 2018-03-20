@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import QRCode from 'qrcode.react';
 import styles from '../styles/QrCode.css';
+import XHR from '../utils/request';
+import API from '../api/index';
 
 
 class QrCode extends Component {
@@ -13,6 +15,10 @@ class QrCode extends Component {
   } 
   componentDidMount() {
     document.querySelector('title').innerText = '公众号二维码';
+    // this.attention();
+    setTimeout(()=>{
+      this.attention();
+    },500)
     setTimeout(() => {
    
       this.setState({invitationCode:decodeURIComponent(this.props.match.params.code)});
@@ -22,6 +28,18 @@ class QrCode extends Component {
       this.setState({imgBase64:image.getAttribute('src')});
     }, 0);
   }
+  async attention() {
+    const loginName=this.props.match.params.loginName;
+    const result = await XHR.post(window.admin+API.attention,{loginName:loginName});
+    if(JSON.parse(result).success === 'T'){         //判断超管
+      const companyId=JSON.parse(result).data;
+      if(companyId.length > 0){         //判断是否已关注  true已关注   false未关注
+        // window.location.href = window.server+'/AttendanceFront/index.html#/userCenter/'+loginName+'/'+companyId;
+        this.props.history.replace('/userCenter/'+loginName+'/'+companyId);
+      }  
+    }
+  }
+
   render() {
     return (
       <div className={styles.container}>

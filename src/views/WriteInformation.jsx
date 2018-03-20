@@ -26,10 +26,10 @@ async ShareInviteCode() {                //公司注册
         userName:this.state.inputValue
     });
     if(JSON.parse(result).success === 'T') {
-      this.props.history.replace('./shareInviteCode');
+      this.props.history.replace('/shareInviteCode');
       window.sessionStorage.setItem("companyid",JSON.parse(result).data.companyid)
       window.sessionStorage.setItem("id",JSON.parse(result).data.id)
-
+      window.localStorage.setItem('codeUrl',JSON.parse(result).data.codeStr)
     }else{
       alert(JSON.parse(result).msg);
     }  

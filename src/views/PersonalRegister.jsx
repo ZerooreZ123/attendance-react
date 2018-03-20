@@ -26,7 +26,7 @@ componentDidMount() {
     document.querySelector('title').innerText = '注册';
     console.log(this.props.match.params.companyid)
     window.sessionStorage.setItem('comID',this.props.match.params.companyid);
-    window.sessionStorage.setItem('ID',this.props.match.params.loginName);
+    window.sessionStorage.setItem('LoginName',this.props.match.params.loginName);
 }
 getPhone(ev) {
     this.setState({inputText:ev.target.value});

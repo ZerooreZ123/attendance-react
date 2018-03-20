@@ -153,6 +153,15 @@ textarea{
     vertical-align: middle;
 }
 .photoBtn{
+    position:absolute;
+    top:22px;
+    left:525px;
+    width:75px;
+    color:transparent;
+    opacity:0;
+    overflow:hidden;
+}
+/* .photoBtn{
     position:relative;
     top:-15px;
     left:-100px;
@@ -161,7 +170,7 @@ textarea{
     color: transparent;
     vertical-align: middle;
     opacity:0;
-}
+} */
 .showMask {
     background: rgba(0, 0, 0, 0.3);
     position:absolute;

@@ -88,7 +88,7 @@ class App extends Component {
                   <Route location={props.location} exact path="/personalRecord" component={PersonalRecord}/>
                   <Route location={props.location} exact path="/personExport" component={PersonExport}/>
                   <Route location={props.location} exact path="/alert" component={Alert}/>
-                  <Route location={props.location} exact path="/qrCode/:code" component={QrCode}/>
+                  <Route location={props.location} exact path="/qrCode/:code/:loginName" component={QrCode}/>
                 </div>
               </CSSTransitionGroup>
             )

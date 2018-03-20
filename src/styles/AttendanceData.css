@@ -148,6 +148,9 @@
     line-height: 102px;
     text-align: center;
 }
+.selectBox{
+    display:inline-block;
+}
 .top{
     width:20px;
     height:10px;

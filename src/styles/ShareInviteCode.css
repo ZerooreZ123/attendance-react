@@ -57,3 +57,17 @@
   background:#fff;
 
 }
+.enterCode{
+  position:fixed;
+  bottom:105px;
+  left:0;
+  width:100%;
+  height:102px;
+  border-top:3px solid #eee;
+  line-height:102px;
+  text-align:center;
+  font-size:30px;
+  color:#4fa8ec;
+  background:#fff;
+
+}

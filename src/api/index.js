@@ -28,7 +28,8 @@ const API = {
   getSignature:'getSignature.do',                         //微信签名参数
   getNewNotice:'getNewNotice.do',                         //获取最新通告
   judge:'judge.do',                                       //验证考勤机是否被注册
-  judgeDevice:'judgeDevice.do'
+  judgeDevice:'judgeDevice.do',
+  attention:'attention.do',
 };
   
 // export { admin ,server

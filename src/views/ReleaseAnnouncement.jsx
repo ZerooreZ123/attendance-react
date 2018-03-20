@@ -95,35 +95,12 @@ class ReleaseAnnouncement extends Component{
         this.setState({selectedDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
         this.setState({chooseDay:date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()});
     }
-    // backAlert(){
-    //     pushHistory(); 
-            // window.addEventListener("popstate", (e)=>{
-            //     if(this.state.announcementTitle!=='' || this.state.announcementContent!== ''){
-            //         this.setState({alertState1:true});
-            //     }else{
-            //         this.props.history.push('/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid'))
-            //     } 
-            // }, false); 
-    //     function pushHistory() { 
-    //         var state = { 
-    //         title: "title", 
-    //         url: '/AttendanceFront/index.html#/userCenter/'+window.sessionStorage.getItem('loginName')+'/'+window.sessionStorage.getItem('companyid')
-    //     }; 
-    //     window.history.pushState(state, "title", '/AttendanceFront/index.html#/releaseAnnouncement')
-        
-    //     } 
-    // }
-    // handleDayClick(day) {
-    //     var myDate = new Date(day);
-    //     this.setState({secondTime:myDate.getTime()})
-    //     this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
-    //     this.hideMask1();
-    // }
     handleDayClick(day) {
-        var myDate = new Date(day);
-        var R1 = myDate.getFullYear()+''+myDate.getMonth()+''+myDate.getDate()+'';
-        var R2 = (new Date().getFullYear())+''+(new Date().getMonth())+''+(new Date().getDate())+'';
-        if(parseInt(R2) <= parseInt(R1)) {
+        const myDate = new Date(day);
+        const R1 = myDate.getFullYear()+''+(myDate.getMonth()+1)+''+myDate.getDate()+'';
+        const R2 = (new Date().getFullYear())+''+(new Date().getMonth()+1)+''+(new Date().getDate())+'';
+        // const R5 = this.state.chooseDay.replace(/-/g, '');
+        if(parseInt(R2) <= parseInt(R1) ){
             this.setState({selectedDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
             this.setState({copyMask:false});
             this.hideMask1();
@@ -135,8 +112,10 @@ class ReleaseAnnouncement extends Component{
         }
     }
     selectDayClick(day) {
-        var myDate = new Date(day);
-        if(this.state.secondTime <= myDate.getTime()) {
+        const myDate = new Date(day);
+        const R3 = myDate.getFullYear()+''+(myDate.getMonth()+1)+''+myDate.getDate()+'';
+        const R4 = this.state.selectedDay.replace(/-/g, '');
+        if(parseInt(R4) <= parseInt(R3)) {
             this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
             this.setState({copyMask:false});
             this.hideMask2();
@@ -147,8 +126,22 @@ class ReleaseAnnouncement extends Component{
                 this.setState({tipState:false})
             },2000)
         }
-
     }
+    // selectDayClick(day) {
+    //     var myDate = new Date(day);
+    //     if(this.state.secondTime <= myDate.getTime()) {
+    //         this.setState({chooseDay:myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()});
+    //         this.setState({copyMask:false});
+    //         this.hideMask2();
+    //     }else{
+    //         this.hideMask2();
+    //         this.setState({tipState:true});
+    //         setTimeout(()=>{
+    //             this.setState({tipState:false})
+    //         },2000)
+    //     }
+
+    // }
     preClockInRemind(day) {
         setTimeout(()=>this.handleDayClick(day), 0);
     }
@@ -182,8 +175,6 @@ class ReleaseAnnouncement extends Component{
         this.setState({imgSrcConcat:this.state.imgSrcConcat});
     }
     getBase64(callback) {            //获取图片
-        this.hideMask1();
-        this.hideMask2();
         var data = this.refs.files.files;
         var file =[];
         for(var i in data){
@@ -299,9 +290,9 @@ class ReleaseAnnouncement extends Component{
                     </div>
                 <div className={styles.footer}>
                         <div onClick={ev =>this.historyAnnouncement(ev)} className={styles.history}>历史公告</div>
-                        <div className={styles.photoBox} onClick={ev=>this.allMask()}>
+                        <div className={styles.photoBox}>
                            <img className={styles.addphoto} src={addphoto} alt=""/>
-                           <input ref="files" onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
+                           <input ref="files" onClick={ev =>this.allMask(ev)} onChange={ev => this.getBase64(base64 => this.upload(base64))} type="file" className={styles.photoBtn} multiple="multiple"/>
                         </div>
                     {/* <div onClick={ev =>this.showMask2(ev)} className={styles.selectDate}>选择起止日期<Icon direction={iconState}/></div> */}
                 </div>
