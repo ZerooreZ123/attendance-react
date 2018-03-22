@@ -19,10 +19,12 @@ class ShareInviteCode extends Component {
     this.getCompany();
   }
   // goToManagement() {
-  //   this.props.history.push('/attendanceManagement');
+    // this.props.history.push('/attendanceManagement');
   // }
   enterCode(){
-    this.props.history.replace('/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName'));
+    window.sessionStorage.setItem('AdminRegister','Y');
+    this.props.history.replace('/attendanceManagement');
+    // this.props.history.replace('/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName'));
     // window.location.href = window.server + '/AttendanceFront/index.html#/qrCode/'+window.localStorage.getItem('codeUrl')+'/'+window.sessionStorage.getItem('LoginName');
   }
   getBase64(canvas){ 

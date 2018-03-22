@@ -33,7 +33,7 @@
     display:inline-block;
     width:20px;
     height:10px;
-    padding-left:22px;
+    padding-left:25px;
     vertical-align: middle;
 }
 .clockTime>div:nth-child(2),.automaticTime>div:nth-child(2){
@@ -121,7 +121,7 @@
     background:#fff;
 }
 .dateClass{
-    width: 150px;
+    width: 180px;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -62,11 +62,9 @@ class AttendanceManagement extends Component {
     }
     handleValueChange(time, s){
         if (s === 0) {
-            this.setState({now: time});
-            this.setState({iconState1:false})
+            this.setState({now: time,iconState1:false});
         } else {
-            this.setState({now1: time});
-            this.setState({iconState2:false})
+            this.setState({now1: time,iconState2:false});
         }
     }
     checkBtn(i) {               //勾选或取消
@@ -77,8 +75,8 @@ class AttendanceManagement extends Component {
         const result = await XHR.post(window.admin + API.getAttendanceManagement, { companyid: window.sessionStorage.getItem("companyid")});
             const dataSource = JSON.parse(result).data;
             this.setState({ data: dataSource });
-            var T1 = JSON.parse(result).data.forenoonLatest.split(':');
-            var T2 = JSON.parse(result).data.afternoonFirst.split(':');
+            var T1 = dataSource.forenoonLatest.split(':');
+            var T2 = dataSource.afternoonFirst.split(':');
             const now = moment().hour(T1[0]).minute(T1[1]);
             const now1 = moment().hour(T2[0]).minute(T2[1]);
             this.setState({
@@ -86,7 +84,7 @@ class AttendanceManagement extends Component {
                 now1
             })
             const Num = [1, 2, 3, 4, 5, 6, 7];                                         //一周时间
-            const weekDay = JSON.parse(result).data.workingTime.split(',');   //初始勾选日期
+            const weekDay = dataSource.workingTime.split(',');   //初始勾选日期
             const weekDayNum = [];                                     //初始勾选日期类型转换
             const weekSelect = [];                                    //勾选日期state
             weekDay.forEach(ev => weekDayNum.push(parseInt(ev)));
@@ -120,19 +118,25 @@ class AttendanceManagement extends Component {
             workingTime: list.toString(),
             id: this.state.data.id
         })
-        if(JSON.parse(result).success === 'T'){
+        const resultJson=JSON.parse(result);
+        if(resultJson.success === 'T'){
             this.setState({tipState:true})
             setTimeout(()=>{
                 this.setState({tipState:false})
             },2000)
         }else{
-            alert(JSON.parse(result).msg);
+            alert(resultJson.msg);
         }
-        this.props.history.goBack();
+        const adminRegister=window.sessionStorage.getItem('AdminRegister');
+        if(adminRegister&&adminRegister==='Y'){
+            this.props.history.replace('/qrCode/'+window.localStorage.getItem('codeUrl')+'/'
+            +window.sessionStorage.getItem('LoginName'));
+        }else
+            this.props.history.goBack();
     }
     render() {
         const { status,iconState1,iconState2,tipState} = this.state;
-        const format = 'H:mm';
+        const format = 'HH:mm';
 
         const week = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
         return (
@@ -150,6 +154,7 @@ class AttendanceManagement extends Component {
                                     format={format}
                                     use24Hours
                                 />
+                                
                                 <Icon checked={iconState1} />
                             </div>
 

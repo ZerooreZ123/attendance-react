@@ -317,6 +317,9 @@
 .maskDate{
     display:flex;
     justify-content:center;
+    max-height:860px;
+    overflow-y: auto;
+    overflow-x: hidden;
     left:0;
     bottom:0;
     background:#fff;

@@ -157,6 +157,8 @@
 .departmentBox{
     padding:16px 12px;
     margin-bottom:104px;
+    max-height: 450px;
+    overflow: auto;
 
 }
 .term,.selectTerm{

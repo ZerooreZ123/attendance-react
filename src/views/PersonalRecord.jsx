@@ -272,6 +272,7 @@ class PersonalRecord extends Component {
         this.props.history.push('/search');
     }
     export() {                       //跳转至导出页面
+        if(this.state.maskToggle === 0){
             if(this.state.currentIndex === 0) {     //导出日
                 window.Data = {
                     time:this.state.selectDate,
@@ -291,6 +292,9 @@ class PersonalRecord extends Component {
                     }
                     this.props.history.push('/personExport'); 
             }
+        }else{
+            return false
+        }
     }
     selectTime(i) {                  //设置日月年展示模块索引值
         this.setState({ currentIndex: i });
