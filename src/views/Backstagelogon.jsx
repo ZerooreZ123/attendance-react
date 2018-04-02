@@ -24,7 +24,6 @@ class Backstagelogon extends Component {
             quickMark:window.sessionStorage.getItem("result")
         })
         if(JSON.parse(result).success === 'T') {
-            alert("登录成功");
             window.history.go(-1)
         }else{
             alert(JSON.parse(result).msg)
