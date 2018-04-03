@@ -185,7 +185,7 @@ class EnterpriseManager extends Component {
                 success: function (res) {
                     var result = res.resultStr;
                     const data = JSON.parse(decodeURIComponent(res.resultStr).split('=')[1])['code']
-                    window.location.href = 'http://www.junl.cn/AttendanceFront/index.html#/addAttendanceMachine/' +data + '/' + window.temp.companyName + '/' + window.temp.name + '/' + window.temp.phone + '/' + window.sessionStorage.getItem('loginName');
+                    window.location.href = window.server + '/AttendanceFront/index.html#/addAttendanceMachine/' +data + '/' + window.temp.companyName + '/' + window.temp.name + '/' + window.temp.phone + '/' + window.sessionStorage.getItem('loginName');
                 }
             });
         })

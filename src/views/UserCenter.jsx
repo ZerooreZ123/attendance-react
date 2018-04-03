@@ -221,6 +221,8 @@ class UserCenter extends Component {
             noticeTitle: '',       //公告标题
             normalDay: ''
         }
+        this.timer =  null;
+        this.closeTimeout =  null;
     }
     componentDidMount() {
         document.querySelector('title').innerText = '考勤打卡';
@@ -372,7 +374,11 @@ class UserCenter extends Component {
     }
     stopSearch() {
         clearTimeout(this.closeTimeout);
-        window.wx.stopSearchBeacons();
+        window.wx.stopSearchBeacons({
+            complete: (res) => {
+                clearTimeout(this.timer);
+            }
+        });
     }
     firstIbeacons() {
         window.wx.ready(() => {
@@ -380,50 +386,49 @@ class UserCenter extends Component {
         })
     }
     searchIbeacons() {
-        // if (this.isSearching)
-        //     return;
-        // this.isSearching = true;
-        window.wx.startSearchBeacons({       //开启ibeacons
-            ticket: "",
-            complete: (argv) => {
-                //开启查找完成后的回调函数
-                if (argv.errMsg === "startSearchBeacons:ok") {
-                    this.closeTimeout = setTimeout(() => {
-                        // if (this.state.prompt !== 1 && this.state.prompt !== 3)  
-                        this.setState({ prompt: 4 });
-                        this.stopSearch();
-                    }, 15000);
-                    // 监听iBeacon信号
-                    window.wx.onSearchBeacons({
-                        complete: (argv) => {
-                            clearTimeout(this.closeTimeout)
-                            // alert(JSON.stringify(argv));
-                            //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
-                            if (argv.beacons.length > 0) {
-                                const backData = [];
-                                argv.beacons.forEach((ev, index) => {
-                                    backData.push({
-                                        major: ev.major,
-                                        minor: ev.minor
-                                    })
-                                })
-                                this.backState(backData);
-                            } else {
-                                this.setState({ tipState: true })
-                                setTimeout(() => {
-                                    this.setState({ tipState: false })
-                                }, 2000);
-                            }
+        let that = this;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(()=>{
+            window.wx.startSearchBeacons({       //开启ibeacons
+                ticket: "",
+                complete: (argv) => {
+                    //开启查找完成后的回调函数
+                    if (argv.errMsg === "startSearchBeacons:ok") {
+                        this.closeTimeout = setTimeout(() => { 
+                            this.setState({ prompt: 4 });
                             this.stopSearch();
-                        }
-                    });
-                } else {
-                    //停止搜索ibeacons
-                    this.setState({ prompt: 2 })
-                    this.stopSearch();
+                        }, 15000);
+                        // 监听iBeacon信号
+                        window.wx.onSearchBeacons({
+                            complete: (argv) => {
+                                clearTimeout(this.closeTimeout)
+                                //回调函数，可以数组形式取得该商家注册的在周边的相关设备列表
+                                if (argv.beacons.length > 0) {
+                                    const backData = [];
+                                    argv.beacons.forEach((ev, index) => {
+                                        backData.push({
+                                            major: ev.major,
+                                            minor: ev.minor
+                                        })
+                                    })
+                                    this.backState(backData);
+                                } else {
+                                    this.setState({ tipState: true })
+                                    setTimeout(() => {
+                                        this.setState({ tipState: false })
+                                    }, 2000);
+                                }
+                                this.stopSearch();
+                            }
+                        });
+                    } else {
+                        //停止搜索ibeacons
+                        this.setState({ prompt: 2 })
+                        this.stopSearch();
+                    }
                 }
-            }
-        })
+            }) 
+        } ,2e3)
     }
     unbindUser() {                  //解绑员工二次确认
         this.setState({ alertState: true })
