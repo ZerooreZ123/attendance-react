@@ -74,6 +74,7 @@
 }
 .list{
     padding:0 22px;
+    background: #fff;
 }
 .list>div{
     height:68px;
